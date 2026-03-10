@@ -1,0 +1,168 @@
+/*
+  FE-UI-00 Design tokens extracted from Figma UI Kit.
+  Reviewed nodes: 44:931, 12387:3010 (input states), 87:645 (button),
+  12385:2750 (add to favorites button), 92:1485 (header), 17:779 (auth form), 82:514.
+  Strategy: keep primitives small and expose flexible semantic aliases per UI domain.
+*/
+
+:root {
+  /* Primitive colors */
+  --fd-color-main: #050505;
+  --fd-color-main-alt: #1a1a1a;
+  --fd-color-muted: #bfbebe;
+  --fd-color-white: #ffffff;
+  --fd-color-danger: #c80000;
+  --fd-color-surface-soft: #f2f2f2;
+
+  /* Semantic colors */
+  --fd-text-primary: var(--fd-color-main);
+  --fd-text-secondary: var(--fd-color-main-alt);
+  --fd-text-muted: var(--fd-color-muted);
+  --fd-bg-canvas: var(--fd-color-white);
+  --fd-bg-muted: var(--fd-color-surface-soft);
+  --fd-border-default: var(--fd-color-muted);
+  --fd-border-contrast: rgba(255, 255, 255, 0.2);
+  --fd-border-strong: #707070;
+  --fd-action-primary-bg: var(--fd-color-muted);
+  --fd-action-primary-text: var(--fd-color-white);
+  --fd-action-secondary-bg: var(--fd-color-white);
+  --fd-action-secondary-text: var(--fd-color-main);
+  --fd-state-danger: var(--fd-color-danger);
+
+  /* Typography */
+  --fd-font-family-base: 'Mulish', 'Segoe UI', sans-serif;
+  --fd-font-weight-medium: 500;
+  --fd-font-weight-bold: 700;
+  --fd-font-weight-extrabold: 800;
+  --fd-letter-spacing-tight: -0.02em;
+
+  --fd-font-size-12: 12px;
+  --fd-font-size-14: 14px;
+  --fd-font-size-16: 16px;
+  --fd-font-size-18: 18px;
+  --fd-font-size-20: 20px;
+  --fd-font-size-24: 24px;
+  --fd-font-size-40: 40px;
+
+  --fd-line-height-18: 18px;
+  --fd-line-height-20: 20px;
+  --fd-line-height-24: 24px;
+  --fd-line-height-28: 28px;
+  --fd-line-height-44: 44px;
+
+  /* Figma text style aliases */
+  --fd-type-main-desktop-size: var(--fd-font-size-16);
+  --fd-type-main-desktop-height: var(--fd-line-height-24);
+  --fd-type-main-mobile-size: var(--fd-font-size-14);
+  --fd-type-main-mobile-height: var(--fd-line-height-20);
+  --fd-type-h2-size: var(--fd-font-size-40);
+  --fd-type-h2-height: var(--fd-line-height-44);
+  --fd-type-h3-desktop-size: var(--fd-font-size-24);
+  --fd-type-h3-mobile-size: var(--fd-font-size-18);
+  --fd-type-h4-size: var(--fd-font-size-20);
+
+  /* Spacing */
+  --fd-space-4: 4px;
+  --fd-space-8: 8px;
+  --fd-space-12: 12px;
+  --fd-space-14: 14px;
+  --fd-space-16: 16px;
+  --fd-space-20: 20px;
+  --fd-space-24: 24px;
+  --fd-space-28: 28px;
+  --fd-space-30: 30px;
+  --fd-space-40: 40px;
+  --fd-space-80: 80px;
+
+  /* Control sizes */
+  --fd-control-height-sm: 40px;
+  --fd-control-height-md: 46px;
+  --fd-control-height-lg: 52px;
+  --fd-control-height-xl: 56px;
+
+  /* Radius */
+  --fd-radius-sm: 12px;
+  --fd-radius-md: 18px;
+  --fd-radius-pill: 30px;
+  --fd-radius-full: 9999px;
+
+  /* Borders */
+  --fd-border-width-hairline: 1px;
+
+  /* Shadows */
+  --fd-shadow-none: none;
+  --fd-shadow-focus: 0 0 0 2px rgba(5, 5, 5, 0.2);
+
+  /* Breakpoints */
+  --fd-breakpoint-mobile: 375px;
+  --fd-breakpoint-tablet: 768px;
+  --fd-breakpoint-desktop: 1280px;
+
+  /* Button tokens (87:645, 12385:2750) */
+  --fd-button-text-size: var(--fd-font-size-12);
+  --fd-button-text-height: var(--fd-line-height-18);
+  --fd-button-text-weight: var(--fd-font-weight-bold);
+  --fd-button-radius: var(--fd-radius-pill);
+  --fd-button-height: var(--fd-control-height-xl);
+
+  --fd-button-primary-bg: var(--fd-action-primary-bg);
+  --fd-button-primary-text: var(--fd-action-primary-text);
+  --fd-button-primary-border: transparent;
+  --fd-button-primary-hover-bg: var(--fd-color-main);
+  --fd-button-primary-hover-text: var(--fd-color-white);
+
+  --fd-button-secondary-bg: var(--fd-action-secondary-bg);
+  --fd-button-secondary-text: var(--fd-action-secondary-text);
+  --fd-button-secondary-border: var(--fd-border-default);
+  --fd-button-secondary-hover-bg: var(--fd-color-surface-soft);
+  --fd-button-secondary-hover-text: var(--fd-color-main);
+
+  /* Header tokens (92:1485) */
+  --fd-header-bg: var(--fd-color-main);
+  --fd-header-text: var(--fd-color-white);
+  --fd-header-nav-gap: var(--fd-space-40);
+  --fd-header-nav-border: var(--fd-border-contrast);
+
+  /* Input/TextArea tokens (12387:3010) */
+  --fd-input-text-size: var(--fd-font-size-16);
+  --fd-input-text-height: var(--fd-line-height-24);
+  --fd-input-text-weight: var(--fd-font-weight-medium);
+  --fd-input-placeholder: var(--fd-text-muted);
+  --fd-input-value: var(--fd-text-primary);
+  --fd-input-counter: var(--fd-text-muted);
+  --fd-input-counter-active: var(--fd-text-secondary);
+  --fd-input-counter-error: var(--fd-state-danger);
+  --fd-input-line-default: var(--fd-border-default);
+  --fd-input-line-focus: var(--fd-border-strong);
+  --fd-input-line-error: var(--fd-state-danger);
+  --fd-input-text-error: var(--fd-state-danger);
+  --fd-input-height: var(--fd-control-height-sm);
+
+  /* Auth form tokens (17:779) */
+  --fd-form-surface-bg: var(--fd-bg-muted);
+  --fd-form-title-size: var(--fd-type-h2-size);
+  --fd-form-title-height: var(--fd-type-h2-height);
+  --fd-form-title-weight: var(--fd-font-weight-extrabold);
+  --fd-form-field-bg: transparent;
+  --fd-form-field-border: var(--fd-border-default);
+  --fd-form-support-text: var(--fd-text-muted);
+}
+
+[data-theme='dark'] {
+  /* Theme overrides are semantic only; primitive tokens remain unchanged. */
+  --fd-text-primary: var(--fd-color-white);
+  --fd-text-secondary: #ebebeb;
+  --fd-text-muted: #cfcfcf;
+  --fd-bg-canvas: var(--fd-color-main);
+  --fd-bg-muted: #1a1a1a;
+  --fd-border-default: #707070;
+  --fd-border-strong: #b5b5b5;
+  --fd-action-primary-bg: var(--fd-color-white);
+  --fd-action-primary-text: var(--fd-color-main);
+  --fd-action-secondary-bg: var(--fd-color-main-alt);
+  --fd-action-secondary-text: var(--fd-color-white);
+  --fd-input-line-focus: var(--fd-border-strong);
+  --fd-form-surface-bg: #111111;
+  --fd-form-support-text: #b5b5b5;
+  --fd-shadow-focus: 0 0 0 2px rgba(255, 255, 255, 0.25);
+}

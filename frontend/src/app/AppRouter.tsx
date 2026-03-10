@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
 import { APP_ROUTES } from '../shared/constants/routes';
 import { SharedLayout } from '../widgets/layout/SharedLayout';
@@ -7,7 +8,7 @@ import { AddRecipePage } from '../pages/add-recipe/AddRecipePage';
 import { UserPage } from '../pages/user/UserPage';
 import { NotFoundPage } from '../pages/not-found/NotFoundPage';
 
-export const AppRouter = (): JSX.Element => {
+export const AppRouter = (): ReactElement => {
   return (
     <Routes>
       <Route element={<SharedLayout />}>
