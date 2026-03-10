@@ -1,8 +1,10 @@
+import { fileURLToPath } from "url";
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import db from "./models/index.js";
 
+import categoriesRouter from "./routes/categoriesRouter.js";
 // import authRouter from "./routes/authRouter.js";
 // import contactsRouter from "./routes/contactsRouter.js";
 
@@ -16,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
+app.use("/api/categories", categoriesRouter);
 // app.use("/api/auth", authRouter);
 // app.use("/api/contacts", contactsRouter);
 
@@ -71,17 +74,23 @@ app.use((err, req, res, next) => {
     res.status(status).json({ message });
 });
 
-const PORT = process.env.APP_PORT || 3000;
+export { app, db };
 
-db.sequelize
-    .authenticate()
-    .then(() => {
-        app.listen(PORT, () => {
-            console.log(`Database connection successful.`);
-            console.log(`Server is running. Use our API on port: ${PORT}`);
+const isMain = process.argv[1] === fileURLToPath(import.meta.url);
+
+if (isMain) {
+    const PORT = process.env.APP_PORT || 3000;
+
+    db.sequelize
+        .authenticate()
+        .then(() => {
+            app.listen(PORT, () => {
+                console.log(`Database connection successful.`);
+                console.log(`Server is running. Use our API on port: ${PORT}`);
+            });
+        })
+        .catch((err) => {
+            console.error("Database connection error:", err);
+            process.exit(1);
         });
-    })
-    .catch((err) => {
-        console.error("Database connection error:", err);
-        process.exit(1);
-    });
+}

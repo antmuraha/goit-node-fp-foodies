@@ -4,10 +4,14 @@
     "scripts": {
         "start": "NODE_ENV=production node ./app.js",
         "dev": "NODE_ENV=development nodemon ./app.js",
+        "test": "NODE_OPTIONS='--experimental-vm-modules' NODE_ENV=test jest --forceExit",
         "db:migrate": "sequelize-cli db:migrate",
         "db:migrate:undo": "sequelize-cli db:migrate:undo",
         "db:seed": "sequelize-cli db:seed:all",
         "db:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate"
+    },
+    "jest": {
+        "testEnvironment": "node"
     },
     "dependencies": {
         "bcrypt": "^6.0.0",
@@ -25,8 +29,10 @@
         "uuid": "^13.0.0"
     },
     "devDependencies": {
+        "jest": "^30.3.0",
         "nodemon": "^3.1.14",
-        "sequelize-cli": "^6.6.5"
+        "sequelize-cli": "^6.6.5",
+        "supertest": "^7.2.2"
     },
     "pnpm": {
         "overrides": {
