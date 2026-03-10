@@ -1,0 +1,67 @@
+name: Verify Formatting
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  format-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.0.0
+
+      - name: Setup Node.js (with pnpm cache)
+        if: ${{ hashFiles('**/pnpm-lock.yaml') != '' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
+
+      - name: Setup Node.js (without cache)
+        if: ${{ hashFiles('**/pnpm-lock.yaml') == '' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+
+      - name: Run formatter
+        run: pnpm run format
+
+      - name: Check for formatting changes
+        id: format-check
+        run: |
+          if git diff --exit-code > /dev/null; then
+            echo "✓ Code formatting is correct"
+            echo "status=clean" >> $GITHUB_OUTPUT
+          else
+            echo "status=dirty" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Report formatting issues
+        if: steps.format-check.outputs.status == 'dirty'
+        run: |
+          echo "❌ Code formatting violations detected!"
+          echo ""
+          echo "The following files need formatting:"
+          git diff --name-only
+          echo ""
+          echo "📋 Changes that would be made:"
+          git diff --color=never
+          echo ""
+          echo "🔧 To fix this locally, run:"
+          echo "   pnpm run format"
+          echo ""
+          echo "Then commit and push the changes."
+          exit 1
