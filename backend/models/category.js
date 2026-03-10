@@ -3,7 +3,9 @@ import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
     class Category extends Model {
         static associate(models) {
-            Category.hasMany(models.Recipe, { foreignKey: "categoryId" });
+            if (models.Recipe) {
+                Category.hasMany(models.Recipe, { foreignKey: "categoryId" });
+            }
         }
     }
 
