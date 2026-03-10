@@ -31,6 +31,7 @@ jobs:
         with:
           node-version: 24
           cache: "npm"
+          cache-dependency-path: ${{ matrix.project }}/package-lock.json
 
       # Skip matrix item if project package.json is not present yet
       - name: Check project presence
