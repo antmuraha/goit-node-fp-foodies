@@ -3,6 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import db from "./models/index.js";
 
+import categoriesRouter from "./routes/categoriesRouter.js";
 // import authRouter from "./routes/authRouter.js";
 // import contactsRouter from "./routes/contactsRouter.js";
 
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
+app.use("/api/categories", categoriesRouter);
 // app.use("/api/auth", authRouter);
 // app.use("/api/contacts", contactsRouter);
 
