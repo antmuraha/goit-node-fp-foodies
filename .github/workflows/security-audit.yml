@@ -1,0 +1,106 @@
+name: Security Audit (npm -> SARIF)
+
+on:
+  push:
+    # Run workflow when commits are pushed to main branch
+    branches: [main]
+  pull_request:
+    # Run workflow on pull requests targeting main
+    branches: [main]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      matrix:
+        project: [backend, frontend]
+
+    permissions:
+      # Required to upload SARIF reports to GitHub Security
+      contents: read
+      security-events: write
+
+    steps:
+      # Checkout repository code
+      - uses: actions/checkout@v4
+
+      # Setup Node.js and enable npm cache
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: "npm"
+
+      # Skip matrix item if project package.json is not present yet
+      - name: Check project presence
+        id: project-check
+        run: |
+          if [ -f "${{ matrix.project }}/package.json" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Show a clear reason when frontend is not added yet
+      - name: Project not found
+        if: steps.project-check.outputs.exists != 'true'
+        run: echo "Skipping ${{ matrix.project }} audit because package.json is missing"
+
+      # Install dependencies with clean install for security scanning
+      - name: Install dependencies
+        if: steps.project-check.outputs.exists == 'true'
+        working-directory: ${{ matrix.project }}
+        run: npm ci
+
+      # Build frontend before audit (required for detecting transitive dependencies)
+      - name: Build frontend
+        if: steps.project-check.outputs.exists == 'true' && matrix.project == 'frontend'
+        working-directory: ${{ matrix.project }}
+        run: npm run build
+
+      # Run npm audit and generate JSON output
+      # '|| true' prevents step failure so we handle severity manually
+      - name: Run npm audit
+        if: steps.project-check.outputs.exists == 'true'
+        working-directory: ${{ matrix.project }}
+        run: npm audit --json > audit.json || true
+
+      # Check for critical/high severity vulnerabilities
+      - name: Check for critical vulnerabilities
+        if: steps.project-check.outputs.exists == 'true'
+        working-directory: ${{ matrix.project }}
+        run: |
+          CRITICAL=$(jq '[.vulnerabilities[]?|select(.severity=="critical" or .severity=="high")]|length' audit.json || echo "0")
+          if [ "$CRITICAL" -gt 0 ]; then
+            echo "❌ Found $CRITICAL critical/high severity vulnerabilities"
+            jq '.vulnerabilities[] | select(.severity=="critical" or .severity=="high") | {title, severity, fixAvailable}' audit.json
+            exit 1
+          else
+            echo "✅ No critical/high severity vulnerabilities found"
+          fi
+
+      # Convert audit JSON to SARIF format
+      # '--yes' ensures npx installs without prompts
+      - name: Convert audit to SARIF
+        if: steps.project-check.outputs.exists == 'true'
+        working-directory: ${{ matrix.project }}
+        run: npx --yes npm-audit-sarif audit.json > audit.sarif
+
+      # Upload SARIF file to GitHub Code Scanning
+      - name: Upload SARIF
+        if: steps.project-check.outputs.exists == 'true'
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          sarif_file: ${{ matrix.project }}/audit.sarif
+          category: npm-audit-${{ matrix.project }}
+
+      # Preserve audit reports as artifacts for investigation
+      - name: Upload audit artifacts
+        if: always() && steps.project-check.outputs.exists == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-${{ matrix.project }}
+          path: ${{ matrix.project }}/audit.*
+          retention-days: 30
