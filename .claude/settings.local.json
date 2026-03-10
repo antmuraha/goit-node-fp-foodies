@@ -1,6 +1,11 @@
 {
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "figma"
   ],
-  "enableAllProjectMcpServers": true
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:github.com)"
+    ]
+  }
 }
