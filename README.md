@@ -50,3 +50,11 @@ Terminal 3 (frontend):
 ```bash
 npm --prefix frontend run dev
 ```
+
+## Temporary UI Kit Page
+
+For quick UI component previews (storybook-like), a temporary frontend page is available at:
+
+- `http://localhost:5173/ui-kit`
+
+This page is intended for internal development only and showcases reusable UI primitives and states.
