@@ -1,0 +1,21 @@
+.select {
+  width: 100%;
+  min-height: var(--fd-control-height-md);
+  border: 1px solid var(--fd-input-line-default);
+  border-radius: var(--fd-radius-sm);
+  background-color: var(--fd-bg-canvas);
+  color: var(--fd-input-value);
+  padding: var(--fd-space-8) var(--fd-space-12);
+  font: inherit;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--fd-input-line-focus);
+  box-shadow: var(--fd-shadow-focus);
+}
+
+.error {
+  border-color: var(--fd-input-line-error);
+  color: var(--fd-input-text-error);
+}

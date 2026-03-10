@@ -1,0 +1,5 @@
+.checkbox {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--fd-action-primary-bg);
+}
