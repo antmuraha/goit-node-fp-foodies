@@ -8,6 +8,7 @@ import categoriesRouter from "./routes/categoriesRouter.js";
 import authRouter from "./routes/authRouter.js";
 import ingredientRouter from "./routes/ingredientsRouter.js";
 import areasRouter from "./routes/areasRouter.js";
+import recipesRouter from "./routes/recipesRouter.js";
 // import contactsRouter from "./routes/contactsRouter.js";
 
 const isDev = (process.env.NODE_ENV || "production") === "development";
@@ -23,6 +24,7 @@ app.use(express.static("public"));
 app.use("/api/categories", categoriesRouter);
 app.use("/api/ingredients", ingredientRouter);
 app.use("/api/areas", areasRouter);
+app.use("/api/recipes", recipesRouter);
 app.use("/api/auth", authRouter);
 // app.use("/api/contacts", contactsRouter);
 
