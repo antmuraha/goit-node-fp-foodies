@@ -1,5 +1,5 @@
-import { createPlaceholderSlice } from './createPlaceholderSlice';
+import { createPlaceholderSlice } from "./createPlaceholderSlice";
 
-const favoritesSlice = createPlaceholderSlice('favorites');
+const favoritesSlice = createPlaceholderSlice("favorites");
 
 export const favoritesReducer = favoritesSlice.reducer;

@@ -1,12 +1,12 @@
-import type { ChangeEvent, ReactElement } from 'react';
-import { useState } from 'react';
-import { Button, Checkbox, Input, Radio, Select, TextArea } from '../../shared/ui';
-import styles from './UiKitPage.module.css';
+import type { ChangeEvent, ReactElement } from "react";
+import { useState } from "react";
+import { Button, Checkbox, Input, Radio, Select, TextArea } from "../../shared/ui";
+import styles from "./UiKitPage.module.css";
 
 const SERVING_OPTIONS = [
-  { value: '1', label: '1 serving' },
-  { value: '2', label: '2 servings' },
-  { value: '4', label: '4 servings' },
+  { value: "1", label: "1 serving" },
+  { value: "2", label: "2 servings" },
+  { value: "4", label: "4 servings" },
 ];
 
 export const UiKitPage = (): ReactElement => {
