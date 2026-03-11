@@ -6,6 +6,9 @@ export default (sequelize, DataTypes) => {
       if (models.Testimonial) {
         User.hasMany(models.Testimonial, { foreignKey: "userId", as: "testimonials" });
       }
+      if (models.Recipe) {
+        User.hasMany(models.Recipe, { as: "authoredRecipes", foreignKey: "userId" });
+      }
     }
   }
 
