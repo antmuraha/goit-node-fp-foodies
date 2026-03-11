@@ -1,14 +1,10 @@
 {
-  "info": {
-    "name": "Foodies Auth",
-    "_postman_id": "foodies-auth-collection",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-  },
-  "variable": [
-    {
-      "key": "baseUrl",
-      "value": "http://localhost:3000/api"
+    "info": {
+        "name": "Foodies Auth",
+        "_postman_id": "foodies-auth-collection",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
     },
+<<<<<<< HEAD
     {
       "key": "token",
       "value": ""
@@ -54,17 +50,18 @@
         }
       },
       "event": [
+=======
+    "variable": [
         {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test('Status is 409', () => pm.response.to.have.status(409));",
-              "pm.test('Message is Email in use', () => {",
-              "  pm.expect(pm.response.json().message).to.eql('Email in use');",
-              "});"
-            ]
-          }
+            "key": "baseUrl",
+            "value": "http://localhost:3000/api"
+        },
+>>>>>>> 2bc81c435aad8d40b1cc95343f5f4c75af0bb67e
+        {
+            "key": "token",
+            "value": ""
         }
+<<<<<<< HEAD
       ]
     },
     {
@@ -99,18 +96,62 @@
         }
       },
       "event": [
+=======
+    ],
+    "item": [
         {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test('Status is 200', () => pm.response.to.have.status(200));",
-              "pm.test('Has token and user', () => {",
-              "  const { token, user } = pm.response.json();",
-              "  pm.expect(token).to.be.a('string');",
-              "  pm.expect(user).to.have.keys(['id', 'name', 'email', 'avatar']);",
-              "  pm.collectionVariables.set('token', token);",
-              "});"
+            "name": "Register",
+            "request": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": "{{baseUrl}}/auth/register",
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"secret123\"\n}"
+                }
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status is 201', () => pm.response.to.have.status(201));",
+                            "pm.test('Has user object', () => {",
+                            "  const { user } = pm.response.json();",
+                            "  pm.expect(user).to.have.keys(['id', 'name', 'email', 'avatar']);",
+                            "  pm.expect(user.email).to.eql('jane@example.com');",
+                            "});"
+                        ]
+                    }
+                }
             ]
+        },
+>>>>>>> 2bc81c435aad8d40b1cc95343f5f4c75af0bb67e
+        {
+            "name": "Register — duplicate email (409)",
+            "request": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": "{{baseUrl}}/auth/register",
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"name\": \"Jane Doe\",\n  \"email\": \"jane@example.com\",\n  \"password\": \"secret123\"\n}"
+                }
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status is 409', () => pm.response.to.have.status(409));",
+                            "pm.test('Message is Email in use', () => {",
+                            "  pm.expect(pm.response.json().message).to.eql('Email in use');",
+                            "});"
+                        ]
+                    }
+                }
+            ]
+<<<<<<< HEAD
           }
         }
       ]
@@ -127,18 +168,81 @@
         }
       },
       "event": [
+=======
+        },
+>>>>>>> 2bc81c435aad8d40b1cc95343f5f4c75af0bb67e
         {
-          "listen": "test",
-          "script": {
-            "exec": [
-              "pm.test('Status is 401', () => pm.response.to.have.status(401));",
-              "pm.test('Message is correct', () => {",
-              "  pm.expect(pm.response.json().message).to.eql('Email or password is wrong');",
-              "});"
+            "name": "Register — missing fields (400)",
+            "request": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": "{{baseUrl}}/auth/register",
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"jane@example.com\"\n}"
+                }
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": ["pm.test('Status is 400', () => pm.response.to.have.status(400));"]
+                    }
+                }
             ]
-          }
+        },
+        {
+            "name": "Login",
+            "request": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": "{{baseUrl}}/auth/login",
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"jane@example.com\",\n  \"password\": \"secret123\"\n}"
+                }
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status is 200', () => pm.response.to.have.status(200));",
+                            "pm.test('Has token and user', () => {",
+                            "  const { token, user } = pm.response.json();",
+                            "  pm.expect(token).to.be.a('string');",
+                            "  pm.expect(user).to.have.keys(['id', 'name', 'email', 'avatar']);",
+                            "  pm.collectionVariables.set('token', token);",
+                            "});"
+                        ]
+                    }
+                }
+            ]
+        },
+        {
+            "name": "Login — wrong password (401)",
+            "request": {
+                "method": "POST",
+                "header": [{ "key": "Content-Type", "value": "application/json" }],
+                "url": "{{baseUrl}}/auth/login",
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n  \"email\": \"jane@example.com\",\n  \"password\": \"wrongpassword\"\n}"
+                }
+            },
+            "event": [
+                {
+                    "listen": "test",
+                    "script": {
+                        "exec": [
+                            "pm.test('Status is 401', () => pm.response.to.have.status(401));",
+                            "pm.test('Message is correct', () => {",
+                            "  pm.expect(pm.response.json().message).to.eql('Email or password is wrong');",
+                            "});"
+                        ]
+                    }
+                }
+            ]
         }
-      ]
-    }
-  ]
+    ]
 }
