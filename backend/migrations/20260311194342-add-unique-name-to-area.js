@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 export default {
@@ -17,4 +17,4 @@ export default {
       unique: false,
     });
   },
-}; 
+};

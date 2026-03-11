@@ -16,11 +16,11 @@ export default (sequelize, DataTypes) => {
         otherKey: "areaId",
       });
       Recipe.belongsToMany(models.User, {
-        through: models.Favorite, 
-        foreignKey: "recipeId", 
+        through: models.Favorite,
+        foreignKey: "recipeId",
         otherKey: "userId",
-        as: "favoritedBy"
-      })
+        as: "favoritedBy",
+      });
     }
   }
 
