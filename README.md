@@ -35,6 +35,10 @@ npx concurrently -n backend,frontend -c green,blue \
 Run checks:
 
 ```bash
+# Run formatting backend and frontend together
+npm --prefix backend run format && npm --prefix backend run format:check
+
+# OR
 npm --prefix backend run format:check
 npm --prefix backend run lint:check
 npm --prefix frontend run format:check
