@@ -19,6 +19,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/api/categories", categoriesRouter);
+app.use("/api/areas", categoriesRouter);
 app.use("/api/auth", authRouter);
 // app.use("/api/contacts", contactsRouter);
 
