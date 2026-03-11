@@ -1,5 +1,95 @@
-import { createPlaceholderSlice } from "./createPlaceholderSlice";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import type { UserSummary } from "../../entities/user";
+import { usersApi } from "../../api/endpoints/usersApi";
+import type { ApiError, AsyncStatus } from "../../shared/types/api";
 
-const usersSlice = createPlaceholderSlice("users");
+type UsersState = {
+  list: UserSummary[];
+  selectedUser: UserSummary | null;
+  listStatus: AsyncStatus;
+  selectedUserStatus: AsyncStatus;
+  listError: string | null;
+  selectedUserError: string | null;
+};
 
+const initialState: UsersState = {
+  list: [],
+  selectedUser: null,
+  listStatus: "idle",
+  selectedUserStatus: "idle",
+  listError: null,
+  selectedUserError: null,
+};
+
+const getErrorMessage = (error: unknown): string => {
+  if (typeof error === "object" && error !== null && "message" in error && typeof error.message === "string") {
+    return error.message;
+  }
+
+  return "Unexpected users request error";
+};
+
+export const fetchUsers = createAsyncThunk<UserSummary[], void, { rejectValue: string }>(
+  "users/fetchUsers",
+  async (_, thunkApi) => {
+    try {
+      const response = await usersApi.getUsers();
+      return response.users;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
+    }
+  },
+);
+
+export const fetchUserById = createAsyncThunk<UserSummary, number, { rejectValue: string }>(
+  "users/fetchUserById",
+  async (id, thunkApi) => {
+    try {
+      return await usersApi.getUserById(id);
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
+    }
+  },
+);
+
+const usersSlice = createSlice({
+  name: "users",
+  initialState,
+  reducers: {
+    clearSelectedUser: (state) => {
+      state.selectedUser = null;
+      state.selectedUserError = null;
+      state.selectedUserStatus = "idle";
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchUsers.pending, (state) => {
+        state.listStatus = "loading";
+        state.listError = null;
+      })
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        state.listStatus = "succeeded";
+        state.list = action.payload;
+      })
+      .addCase(fetchUsers.rejected, (state, action) => {
+        state.listStatus = "failed";
+        state.listError = action.payload ?? "Unable to load users";
+      })
+      .addCase(fetchUserById.pending, (state) => {
+        state.selectedUserStatus = "loading";
+        state.selectedUserError = null;
+      })
+      .addCase(fetchUserById.fulfilled, (state, action) => {
+        state.selectedUserStatus = "succeeded";
+        state.selectedUser = action.payload;
+      })
+      .addCase(fetchUserById.rejected, (state, action) => {
+        state.selectedUserStatus = "failed";
+        state.selectedUserError = action.payload ?? "Unable to load user";
+      });
+  },
+});
+
+export const { clearSelectedUser } = usersSlice.actions;
 export const usersReducer = usersSlice.reducer;

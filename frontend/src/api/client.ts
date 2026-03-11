@@ -1,5 +1,85 @@
-const API_URL = import.meta.env.VITE_API_URL ?? "";
+import type { ApiError, HttpMethod, QueryValue, RequestConfig } from "../shared/types/api";
+
+const API_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3000";
+
+const buildQueryString = (params?: Record<string, QueryValue>): string => {
+  if (!params) {
+    return "";
+  }
+
+  const searchParams = new URLSearchParams();
+
+  for (const [key, value] of Object.entries(params)) {
+    if (value === undefined || value === null || value === "") {
+      continue;
+    }
+
+    searchParams.append(key, String(value));
+  }
+
+  const queryString = searchParams.toString();
+  return queryString ? `?${queryString}` : "";
+};
+
+const normalizeError = async (response: Response): Promise<ApiError> => {
+  let data: unknown = null;
+
+  try {
+    data = await response.json();
+  } catch {
+    data = null;
+  }
+
+  const messageFromBody =
+    data && typeof data === "object" && "message" in data && typeof data.message === "string" ? data.message : null;
+
+  return {
+    message: messageFromBody ?? `Request failed with status ${response.status}`,
+    status: response.status,
+    details: data,
+  };
+};
+
+const request = async <TResponse, TBody = unknown>(
+  method: HttpMethod,
+  path: string,
+  config?: RequestConfig<TBody>,
+): Promise<TResponse> => {
+  const queryString = buildQueryString(config?.query);
+  const url = `${API_URL}/api${path}${queryString}`;
+
+  const headers = new Headers(config?.headers);
+  const hasBody = config?.body !== undefined;
+
+  if (hasBody && !headers.has("Content-Type")) {
+    headers.set("Content-Type", "application/json");
+  }
+
+  const response = await fetch(url, {
+    method,
+    headers,
+    body: hasBody ? JSON.stringify(config?.body) : undefined,
+  });
+
+  if (!response.ok) {
+    throw await normalizeError(response);
+  }
+
+  if (response.status === 204) {
+    return undefined as TResponse;
+  }
+
+  return (await response.json()) as TResponse;
+};
 
 export const apiClient = {
   baseUrl: API_URL,
+  get: <TResponse>(path: string, config?: RequestConfig) => request<TResponse>("GET", path, config),
+  post: <TResponse, TBody = unknown>(path: string, config?: RequestConfig<TBody>) =>
+    request<TResponse, TBody>("POST", path, config),
+  patch: <TResponse, TBody = unknown>(path: string, config?: RequestConfig<TBody>) =>
+    request<TResponse, TBody>("PATCH", path, config),
+  put: <TResponse, TBody = unknown>(path: string, config?: RequestConfig<TBody>) =>
+    request<TResponse, TBody>("PUT", path, config),
+  delete: <TResponse>(path: string, config?: RequestConfig) => request<TResponse>("DELETE", path, config),
 };
