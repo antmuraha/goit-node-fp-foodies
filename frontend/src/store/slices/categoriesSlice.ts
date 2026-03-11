@@ -1,5 +1,5 @@
-import { createPlaceholderSlice } from './createPlaceholderSlice';
+import { createPlaceholderSlice } from "./createPlaceholderSlice";
 
-const categoriesSlice = createPlaceholderSlice('categories');
+const categoriesSlice = createPlaceholderSlice("categories");
 
 export const categoriesReducer = categoriesSlice.reducer;

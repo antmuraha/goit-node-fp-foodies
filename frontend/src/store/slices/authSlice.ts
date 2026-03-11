@@ -1,5 +1,5 @@
-import { createPlaceholderSlice } from './createPlaceholderSlice';
+import { createPlaceholderSlice } from "./createPlaceholderSlice";
 
-const authSlice = createPlaceholderSlice('auth');
+const authSlice = createPlaceholderSlice("auth");
 
 export const authReducer = authSlice.reducer;
