@@ -1,15 +1,7 @@
 import { Op } from "sequelize";
 import db from "../models/index.js";
 
-const {
-  Recipe,
-  Category,
-  User,
-  Ingredient,
-  Area,
-  RecipeIngredient,
-  RecipeArea
-} = db;
+const { Recipe, Category, User, Ingredient, Area, RecipeIngredient, RecipeArea } = db;
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
@@ -82,33 +74,32 @@ export const createRecipe = async (userId, data) => {
   const { ingredients, areas, ...recipeData } = data;
 
   return db.sequelize.transaction(async (t) => {
-
     const recipe = await Recipe.create(
-        {
-          ...recipeData,
-          userId,
-        },
-        { transaction: t }
+      {
+        ...recipeData,
+        userId,
+      },
+      { transaction: t },
     );
 
     if (ingredients?.length) {
       await RecipeIngredient.bulkCreate(
-          ingredients.map((i) => ({
-            recipeId: recipe.id,
-            ingredientId: i.ingredientId,
-            quantity: i.quantity,
-          })),
-          { transaction: t }
+        ingredients.map((i) => ({
+          recipeId: recipe.id,
+          ingredientId: i.ingredientId,
+          quantity: i.quantity,
+        })),
+        { transaction: t },
       );
     }
 
     if (areas?.length) {
       await RecipeArea.bulkCreate(
-          areas.map((areaId) => ({
-            recipeId: recipe.id,
-            areaId,
-          })),
-          { transaction: t }
+        areas.map((areaId) => ({
+          recipeId: recipe.id,
+          areaId,
+        })),
+        { transaction: t },
       );
     }
 
