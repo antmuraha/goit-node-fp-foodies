@@ -37,3 +37,13 @@ export const login = async ({ email, password }) => {
     user: { id: user.id, name: user.name, email: user.email, avatar: user.avatar },
   };
 };
+
+export const logout = async (id) => {
+  const user = await db.User.findOne({ where: { id } });
+  if (!user) {
+    throw { status: 401, message: "Not authorized" };
+  }
+
+  await user.update({ token: null });
+  return user;
+};
