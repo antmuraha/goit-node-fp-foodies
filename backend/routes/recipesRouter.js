@@ -5,9 +5,10 @@ import { validateBody } from "../helpers/validateBody.js";
 
 const recipesRouter = new Router();
 
-// временная заглушка auth чтобы работало пока не сделают authenticate
-// когда будет авторизация - убрать сщтые и добавить import следующий
-// import authenticate from "../helpers/authenticate.js"; в шапке файла
+// todo: temporary auth stub to work until authenticate
+// when authenticate will be ready - remove the stub (const authenticate) and add import as follows
+// import authenticate from ".. /helpers/authenticate.js";
+// in the top
 const authenticate = (req, res, next) => {
   req.user = { id: 1 }; // fake user
   next();
