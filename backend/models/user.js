@@ -3,8 +3,8 @@ import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      if(models.Testimonial){
-        User.hasMany(models.Testimonial, { foreignKey: 'userId', as: 'testimonials' });
+      if (models.Testimonial) {
+        User.hasMany(models.Testimonial, { foreignKey: "userId", as: "testimonials" });
       }
     }
   }
