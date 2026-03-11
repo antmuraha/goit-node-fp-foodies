@@ -3,11 +3,7 @@
     "formatter": {
         "enabled": true,
         "indentStyle": "space",
-<<<<<<< HEAD
         "indentWidth": 2,
-=======
-        "indentWidth": 4,
->>>>>>> 2bc81c435aad8d40b1cc95343f5f4c75af0bb67e
         "lineWidth": 120
     },
     "assist": { "actions": { "source": { "organizeImports": "on" } } },
