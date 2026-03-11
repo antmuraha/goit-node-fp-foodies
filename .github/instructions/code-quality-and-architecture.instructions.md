@@ -21,16 +21,16 @@ Apply these rules to all code changes unless a stronger repository rule override
 
 - Do not hardcode repeated literals in business logic.
 - Store reusable values in dedicated modules:
-  - `constants/`
-  - `config/`
-  - `enums/`
+    - `constants/`
+    - `config/`
+    - `enums/`
 - Extract and centralize:
-  - API endpoints and route fragments
-  - status codes
-  - default values
-  - magic numbers
-  - reusable string literals
-  - environment key names
+    - API endpoints and route fragments
+    - status codes
+    - default values
+    - magic numbers
+    - reusable string literals
+    - environment key names
 
 ## 3. API Access Through Wrappers
 
@@ -50,10 +50,10 @@ Apply these rules to all code changes unless a stronger repository rule override
 - Avoid duplicate logic across routes, services, and UI modules.
 - Extract reusable logic into shared modules (`utils/`, `helpers/`) with clear ownership.
 - Preserve separation between:
-  - business logic
-  - API communication
-  - UI/presentation
-  - configuration/constants
+    - business logic
+    - API communication
+    - UI/presentation
+    - configuration/constants
 
 ## 6. Functional HTML Element Encapsulation
 
@@ -126,11 +126,3 @@ rg "'[^']{8,}'|\"[^\"]{8,}\"" apps packages
 - `manage-centralized-constants`
 - `create-api-service-wrapper`
 - `implement-dependency-adapter-layer`
-- `validate-import-paths`
-- `enforce-hono-rpc-only`
-- `create-button-component`
-- `create-form-input-component`
-- `create-textarea-component`
-- `create-select-component`
-- `create-checkbox-component`
-- `create-radio-component`
