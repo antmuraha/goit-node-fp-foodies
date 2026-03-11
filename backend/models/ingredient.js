@@ -3,9 +3,11 @@ import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class Ingredient extends Model {
     static associate(models) {
-      if (models.RecipeIngredient) {
-        Ingredient.hasMany(models.RecipeIngredient, { foreignKey: "ingredientId" });
-      }
+      Ingredient.belongsToMany(models.Recipe, {
+        through: models.RecipeIngredient,
+        foreignKey: "ingredientId",
+        otherKey: "recipeId",
+      });
     }
   }
   Ingredient.init(
