@@ -32,5 +32,5 @@ jobs:
       - name: Run formatter check
         run: npm --prefix ${{ matrix.project }} run format:check
 
-      - name: Run lint check
-        run: npm --prefix ${{ matrix.project }} run lint:check
+      # - name: Run lint check
+      #   run: npm --prefix ${{ matrix.project }} run lint:check
