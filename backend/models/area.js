@@ -2,17 +2,33 @@ import { Model } from "sequelize";
 
 export default (sequelize, DataTypes) => {
   class Area extends Model {
-    static associate(models) {}
+    static associate(models) {
+      if (models.RecipeArea) {
+        Area.belongsToMany(models.Recipe, {
+          through: models.RecipeArea,
+          foreignKey: "areaId",
+          otherKey: "recipeId",
+        });
+      }
+    }
   }
   Area.init(
     {
-      name: DataTypes.STRING,
-      allowNull: false,
+      id: {
+        type: DataTypes.INTEGER,
+        autoIncrement: true,
+        primaryKey: true,
+        allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       sequelize,
       modelName: "Area",
-      tableName: "users",
+      tableName: "areas",
     },
   );
   return Area;
