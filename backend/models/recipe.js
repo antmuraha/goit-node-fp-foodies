@@ -15,6 +15,12 @@ export default (sequelize, DataTypes) => {
         foreignKey: "recipeId",
         otherKey: "areaId",
       });
+      Recipe.belongsToMany(models.User, {
+        through: models.Favorite, 
+        foreignKey: "recipeId", 
+        otherKey: "userId",
+        as: "favoritedBy"
+      })
     }
   }
 
@@ -26,7 +32,7 @@ export default (sequelize, DataTypes) => {
         primaryKey: true,
         allowNull: false,
       },
-      name: {
+      title: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -42,8 +48,8 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.INTEGER,
         allowNull: true,
       },
-      servings: {
-        type: DataTypes.INTEGER,
+      thumbnail: {
+        type: DataTypes.TEXT,
         allowNull: true,
       },
       image: {

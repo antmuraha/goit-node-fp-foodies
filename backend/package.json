@@ -9,6 +9,7 @@
     "format:check": "biome format .",
     "lint": "biome lint --write .",
     "lint:check": "biome lint .",
+    "db:migration:generate": "sequelize-cli migration:generate --name",
     "db:migrate": "sequelize-cli db:migrate",
     "db:migrate:undo": "sequelize-cli db:migrate:undo",
     "db:seed": "sequelize-cli db:seed:all",
