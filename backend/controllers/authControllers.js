@@ -1,14 +1,8 @@
-import { registerSchema, loginSchema } from "../schemas/authSchemas.js";
 import { register, login, logout } from "../services/authServices.js";
 
 export const registerUser = async (req, res, next) => {
   try {
-    const { error, value } = registerSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.message });
-    }
-
-    const user = await register(value);
+    const user = await register(req.body);
     res.status(201).json({ user });
   } catch (err) {
     next(err);
@@ -17,12 +11,7 @@ export const registerUser = async (req, res, next) => {
 
 export const loginUser = async (req, res, next) => {
   try {
-    const { error, value } = loginSchema.validate(req.body);
-    if (error) {
-      return res.status(400).json({ message: error.message });
-    }
-
-    const result = await login(value);
+    const result = await login(req.body);
     res.status(200).json(result);
   } catch (err) {
     next(err);

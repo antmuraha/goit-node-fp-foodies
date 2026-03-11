@@ -6,13 +6,15 @@ export default (sequelize, DataTypes) => {
   }
   Area.init(
     {
-      name: DataTypes.STRING,
-      allowNull: false,
+      name: {
+        type: DataTypes.STRING,
+        allowNull: false,
+      },
     },
     {
       sequelize,
       modelName: "Area",
-      tableName: "users",
+      tableName: "areas",
     },
   );
   return Area;
