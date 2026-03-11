@@ -495,20 +495,63 @@ podman-compose -f docker-compose.dev.yaml down
 
 Sequelize migrations manage database schema changes. Migrations are versioned and allow you to evolve your database schema over time.
 
-Current migrations include users, contacts, and `avatarURL` column for users.
+**Recipe-domain migrations (9 total, in apply order):**
+
+| # | File | Table |
+|---|------|-------|
+| 1 | `20260310120000-create-categories.js` | `categories` |
+| 2 | `20260310140000-create-users.js` | `users` |
+| 3 | `20260311104817-create-area.js` | `areas` |
+| 4 | `20260311121928-create-ingredient.js` | `ingredients` |
+| 5 | `20260311152926-create-testimonials.js` | `testimonials` |
+| 6 | `20260312000000-create-recipes.js` | `recipes` |
+| 7 | `20260312000001-create-recipe-ingredients.js` | `recipeIngredients` |
+| 8 | `20260312000002-create-recipe-areas.js` | `recipeAreas` |
+| 9 | `20260312000003-create-favorites.js` | `favorites` |
+| 10 | `20260312000004-create-follows.js` | `follows` |
+
+Junction tables (`recipeIngredients`, `recipeAreas`, `favorites`, `follows`) reference parent tables via foreign keys with `ON DELETE CASCADE`, so they are always rolled back before their parents.
 
 **Available migration commands:**
 
 ```bash
 # Apply all pending migrations
-pnpm db:migrate
+npm --prefix backend run db:migrate
 
 # Undo the last migration
-pnpm db:migrate:undo
+npm --prefix backend run db:migrate:undo
 
-# Reset database (undo all migrations and reapply)
-pnpm db:reset
+# Undo ALL migrations
+npm --prefix backend run db:migrate:undo:all
+
+# Show applied/pending migration status
+npm --prefix backend run db:migrate:status
+
+# Reset database (undo all + reapply)
+npm --prefix backend run db:reset
+
+# Run full rollback verification suite
+npm --prefix backend run db:migrate:verify
 ```
+
+#### 2a. Migration Rollback Verification
+
+The script `backend/scripts/test-migrations.sh` validates that every migration can be safely rolled back. It runs four phases:
+
+1. **Apply** — runs `db:migrate` and checks that all 10 tables exist.
+2. **Rollback** — runs `db:migrate:undo` once per migration and verifies no orphaned tables remain.
+3. **Idempotency** — re-applies all migrations to confirm the schema rebuilds cleanly.
+4. **Sequence check** — confirms PostgreSQL auto-increment sequences are present.
+
+```bash
+# Run from the repository root
+bash backend/scripts/test-migrations.sh
+
+# Or via npm script (from repository root)
+npm --prefix backend run db:migrate:verify
+```
+
+Prerequisites: PostgreSQL must be running and `backend/.env` must contain valid credentials.
 
 **Creating a new migration:**
 

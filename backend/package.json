@@ -11,8 +11,11 @@
     "lint:check": "biome lint .",
     "db:migrate": "sequelize-cli db:migrate",
     "db:migrate:undo": "sequelize-cli db:migrate:undo",
+    "db:migrate:undo:all": "sequelize-cli db:migrate:undo:all",
+    "db:migrate:status": "sequelize-cli db:migrate:status",
     "db:seed": "sequelize-cli db:seed:all",
-    "db:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate"
+    "db:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate",
+    "db:migrate:verify": "bash scripts/test-migrations.sh"
   },
   "jest": {
     "testEnvironment": "node"
