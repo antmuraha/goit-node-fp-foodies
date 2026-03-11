@@ -5,16 +5,12 @@ export default {
   async up(queryInterface) {
     const now = new Date();
 
-    const [categories] = await queryInterface.sequelize.query(
-      "SELECT id, name FROM categories ORDER BY name ASC",
-    );
+    const [categories] = await queryInterface.sequelize.query("SELECT id, name FROM categories ORDER BY name ASC");
     if (categories.length === 0) return;
 
     const categoryMap = Object.fromEntries(categories.map((c) => [c.name, c.id]));
 
-    const [areas] = await queryInterface.sequelize.query(
-      "SELECT id, name FROM areas ORDER BY name ASC",
-    );
+    const [areas] = await queryInterface.sequelize.query("SELECT id, name FROM areas ORDER BY name ASC");
     const areaMap = Object.fromEntries(areas.map((a) => [a.name, a.id]));
 
     const recipes = [
@@ -127,9 +123,7 @@ export default {
     await queryInterface.bulkInsert("recipes", recipes);
 
     if (Object.keys(areaMap).length > 0) {
-      const [insertedRecipes] = await queryInterface.sequelize.query(
-        "SELECT id, name FROM recipes ORDER BY id ASC",
-      );
+      const [insertedRecipes] = await queryInterface.sequelize.query("SELECT id, name FROM recipes ORDER BY id ASC");
 
       const recipeAreaRows = [];
       const recipeAreas = [
