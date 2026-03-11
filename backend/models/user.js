@@ -2,7 +2,11 @@ import { Model } from "sequelize";
 
 export default (sequelize, DataTypes) => {
   class User extends Model {
-    static associate(models) {}
+    static associate(models) {
+      if(models.Testimonial){
+        User.hasMany(models.Testimonial, { foreignKey: 'userId', as: 'testimonials' });
+      }
+    }
   }
 
   User.init(
