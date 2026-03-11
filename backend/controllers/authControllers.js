@@ -1,5 +1,5 @@
-import { registerSchema, loginSchema } from '../schemas/authSchemas.js';
-import { register, login, logout } from '../services/authServices.js';
+import { registerSchema, loginSchema } from "../schemas/authSchemas.js";
+import { register, login, logout } from "../services/authServices.js";
 
 export const registerUser = async (req, res, next) => {
   try {
@@ -30,10 +30,10 @@ export const loginUser = async (req, res, next) => {
 };
 
 export const logoutUser = async (req, res, next) => {
-    try {
-        await logout(req.user.id);
-        res.status(204).send();
-    } catch (err) {
-        next(err);
-    }
+  try {
+    await logout(req.user.id);
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
 };
