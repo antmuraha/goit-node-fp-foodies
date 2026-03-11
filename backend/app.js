@@ -10,6 +10,7 @@ import ingredientRouter from "./routes/ingredientsRouter.js";
 import testimonialsRouter from "./routes/testimonialsRouter.js";
 import areasRouter from "./routes/areasRouter.js";
 import recipesRouter from "./routes/recipesRouter.js";
+import usersRouter from "./routes/usersRouter.js";
 // import contactsRouter from "./routes/contactsRouter.js";
 
 const isDev = (process.env.NODE_ENV || "production") === "development";
@@ -28,6 +29,7 @@ app.use("/api/testimonials", testimonialsRouter);
 app.use("/api/areas", areasRouter);
 app.use("/api/recipes", recipesRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/users", usersRouter);
 // app.use("/api/contacts", contactsRouter);
 
 app.use((_, res) => {
