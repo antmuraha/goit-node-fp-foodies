@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 /** @type {import('sequelize-cli').Migration} */
 export default {
@@ -11,8 +11,8 @@ export default {
 
   async down(queryInterface, Sequelize) {
     await queryInterface.changeColumn("ingredients", "description", {
-        type: Sequelize.STRING,
-        allowNull: false,
+      type: Sequelize.STRING,
+      allowNull: false,
     });
-  }
+  },
 };

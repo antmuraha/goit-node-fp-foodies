@@ -8,27 +8,19 @@ export default {
     const now = new Date();
 
     // --- lookup tables already seeded ---
-    const [dbCategories] = await queryInterface.sequelize.query(
-      "SELECT id, name FROM categories",
-    );
+    const [dbCategories] = await queryInterface.sequelize.query("SELECT id, name FROM categories");
     const categoryMap = Object.fromEntries(dbCategories.map((c) => [c.name, c.id]));
 
-    const [dbAreas] = await queryInterface.sequelize.query(
-      "SELECT id, name FROM areas",
-    );
+    const [dbAreas] = await queryInterface.sequelize.query("SELECT id, name FROM areas");
     const areaMap = Object.fromEntries(dbAreas.map((a) => [a.name, a.id]));
 
-    const [dbUsers] = await queryInterface.sequelize.query(
-      "SELECT id, email FROM users",
-    );
+    const [dbUsers] = await queryInterface.sequelize.query("SELECT id, email FROM users");
     const userEmailMap = Object.fromEntries(dbUsers.map((u) => [u.email, u.id]));
 
     // Map CSV user string-id → DB integer id via email
     const csvUsers = loadCSV("users.csv");
     const csvUserIdToDbId = Object.fromEntries(
-      csvUsers
-        .filter((u) => userEmailMap[u.email] !== undefined)
-        .map((u) => [u.id, userEmailMap[u.email]]),
+      csvUsers.filter((u) => userEmailMap[u.email] !== undefined).map((u) => [u.id, userEmailMap[u.email]]),
     );
 
     // --- build recipe rows ---
@@ -52,9 +44,7 @@ export default {
     );
 
     // --- recipeAreas ---
-    const [dbRecipes] = await queryInterface.sequelize.query(
-      "SELECT id, name FROM recipes",
-    );
+    const [dbRecipes] = await queryInterface.sequelize.query("SELECT id, name FROM recipes");
     const recipeTitleToDbId = Object.fromEntries(dbRecipes.map((r) => [r.name, r.id]));
 
     const recipeAreaRows = [];

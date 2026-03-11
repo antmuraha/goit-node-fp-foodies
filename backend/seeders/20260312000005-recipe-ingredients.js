@@ -9,12 +9,8 @@ export default {
 
     // Build CSV string-id → DB integer-id map for ingredients
     const csvIngredients = loadCSV("ingredients.csv");
-    const [dbIngredients] = await queryInterface.sequelize.query(
-      "SELECT id, name FROM ingredients",
-    );
-    const ingredientNameToDbId = Object.fromEntries(
-      dbIngredients.map((i) => [i.name, i.id]),
-    );
+    const [dbIngredients] = await queryInterface.sequelize.query("SELECT id, name FROM ingredients");
+    const ingredientNameToDbId = Object.fromEntries(dbIngredients.map((i) => [i.name, i.id]));
     const csvIngredientIdToDbId = Object.fromEntries(
       csvIngredients
         .filter((i) => ingredientNameToDbId[i.name] !== undefined)
@@ -23,16 +19,10 @@ export default {
 
     // Build CSV string-id → DB integer-id map for recipes
     const csvRecipes = loadCSV("recipes.csv");
-    const [dbRecipes] = await queryInterface.sequelize.query(
-      "SELECT id, name FROM recipes",
-    );
-    const recipeTitleToDbId = Object.fromEntries(
-      dbRecipes.map((r) => [r.name, r.id]),
-    );
+    const [dbRecipes] = await queryInterface.sequelize.query("SELECT id, name FROM recipes");
+    const recipeTitleToDbId = Object.fromEntries(dbRecipes.map((r) => [r.name, r.id]));
     const csvRecipeIdToDbId = Object.fromEntries(
-      csvRecipes
-        .filter((r) => recipeTitleToDbId[r.title] !== undefined)
-        .map((r) => [r.id, recipeTitleToDbId[r.title]]),
+      csvRecipes.filter((r) => recipeTitleToDbId[r.title] !== undefined).map((r) => [r.id, recipeTitleToDbId[r.title]]),
     );
 
     // Build recipeIngredients rows

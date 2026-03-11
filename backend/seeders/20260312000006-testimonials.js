@@ -9,14 +9,10 @@ export default {
 
     // Build CSV user string-id → DB integer-id map
     const csvUsers = loadCSV("users.csv");
-    const [dbUsers] = await queryInterface.sequelize.query(
-      "SELECT id, email FROM users",
-    );
+    const [dbUsers] = await queryInterface.sequelize.query("SELECT id, email FROM users");
     const userEmailToDbId = Object.fromEntries(dbUsers.map((u) => [u.email, u.id]));
     const csvUserIdToDbId = Object.fromEntries(
-      csvUsers
-        .filter((u) => userEmailToDbId[u.email] !== undefined)
-        .map((u) => [u.id, userEmailToDbId[u.email]]),
+      csvUsers.filter((u) => userEmailToDbId[u.email] !== undefined).map((u) => [u.id, userEmailToDbId[u.email]]),
     );
 
     const csvTestimonials = loadCSV("testimonials.csv");
