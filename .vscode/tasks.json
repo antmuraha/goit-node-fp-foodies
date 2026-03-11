@@ -2,9 +2,17 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Validate: Full Compliance",
+      "label": "Formatting code",
       "type": "shell",
-      "command": "./scripts/validate-skills.sh && ./scripts/validate-architecture-quality.sh",
+      "command": "export NVM_DIR=\"$HOME/.nvm\" && [ -s \"$NVM_DIR/nvm.sh\" ] && . \"$NVM_DIR/nvm.sh\" && npm run --prefix frontend format && npm run --prefix backend format",
+      "options": {
+        "shell": {
+          "executable": "/bin/bash",
+          "args": [
+            "-lc"
+          ]
+        }
+      },
       "group": "test",
       "problemMatcher": []
     }
