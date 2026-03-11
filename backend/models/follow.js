@@ -3,8 +3,8 @@ import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class Follow extends Model {
     static associate(models) {
-      Follow.belongsTo(models.User, { as: "follower", foreignKey: "followerId" });
-      Follow.belongsTo(models.User, { as: "following", foreignKey: "followingId" });
+      Follow.belongsTo(models.User, { foreignKey: "followerId", as: "follower" });
+      Follow.belongsTo(models.User, { foreignKey: "followingId", as: "following" });
     }
   }
 

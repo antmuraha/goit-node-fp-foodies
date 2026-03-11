@@ -10,11 +10,26 @@ export default (sequelize, DataTypes) => {
         User.hasMany(models.Recipe, { as: "authoredRecipes", foreignKey: "userId" });
       }
       if (models.Favorite) {
-        User.hasMany(models.Favorite, { foreignKey: "userId", as: "favorites" });
+        User.belongsToMany(models.Recipe, {
+          through: models.Favorite,
+          foreignKey: "userId",
+          otherKey: "recipeId",
+          as: "favoriteRecipes",
+        });
       }
       if (models.Follow) {
-        User.hasMany(models.Follow, { foreignKey: "followerId", as: "following" });
-        User.hasMany(models.Follow, { foreignKey: "followingId", as: "followers" });
+        User.belongsToMany(models.User, {
+          through: models.Follow,
+          foreignKey: "followerId",
+          otherKey: "followingId",
+          as: "following",
+        });
+        User.belongsToMany(models.User, {
+          through: models.Follow,
+          foreignKey: "followingId",
+          otherKey: "followerId",
+          as: "followers",
+        });
       }
     }
   }
