@@ -30,6 +30,26 @@ npx concurrently -n backend,frontend -c green,blue \
 	"npm --prefix frontend run dev"
 ```
 
+## Formatting And Linting (Biome)
+
+Run checks:
+
+```bash
+npm --prefix backend run format:check
+npm --prefix backend run lint:check
+npm --prefix frontend run format:check
+npm --prefix frontend run lint:check
+```
+
+Auto-fix formatting and lint issues:
+
+```bash
+npm --prefix backend run format
+npm --prefix backend run lint
+npm --prefix frontend run format
+npm --prefix frontend run lint
+```
+
 ## Run Split (Separate Terminals)
 
 Terminal 1 (database):

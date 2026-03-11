@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Validate: Full Compliance",
+      "type": "shell",
+      "command": "./scripts/validate-skills.sh && ./scripts/validate-architecture-quality.sh",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}

@@ -5,10 +5,14 @@
         "start": "NODE_ENV=production node ./app.js",
         "dev": "NODE_ENV=development nodemon ./app.js",
         "test": "NODE_OPTIONS='--experimental-vm-modules' NODE_ENV=test jest --forceExit",
-        "db:migrate": "npx sequelize-cli db:migrate",
-        "db:migrate:undo": "npx sequelize-cli db:migrate:undo",
-        "db:seed": "npx sequelize-cli db:seed:all",
-        "db:reset": "npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate"
+        "format": "biome format --write .",
+        "format:check": "biome format .",
+        "lint": "biome lint --write .",
+        "lint:check": "biome lint .",
+        "db:migrate": "sequelize-cli db:migrate",
+        "db:migrate:undo": "sequelize-cli db:migrate:undo",
+        "db:seed": "sequelize-cli db:seed:all",
+        "db:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate"
     },
     "jest": {
         "testEnvironment": "node"
@@ -29,16 +33,10 @@
         "uuid": "^13.0.0"
     },
     "devDependencies": {
+        "@biomejs/biome": "^2.4.6",
         "jest": "^30.3.0",
         "nodemon": "^3.1.14",
         "sequelize-cli": "^6.6.5",
         "supertest": "^7.2.2"
-    },
-    "pnpm": {
-        "overrides": {
-            "minimatch": "^9.0.7",
-            "dottie": "^2.0.7",
-            "qs": "^6.14.2"
-        }
     }
 }
