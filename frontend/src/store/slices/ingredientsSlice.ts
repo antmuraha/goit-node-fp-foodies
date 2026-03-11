@@ -1,5 +1,5 @@
-import { createPlaceholderSlice } from './createPlaceholderSlice';
+import { createPlaceholderSlice } from "./createPlaceholderSlice";
 
-const ingredientsSlice = createPlaceholderSlice('ingredients');
+const ingredientsSlice = createPlaceholderSlice("ingredients");
 
 export const ingredientsReducer = ingredientsSlice.reducer;

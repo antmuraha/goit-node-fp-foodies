@@ -30,7 +30,7 @@
   --fd-state-danger: var(--fd-color-danger);
 
   /* Typography */
-  --fd-font-family-base: 'Mulish', 'Segoe UI', sans-serif;
+  --fd-font-family-base: "Mulish", "Segoe UI", sans-serif;
   --fd-font-weight-medium: 500;
   --fd-font-weight-bold: 700;
   --fd-font-weight-extrabold: 800;
@@ -148,7 +148,7 @@
   --fd-form-support-text: var(--fd-text-muted);
 }
 
-[data-theme='dark'] {
+[data-theme="dark"] {
   /* Theme overrides are semantic only; primitive tokens remain unchanged. */
   --fd-text-primary: var(--fd-color-white);
   --fd-text-secondary: #ebebeb;

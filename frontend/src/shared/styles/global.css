@@ -1,121 +1,121 @@
-@import './variables.css';
+@import "./variables.css";
 
 *,
 *::before,
 *::after {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html,
 body,
 #root {
-	min-height: 100%;
+  min-height: 100%;
 }
 
 body {
-	margin: 0;
-	font-family: var(--fd-font-family-base);
-	font-size: var(--fd-type-main-mobile-size);
-	font-weight: var(--fd-font-weight-medium);
-	line-height: var(--fd-type-main-mobile-height);
-	letter-spacing: var(--fd-letter-spacing-tight);
-	color: var(--fd-text-primary);
-	background-color: var(--fd-bg-canvas);
+  margin: 0;
+  font-family: var(--fd-font-family-base);
+  font-size: var(--fd-type-main-mobile-size);
+  font-weight: var(--fd-font-weight-medium);
+  line-height: var(--fd-type-main-mobile-height);
+  letter-spacing: var(--fd-letter-spacing-tight);
+  color: var(--fd-text-primary);
+  background-color: var(--fd-bg-canvas);
 }
 
 a {
-	color: inherit;
+  color: inherit;
 }
 
 .page-shell {
-	max-width: 100%;
-	padding: var(--fd-space-24) var(--fd-space-16) var(--fd-space-40);
+  max-width: 100%;
+  padding: var(--fd-space-24) var(--fd-space-16) var(--fd-space-40);
 }
 
 .token-demo-card {
-	display: flex;
-	flex-direction: column;
-	gap: var(--fd-space-16);
-	max-width: 960px;
-	margin: 0 auto var(--fd-space-20);
-	padding: var(--fd-space-24);
-	background-color: var(--fd-bg-muted);
-	border: 1px solid var(--fd-border-default);
-	border-radius: var(--fd-radius-pill);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-16);
+  max-width: 960px;
+  margin: 0 auto var(--fd-space-20);
+  padding: var(--fd-space-24);
+  background-color: var(--fd-bg-muted);
+  border: 1px solid var(--fd-border-default);
+  border-radius: var(--fd-radius-pill);
 }
 
 .token-demo-kicker {
-	margin: 0;
-	color: var(--fd-text-secondary);
-	font-size: var(--fd-type-main-mobile-size);
-	line-height: var(--fd-type-main-mobile-height);
+  margin: 0;
+  color: var(--fd-text-secondary);
+  font-size: var(--fd-type-main-mobile-size);
+  line-height: var(--fd-type-main-mobile-height);
 }
 
 .token-demo-title {
-	margin: 0;
-	color: var(--fd-text-primary);
-	font-size: var(--fd-type-h3-mobile-size);
-	font-weight: var(--fd-font-weight-extrabold);
-	line-height: var(--fd-line-height-28);
-	letter-spacing: var(--fd-letter-spacing-tight);
-	text-transform: uppercase;
+  margin: 0;
+  color: var(--fd-text-primary);
+  font-size: var(--fd-type-h3-mobile-size);
+  font-weight: var(--fd-font-weight-extrabold);
+  line-height: var(--fd-line-height-28);
+  letter-spacing: var(--fd-letter-spacing-tight);
+  text-transform: uppercase;
 }
 
 .token-demo-text {
-	margin: 0;
-	color: var(--fd-text-secondary);
+  margin: 0;
+  color: var(--fd-text-secondary);
 }
 
 .token-chip-list {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--fd-space-8);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--fd-space-8);
 }
 
 .token-chip {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	min-height: 38px;
-	padding: var(--fd-space-8) var(--fd-space-16);
-	border: 1px solid var(--fd-border-default);
-	border-radius: var(--fd-radius-pill);
-	color: var(--fd-action-primary-text);
-	background-color: var(--fd-action-primary-bg);
-	font-size: var(--fd-font-size-12);
-	font-weight: var(--fd-font-weight-bold);
-	line-height: var(--fd-line-height-18);
-	text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 38px;
+  padding: var(--fd-space-8) var(--fd-space-16);
+  border: 1px solid var(--fd-border-default);
+  border-radius: var(--fd-radius-pill);
+  color: var(--fd-action-primary-text);
+  background-color: var(--fd-action-primary-bg);
+  font-size: var(--fd-font-size-12);
+  font-weight: var(--fd-font-weight-bold);
+  line-height: var(--fd-line-height-18);
+  text-transform: uppercase;
 }
 
 .token-chip--outlined {
-	color: var(--fd-action-secondary-text);
-	background-color: var(--fd-action-secondary-bg);
+  color: var(--fd-action-secondary-text);
+  background-color: var(--fd-action-secondary-bg);
 }
 
 /* Breakpoint values are mirrored from --fd-breakpoint-tablet and --fd-breakpoint-desktop. */
 @media (min-width: 768px) {
-	body {
-		font-size: var(--fd-type-main-desktop-size);
-		line-height: var(--fd-type-main-desktop-height);
-	}
+  body {
+    font-size: var(--fd-type-main-desktop-size);
+    line-height: var(--fd-type-main-desktop-height);
+  }
 
-	.page-shell {
-		padding: var(--fd-space-40) var(--fd-space-24) var(--fd-space-80);
-	}
+  .page-shell {
+    padding: var(--fd-space-40) var(--fd-space-24) var(--fd-space-80);
+  }
 
-	.token-demo-card {
-		padding: var(--fd-space-30);
-	}
+  .token-demo-card {
+    padding: var(--fd-space-30);
+  }
 
-	.token-demo-title {
-		font-size: var(--fd-type-h3-desktop-size);
-	}
+  .token-demo-title {
+    font-size: var(--fd-type-h3-desktop-size);
+  }
 }
 
 @media (min-width: 1280px) {
-	.token-demo-title {
-		font-size: var(--fd-type-h2-size);
-		line-height: var(--fd-type-h2-height);
-	}
+  .token-demo-title {
+    font-size: var(--fd-type-h2-size);
+    line-height: var(--fd-type-h2-height);
+  }
 }

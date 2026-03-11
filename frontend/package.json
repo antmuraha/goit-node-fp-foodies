@@ -6,7 +6,11 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "lint": "biome lint --write .",
+    "lint:check": "biome lint ."
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
@@ -16,6 +20,7 @@
     "react-router-dom": "^7.13.1"
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.4.6",
     "@types/node": "^25.4.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

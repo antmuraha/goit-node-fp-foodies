@@ -7,7 +7,7 @@ A Node.js REST API application for managing contacts with PostgreSQL database an
 ## Prerequisites
 
 - **Node.js:** LTS version 22+ or 24+
-- **Package Manager:** `pnpm` (or `npm`)
+- **Package Manager:** `npm`
 - **Docker/Podman:** For running PostgreSQL database and pgAdmin
 - **PostgreSQL Client:** (optional) For direct database access
 
@@ -18,7 +18,7 @@ A Node.js REST API application for managing contacts with PostgreSQL database an
 2. Install dependencies:
 
     ```bash
-    pnpm install
+    npm install
     ```
 
     Upload directories are already prepared in the repository:
@@ -63,12 +63,12 @@ A Node.js REST API application for managing contacts with PostgreSQL database an
 5. Run database migrations:
 
     ```bash
-    pnpm db:migrate
+    npm run db:migrate
     ```
 
 6. (Optional) Seed the database with sample data:
     ```bash
-    pnpm db:seed
+    npm run db:seed
     ```
 
 ## Quick Start
@@ -77,10 +77,22 @@ Start the server:
 
 ```bash
 # Production mode
-pnpm start
+npm run start
 
 # Development mode with auto-reload
-pnpm dev
+npm run dev
+```
+
+## Code Style (Biome)
+
+```bash
+# Check formatting and linting
+npm run format:check
+npm run lint:check
+
+# Apply fixes
+npm run format
+npm run lint
 ```
 
 The API will be available at `http://localhost:3000`
