@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getRecipes, getRecipeById, createRecipe, deleteRecipe } from "../controllers/recipesControllers.js";
+import { getRecipes, getRecipeById, createRecipe, deleteRecipe, getOwnRecipes } from "../controllers/recipesControllers.js";
 import { createRecipeSchema } from "../schemas/recipeSchemas.js";
 import { validateBody } from "../helpers/validateBody.js";
 
@@ -15,6 +15,7 @@ const authenticate = (req, res, next) => {
 };
 
 recipesRouter.get("/", getRecipes);
+recipesRouter.get("/own", authenticate, getOwnRecipes);
 recipesRouter.get("/:id", getRecipeById);
 recipesRouter.post("/", authenticate, validateBody(createRecipeSchema), createRecipe);
 recipesRouter.delete("/:id", authenticate, deleteRecipe);

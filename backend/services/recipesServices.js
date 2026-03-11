@@ -107,6 +107,26 @@ export const createRecipe = async (userId, data) => {
   });
 };
 
+
+export const getOwnRecipes = async (userId, { limit, offset }) => {
+  const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);           
+  const safeOffset = Math.max(Number(offset) || 0, 0);  
+
+  const { count, rows } = await Recipe.findAndCountAll({
+    where: { userId },
+    include: [
+      { model: Category, attributes: ["id", "name", "image"] },
+      { model: User, as: "author", attributes: ["id", "name", "avatar"] }
+    ],
+    limit: safeLimit,
+    offset: safeOffset,
+    distinct: true,
+    order: [["createdAt", "DESC"]],
+  });
+  return {total: count, limit: safeLimit, offset: safeOffset, recipes:rows };
+}
+ 
+
 export const deleteRecipe = async (id, userId) => {
   const recipe = await Recipe.findByPk(id);
 

@@ -1,7 +1,9 @@
-import { searchRecipes, getRecipeById as findRecipeById } from "../services/recipesServices.js";
 import {
+  searchRecipes,
+  getRecipeById as findRecipeById,
   createRecipe as createRecipeService,
   deleteRecipe as deleteRecipeService,
+  getOwnRecipes as getOwnRecipesService,
 } from "../services/recipesServices.js";
 
 export const getRecipes = async (req, res, next) => {
@@ -36,6 +38,18 @@ export const createRecipe = async (req, res, next) => {
   try {
     const recipe = await createRecipeService(req.user.id, req.body);
     res.status(201).json(recipe);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getOwnRecipes = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const { limit, offset } = req.query;
+    const recipesList = await getOwnRecipesService(userId, { limit, offset });
+    res.set("Cache-Control", "private, no-store");
+    res.status(200).json(recipesList);
   } catch (err) {
     next(err);
   }
