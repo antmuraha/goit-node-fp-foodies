@@ -35,13 +35,8 @@ describe("GET /api/categories", () => {
   it("sets Cache-Control header", async () => {
     const res = await request(app).get("/api/categories");
 
-<<<<<<< HEAD
     expect(res.headers["cache-control"]).toBe("public, max-age=3600, stale-while-revalidate=86400");
   });
-=======
-        expect(res.headers["cache-control"]).toBe("public, max-age=3600, stale-while-revalidate=86400");
-    });
->>>>>>> 2bc81c435aad8d40b1cc95343f5f4c75af0bb67e
 
   it("does not require authentication", async () => {
     const res = await request(app).get("/api/categories");

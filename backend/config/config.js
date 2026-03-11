@@ -40,7 +40,6 @@ export default {
     dialectOptions: {
       bigNumberStrings: true,
     },
-<<<<<<< HEAD
   },
   production: {
     username: config.username,
@@ -58,25 +57,6 @@ export default {
               rejectUnauthorized: false,
             }
           : undefined,
-=======
-    production: {
-        username: config.username,
-        password: config.password,
-        database: config.database,
-        host: config.host,
-        port: config.port,
-        dialect: config.dialect,
-        dialectOptions: {
-            bigNumberStrings: true,
-            ssl:
-                process.env.POSTGRES_SSL === "true"
-                    ? {
-                          require: true,
-                          rejectUnauthorized: false,
-                      }
-                    : undefined,
-        },
->>>>>>> 2bc81c435aad8d40b1cc95343f5f4c75af0bb67e
     },
   },
 };

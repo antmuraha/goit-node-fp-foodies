@@ -1,5 +1,4 @@
 {
-<<<<<<< HEAD
   "name": "goit-node-rest-api",
   "type": "module",
   "scripts": {
@@ -40,46 +39,4 @@
     "sequelize-cli": "^6.6.5",
     "supertest": "^7.2.2"
   }
-=======
-    "name": "goit-node-rest-api",
-    "type": "module",
-    "scripts": {
-        "start": "NODE_ENV=production node ./app.js",
-        "dev": "NODE_ENV=development nodemon ./app.js",
-        "test": "NODE_OPTIONS='--experimental-vm-modules' NODE_ENV=test jest --forceExit",
-        "format": "biome format --write .",
-        "format:check": "biome format .",
-        "lint": "biome lint --write .",
-        "lint:check": "biome lint .",
-        "db:migrate": "sequelize-cli db:migrate",
-        "db:migrate:undo": "sequelize-cli db:migrate:undo",
-        "db:seed": "sequelize-cli db:seed:all",
-        "db:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate"
-    },
-    "jest": {
-        "testEnvironment": "node"
-    },
-    "dependencies": {
-        "bcrypt": "^6.0.0",
-        "cors": "^2.8.6",
-        "dotenv": "^17.3.1",
-        "express": "^5.2.1",
-        "gravatar": "^1.8.2",
-        "joi": "^18.0.2",
-        "jsonwebtoken": "^9.0.3",
-        "morgan": "^1.10.1",
-        "multer": "^2.1.1",
-        "nodemailer": "^8.0.2",
-        "pg": "^8.20.0",
-        "sequelize": "^6.37.8",
-        "uuid": "^13.0.0"
-    },
-    "devDependencies": {
-        "@biomejs/biome": "^2.4.6",
-        "jest": "^30.3.0",
-        "nodemon": "^3.1.14",
-        "sequelize-cli": "^6.6.5",
-        "supertest": "^7.2.2"
-    }
->>>>>>> 2bc81c435aad8d40b1cc95343f5f4c75af0bb67e
 }
