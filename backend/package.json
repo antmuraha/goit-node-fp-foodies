@@ -5,10 +5,10 @@
         "start": "NODE_ENV=production node ./app.js",
         "dev": "NODE_ENV=development nodemon ./app.js",
         "test": "NODE_OPTIONS='--experimental-vm-modules' NODE_ENV=test jest --forceExit",
-        "db:migrate": "sequelize-cli db:migrate",
-        "db:migrate:undo": "sequelize-cli db:migrate:undo",
-        "db:seed": "sequelize-cli db:seed:all",
-        "db:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate"
+        "db:migrate": "npx sequelize-cli db:migrate",
+        "db:migrate:undo": "npx sequelize-cli db:migrate:undo",
+        "db:seed": "npx sequelize-cli db:seed:all",
+        "db:reset": "npx sequelize-cli db:migrate:undo:all && npx sequelize-cli db:migrate"
     },
     "jest": {
         "testEnvironment": "node"

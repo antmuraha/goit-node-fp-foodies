@@ -5,7 +5,7 @@ import cors from "cors";
 import db from "./models/index.js";
 
 import categoriesRouter from "./routes/categoriesRouter.js";
-// import authRouter from "./routes/authRouter.js";
+import authRouter from "./routes/authRouter.js";
 // import contactsRouter from "./routes/contactsRouter.js";
 
 const isDev = (process.env.NODE_ENV || "production") === "development";
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 app.use("/api/categories", categoriesRouter);
-// app.use("/api/auth", authRouter);
+app.use("/api/auth", authRouter);
 // app.use("/api/contacts", contactsRouter);
 
 app.use((_, res) => {
