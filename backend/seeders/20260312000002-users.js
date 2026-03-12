@@ -6,11 +6,17 @@ import { loadCSV } from "../helpers/parseCSV.js";
 /** @type {import('sequelize-cli').Migration} */
 export default {
   async up(queryInterface) {
+    const seedPassword = process.env.SEED_PASSWORD;
+    if (!seedPassword) {
+      throw new Error(
+        "SEED_PASSWORD environment variable is required to run the users seeder.",
+      );
+    }
+
     const now = new Date();
     const rows = loadCSV("users.csv");
 
-    // All sample users share the same default password for development
-    const password = await bcrypt.hash("Password1!", 10);
+    const password = await bcrypt.hash(seedPassword, 10);
 
     await queryInterface.bulkInsert(
       "users",

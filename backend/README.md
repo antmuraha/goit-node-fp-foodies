@@ -67,9 +67,14 @@ A Node.js REST API application for managing contacts with PostgreSQL database an
     ```
 
 6. (Optional) Seed the database with sample data:
+
+    The seeder requires a `SEED_PASSWORD` environment variable — the plain-text password that will be hashed and assigned to every seeded user.
+
     ```bash
-    npm run db:seed
+    SEED_PASSWORD=ExampleSecurePassword npm run db:seed
     ```
+
+    > **Note:** Omitting `SEED_PASSWORD` will cause the seeder to exit with an error.
 
 ## Quick Start
 
