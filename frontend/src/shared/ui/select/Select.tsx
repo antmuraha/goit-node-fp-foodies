@@ -99,10 +99,6 @@ export const Select = ({
   value,
   onChange,
   children,
-  // Exclude these attributes as they conflict with button element
-  onBlur,
-  onFocus,
-  onMouseDown,
 }: SelectProps): ReactElement => {
   const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
   const errorId = error ? `${selectId}-error` : undefined;
