@@ -1,5 +1,3 @@
-
-
 const areas = [
   { name: "American" },
   { name: "British" },

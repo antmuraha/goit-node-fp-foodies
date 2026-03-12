@@ -1,5 +1,3 @@
-
-
 const categories = [
   { name: "Beef", image: null },
   { name: "Breakfast", image: null },
