@@ -16,6 +16,7 @@
     "db:migrate:status": "sequelize-cli db:migrate:status",
     "db:seed": "sequelize-cli db:seed:all",
     "db:reset": "sequelize-cli db:migrate:undo:all && sequelize-cli db:migrate",
+    "db:purge": "sequelize-cli db:drop && sequelize-cli db:create && sequelize-cli db:migrate",
     "db:migrate:verify": "bash scripts/test-migrations.sh"
   },
   "jest": {

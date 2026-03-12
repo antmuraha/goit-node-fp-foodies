@@ -29,11 +29,10 @@ export default {
     await queryInterface.bulkInsert(
       "recipes",
       csvRecipes.map((r) => ({
-        name: r.title,
+        title: r.title,
         description: r.description || null,
         instructions: r.instructions || null,
         cookingTime: r.time ? parseInt(r.time, 10) || null : null,
-        servings: null,
         image: r.thumb || null,
         categoryId: categoryMap[r.category] ?? null,
         userId: csvUserIdToDbId[r.owner_id] ?? null,
@@ -44,8 +43,8 @@ export default {
     );
 
     // --- recipeAreas ---
-    const [dbRecipes] = await queryInterface.sequelize.query("SELECT id, name FROM recipes");
-    const recipeTitleToDbId = Object.fromEntries(dbRecipes.map((r) => [r.name, r.id]));
+    const [dbRecipes] = await queryInterface.sequelize.query("SELECT id, title FROM recipes");
+    const recipeTitleToDbId = Object.fromEntries(dbRecipes.map((r) => [r.title, r.id]));
 
     const recipeAreaRows = [];
     for (const r of csvRecipes) {
