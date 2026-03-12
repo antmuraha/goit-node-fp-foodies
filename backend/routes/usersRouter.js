@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getCurrentUser, getFollowers, getFollowing } from "../controllers/usersControllers.js";
-import { validatePaginationParams } from '../helpers/validatePaginationParams.js';
+import { validatePaginationParams } from "../helpers/validatePaginationParams.js";
 import authenticate from "../middleware/authenticate.js";
 
 const usersRouter = Router();
