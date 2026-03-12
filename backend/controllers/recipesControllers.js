@@ -4,7 +4,7 @@ import {
   createRecipe as createRecipeService,
   deleteRecipe as deleteRecipeService,
   getOwnRecipes as getOwnRecipesService,
-  getPopularRecipes as getPopularRecipesService,
+  getPopularRecipesService,
 } from "../services/recipesServices.js";
 
 export const getRecipes = async (req, res, next) => {
