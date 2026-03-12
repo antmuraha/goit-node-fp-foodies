@@ -8,9 +8,7 @@ export default {
   async up(queryInterface) {
     const seedPassword = process.env.SEED_PASSWORD;
     if (!seedPassword) {
-      throw new Error(
-        "SEED_PASSWORD environment variable is required to run the users seeder.",
-      );
+      throw new Error("SEED_PASSWORD environment variable is required to run the users seeder.");
     }
 
     const now = new Date();
