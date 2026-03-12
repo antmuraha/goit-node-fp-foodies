@@ -1,4 +1,4 @@
-"use strict";
+
 
 const categories = [
   { name: "Beef", image: null },
