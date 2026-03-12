@@ -103,7 +103,6 @@ export const Select = ({
   onBlur,
   onFocus,
   onMouseDown,
-  ...props
 }: SelectProps): ReactElement => {
   const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
   const errorId = error ? `${selectId}-error` : undefined;
