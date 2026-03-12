@@ -6,13 +6,14 @@ import { loadCSV } from "../helpers/parseCSV.js";
 export default {
   async up(queryInterface) {
     const now = new Date();
-    const rows = loadCSV("categories.csv");
+    const rows = loadCSV("ingredients.csv");
 
     await queryInterface.bulkInsert(
-      "categories",
+      "ingredients",
       rows.map((r) => ({
         name: r.name,
-        image: null,
+        description: r.description || r.name,
+        image: r.img || null,
         createdAt: now,
         updatedAt: now,
       })),
@@ -21,6 +22,6 @@ export default {
   },
 
   async down(queryInterface) {
-    await queryInterface.bulkDelete("categories", null, {});
+    await queryInterface.bulkDelete("ingredients", null, {});
   },
 };
