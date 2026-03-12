@@ -5,6 +5,7 @@ import {
   createRecipe,
   deleteRecipe,
   getOwnRecipes,
+  getPopularRecipes,
 } from "../controllers/recipesControllers.js";
 import { createRecipeSchema } from "../schemas/recipeSchemas.js";
 import { validateBody } from "../helpers/validateBody.js";
@@ -21,6 +22,7 @@ const authenticate = (req, res, next) => {
 };
 
 recipesRouter.get("/", getRecipes);
+recipesRouter.get("/popular", getPopularRecipes);
 recipesRouter.get("/own", authenticate, getOwnRecipes);
 recipesRouter.get("/:id", getRecipeById);
 recipesRouter.post("/", authenticate, validateBody(createRecipeSchema), createRecipe);
