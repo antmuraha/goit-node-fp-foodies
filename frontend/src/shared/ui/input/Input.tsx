@@ -5,15 +5,10 @@ import { FormErrorMessage } from "../form-error/FormErrorMessage";
 type InputType = "text" | "email" | "password" | "number";
 
 type InputProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type"> & {
-  /** HTML input type: text, email, password, or number */
   type?: InputType;
-  /** Label text displayed above the input */
   label?: string;
-  /** Error message displayed below the input */
   error?: string;
-  /** Hint/helper text displayed below the input (shown when no error) */
   hint?: string;
-  /** Whether the input has an error state (applies error styling) */
   hasError?: boolean;
 };
 
