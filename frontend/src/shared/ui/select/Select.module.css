@@ -1,4 +1,4 @@
-.wrapper {
+/* .wrapper {
   display: flex;
   flex-direction: column;
   gap: var(--fd-space-12);
@@ -135,10 +135,10 @@
   outline: none;
   background-color: #707070;
   color: var(--fd-color-white);
-}
+} */
 
 /* Option group styling */
-.optgroup {
+/* .optgroup {
   display: contents;
 }
 
@@ -179,10 +179,10 @@
   background-color: #707070;
   color: var(--fd-color-white);
   font-weight: var(--fd-font-weight-bold);
-}
+} */
 
 /* Disabled state */
-.disabled {
+/* .disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -197,9 +197,170 @@
   font-size: var(--fd-font-size-12);
   color: var(--fd-input-counter);
   line-height: var(--fd-line-height-18);
+} */
+
+/* =========================================
+   БАЗОВІ СТИЛІ (Mobile First: до 375px)
+========================================= */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.label {
+  font-family: 'Mulish', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #050505;
+  margin-left: 12px;
+}
+
+.container {
+  position: relative;
+  width: 100%;
+}
+
+/* --- Кнопка (Select Button) --- */
+.button {
+  width: 100%;
+  min-height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 24px;
+  background-color: #ffffff;
+  border: 1px solid #E0E0E0;
+  border-radius: 100px; /* Повний овал */
+  
+  font-family: 'Mulish', sans-serif;
+  font-size: 14px; 
+  font-weight: 500;
+  color: #050505;
+  
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.button:focus,
+.button.open {
+  border-color: #050505;
+}
+
+.button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #F5F5F5;
+}
+
+.value {
+  flex: 1;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.arrow {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  transition: transform 0.2s ease;
+  color: #050505;
+}
+
+.button.open .arrow {
+  transform: rotate(180deg);
+}
+
+/* --- Випадаючий список (Dropdown List) --- */
+.list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  
+  /* Точні параметри з останніх скріншотів Figma */
+  background-color: #ffffff;
+  border: 1px solid #E0E0E0;
+  border-radius: 15px; /* За макетом Radius: 15px */
+  padding: 16px 18px;  /* За макетом Padding: 16px 18px 16px 18px */
+  
+  display: flex;
+  flex-direction: column;
+  gap: 6px; 
+  
+  list-style: none;
+  margin: 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  max-height: 286px; /* Висота з макета (Hug 286px) */
+  overflow-y: auto;
+}
+
+/* Кастомізація скролбару (щоб виглядав охайно) */
+.list::-webkit-scrollbar {
+  width: 4px;
+}
+.list::-webkit-scrollbar-thumb {
+  background: #E0E0E0;
+  border-radius: 10px;
+}
+
+/* --- Пункти списку (List Items) --- */
+.list > li {
+  font-family: 'Mulish', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  letter-spacing: -0.02em; /* -2% Letter spacing */
+  color: #050505;
+  
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 8px; /* Невелике закруглення для hover-ефекту */
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.list > li:hover {
+  background-color: #F5F5F5;
+}
+
+.list > li.selected {
+  background-color: #F0F0F0;
+  font-weight: 700;
+}
+
+/* Допоміжні класи помилок */
+.errorText {
+  color: #D32F2F;
+  font-size: 12px;
+  margin: 4px 0 0 12px;
 }
 
 
+/* =========================================
+   АДАПТИВНІСТЬ (Media Queries)
+========================================= */
 
+/* Від 375px до 768px */
+@media (min-width: 375px) and (max-width: 767px) {
+  .list {
+    max-height: 326px; /* На більших телефонах контейнер стає вищим за макетом */
+  }
+}
 
-
+/* Від 768px (Планшети та Десктоп) */
+@media (min-width: 768px) {
+  .container {
+    /* На десктопі зазвичай обмежують максимальну ширину */
+    /* max-width: 343px; */ 
+  }
+  
+  .list {
+    max-height: 326px;
+  }
+}
