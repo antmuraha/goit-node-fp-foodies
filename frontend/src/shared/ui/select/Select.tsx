@@ -42,10 +42,12 @@ const parseOptionsFromChildren = (children: ReactNode): ParsedOptions => {
       return;
     }
 
-    if (!("type" in nodes)) return;
+    // Check if node is a React element (has type property)
+    if (typeof nodes !== "object" || !("type" in nodes)) return;
 
-    const type = nodes.type;
-    const props = nodes.props;
+    const node = nodes as any;
+    const type = node.type;
+    const props = node.props;
 
     // Handle optgroup
     if (type === "optgroup") {
@@ -99,6 +101,10 @@ export const Select = ({
   value,
   onChange,
   children,
+  // Exclude these attributes as they conflict with button element
+  onBlur,
+  onFocus,
+  onMouseDown,
   ...props
 }: SelectProps): ReactElement => {
   const selectId = id || `select-${Math.random().toString(36).substr(2, 9)}`;
@@ -218,7 +224,7 @@ export const Select = ({
           aria-controls={`${selectId}-listbox`}
           aria-invalid={hasError}
           aria-describedby={describedBy}
-          {...props}
+          type="button"
         >
           <span className={styles.value}>{selectedLabel}</span>
           <svg
