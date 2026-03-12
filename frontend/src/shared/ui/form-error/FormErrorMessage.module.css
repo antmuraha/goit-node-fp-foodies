@@ -1,0 +1,11 @@
+.base {
+  color: var(--fd-color-error, #d0021b);
+}
+
+.field {
+  font-size: 12px;
+}
+
+.form {
+  font-size: 14px;
+}
