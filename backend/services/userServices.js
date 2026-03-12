@@ -1,5 +1,10 @@
 import db from "../models/index.js";
 
+const maskEmail = (email) => {
+  const [local, domain] = email.split("@");
+  return `${local[0]}***@${domain}`;
+};
+
 export const getFollowersList = async (userId, { page, limit }) => {
   const offset = (page - 1) * limit;
   const { count, rows } = await db.Follow.findAndCountAll({
@@ -22,6 +27,33 @@ export const getFollowingList = async (userId, { page, limit }) => {
     offset,
   });
   return { following: rows.map((f) => f.following), total: count, page, limit };
+};
+
+export const getOtherUserProfile = async (targetId) => {
+  const user = await db.User.findByPk(targetId, {
+    attributes: ["id", "name", "email", "avatar", "createdAt"],
+  });
+
+  if (!user) {
+    throw { status: 404, message: "User not found" };
+  }
+
+  const [recipesCreated, followersCount] = await Promise.all([
+    db.Recipe.count({ where: { userId: targetId } }),
+    db.Follow.count({ where: { followingId: targetId } }),
+  ]);
+
+  const { id, name, email, avatar, createdAt } = user.toJSON();
+
+  return {
+    id,
+    name,
+    email: maskEmail(email),
+    avatarURL: avatar,
+    createdAt,
+    recipesCreated,
+    followersCount,
+  };
 };
 
 export const getUserProfileWithMetrics = async (userId) => {
