@@ -1,4 +1,9 @@
-import { getUserProfileWithMetrics, getFollowersList, getFollowingList, getOtherUserProfile } from "../services/userServices.js";
+import {
+  getUserProfileWithMetrics,
+  getFollowersList,
+  getFollowingList,
+  getOtherUserProfile,
+} from "../services/userServices.js";
 
 export const getCurrentUser = async (req, res, next) => {
   try {
