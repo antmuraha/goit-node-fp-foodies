@@ -1,27 +1,21 @@
-const categories = [
-  { name: "Beef", image: null },
-  { name: "Breakfast", image: null },
-  { name: "Chicken", image: null },
-  { name: "Desserts", image: null },
-  { name: "Goat", image: null },
-  { name: "Lamb", image: null },
-  { name: "Miscellaneous", image: null },
-  { name: "Pasta", image: null },
-  { name: "Pork", image: null },
-  { name: "Seafood", image: null },
-  { name: "Side", image: null },
-  { name: "Starter", image: null },
-  { name: "Vegan", image: null },
-  { name: "Vegetarian", image: null },
-];
+"use strict";
+import { loadCSV } from "../helpers/parseCSV.js";
 
 /** @type {import('sequelize-cli').Migration} */
 export default {
   async up(queryInterface) {
     const now = new Date();
+    const rows = loadCSV("categories.csv");
+
     await queryInterface.bulkInsert(
       "categories",
-      categories.map((c) => ({ ...c, createdAt: now, updatedAt: now })),
+      rows.map((r) => ({
+        name: r.name,
+        image: null,
+        createdAt: now,
+        updatedAt: now,
+      })),
+      { ignoreDuplicates: true },
     );
   },
 
