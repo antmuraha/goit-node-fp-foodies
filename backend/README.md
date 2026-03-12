@@ -530,6 +530,10 @@ npm --prefix backend run db:migrate:status
 # Reset database (undo all + reapply)
 npm --prefix backend run db:reset
 
+# Purge database (drop + recreate + reapply migrations)
+# WARNING: destructive operation intended for local/dev environments.
+npm --prefix backend run db:purge
+
 # Run full rollback verification suite
 npm --prefix backend run db:migrate:verify
 ```
