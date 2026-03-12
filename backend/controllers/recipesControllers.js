@@ -4,6 +4,7 @@ import {
   createRecipe as createRecipeService,
   deleteRecipe as deleteRecipeService,
   getOwnRecipes as getOwnRecipesService,
+  getPopularRecipes as getPopularRecipesService,
 } from "../services/recipesServices.js";
 
 export const getRecipes = async (req, res, next) => {
@@ -12,6 +13,21 @@ export const getRecipes = async (req, res, next) => {
     const result = await searchRecipes({ categoryId, ingredientId, areaId, search, limit, offset });
     res.set("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
     res.json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getPopularRecipes = async (req, res, next) => {
+  try {
+    const { limit, offset } = req.query;
+    const result = await getPopularRecipesService({ limit, offset });
+
+    if (!result || result.length === 0) {
+      return res.status(404).json({ message: "No popular result found" });
+    }
+
+    res.status(200).json(result);
   } catch (err) {
     next(err);
   }
