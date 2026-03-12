@@ -1,5 +1,29 @@
 import db from "../models/index.js";
 
+export const getFollowersList = async (userId, { page, limit }) => {
+  const offset = (page - 1) * limit;
+  const { count, rows } = await db.Follow.findAndCountAll({
+    where: { followingId: userId },
+    include: [{ model: db.User, as: "follower", attributes: ["id", "name", "email", "avatar"] }],
+    order: [["createdAt", "DESC"]],
+    limit,
+    offset,
+  });
+  return { followers: rows.map((f) => f.follower), total: count, page, limit };
+};
+
+export const getFollowingList = async (userId, { page, limit }) => {
+  const offset = (page - 1) * limit;
+  const { count, rows } = await db.Follow.findAndCountAll({
+    where: { followerId: userId },
+    include: [{ model: db.User, as: "following", attributes: ["id", "name", "email", "avatar"] }],
+    order: [["createdAt", "DESC"]],
+    limit,
+    offset,
+  });
+  return { following: rows.map((f) => f.following), total: count, page, limit };
+};
+
 export const getUserProfileWithMetrics = async (userId) => {
   const user = await db.User.findByPk(userId, {
     attributes: ["id", "name", "email", "avatar"],
