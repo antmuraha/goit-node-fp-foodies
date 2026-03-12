@@ -170,3 +170,70 @@ export const deleteRecipe = async (id, userId) => {
 
   await recipe.destroy();
 };
+
+export const addFavoriteService = async (userId, recipeId) => {
+  const recipe = await Recipe.findByPk(recipeId);
+
+  if (!recipe) {
+    const err = new Error("Recipe not found");
+    err.status = 404;
+    throw err;
+  }
+
+  const existing = await Favorite.findOne({
+    where: { userId, recipeId },
+  });
+
+  if (existing) {
+    const err = new Error("Recipe already in favorites");
+    err.status = 409;
+    throw err;
+  }
+
+  return Favorite.create({
+    userId,
+    recipeId,
+  });
+};
+
+export const removeFavoriteService = async (userId, recipeId) => {
+  const favorite = await Favorite.findOne({
+    where: { userId, recipeId },
+  });
+
+  if (!favorite) {
+    const err = new Error("Favorite not found");
+    err.status = 404;
+    throw err;
+  }
+
+  await favorite.destroy();
+};
+
+export const listFavoritesService = async (userId, { limit, offset }) => {
+  const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
+  const safeOffset = Math.max(Number(offset) || 0, 0);
+
+  const { count, rows } = await Favorite.findAndCountAll({
+    where: { userId },
+    include: [
+      {
+        model: Recipe,
+        include: [
+          { model: Category, attributes: ["id", "name", "image"] },
+          { model: User, as: "author", attributes: ["id", "name", "avatar"] },
+        ],
+      },
+    ],
+    limit: safeLimit,
+    offset: safeOffset,
+    order: [["createdAt", "DESC"]],
+  });
+
+  return {
+    total: count,
+    limit: safeLimit,
+    offset: safeOffset,
+    recipes: rows.map((f) => f.Recipe),
+  };
+};

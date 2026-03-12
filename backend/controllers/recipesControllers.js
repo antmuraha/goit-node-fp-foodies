@@ -5,6 +5,9 @@ import {
   deleteRecipe as deleteRecipeService,
   getOwnRecipes as getOwnRecipesService,
   getPopularRecipesService,
+  addFavoriteService,
+  removeFavoriteService,
+  listFavoritesService,
 } from "../services/recipesServices.js";
 
 export const getRecipes = async (req, res, next) => {
@@ -82,6 +85,52 @@ export const deleteRecipe = async (req, res, next) => {
     await deleteRecipeService(id, req.user.id);
 
     res.json({ message: "Recipe deleted successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const addFavorite = async (req, res, next) => {
+  try {
+    const recipeId = Number(req.params.id);
+
+    if (!Number.isInteger(recipeId) || recipeId <= 0) {
+      return res.status(400).json({ message: "Invalid recipe id" });
+    }
+
+    const result = await addFavoriteService(req.user.id, recipeId);
+    res.status(201).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const removeFavorite = async (req, res, next) => {
+  try {
+    const recipeId = Number(req.params.id);
+
+    if (!Number.isInteger(recipeId) || recipeId <= 0) {
+      return res.status(400).json({ message: "Invalid recipe id" });
+    }
+
+    await removeFavoriteService(req.user.id, recipeId);
+    res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const listFavorites = async (req, res, next) => {
+  try {
+    const { limit, offset } = req.query;
+
+    const result = await listFavoritesService(req.user.id, {
+      limit,
+      offset,
+    });
+
+    res.set("Cache-Control", "private, no-store");
+    res.status(200).json(result);
   } catch (err) {
     next(err);
   }
