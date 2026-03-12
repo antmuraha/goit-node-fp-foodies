@@ -19,8 +19,8 @@ export default {
 
     // Build CSV string-id → DB integer-id map for recipes
     const csvRecipes = loadCSV("recipes.csv");
-    const [dbRecipes] = await queryInterface.sequelize.query("SELECT id, name FROM recipes");
-    const recipeTitleToDbId = Object.fromEntries(dbRecipes.map((r) => [r.name, r.id]));
+    const [dbRecipes] = await queryInterface.sequelize.query("SELECT id, title FROM recipes");
+    const recipeTitleToDbId = Object.fromEntries(dbRecipes.map((r) => [r.title, r.id]));
     const csvRecipeIdToDbId = Object.fromEntries(
       csvRecipes.filter((r) => recipeTitleToDbId[r.title] !== undefined).map((r) => [r.id, recipeTitleToDbId[r.title]]),
     );
