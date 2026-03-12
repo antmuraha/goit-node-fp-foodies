@@ -1,3 +1,4 @@
+import HttpError from "../helpers/HttpError.js";
 import db from "../models/index.js";
 
 const maskEmail = (email) => {
@@ -15,6 +16,53 @@ export const getFollowersList = async (userId, { page, limit }) => {
     offset,
   });
   return { followers: rows.map((f) => f.follower), total: count, page, limit };
+};
+
+/**
+ * Creates a follow relation between two users.
+ * @param {number} followerId
+ * @param {number} followingId
+ * @returns {Promise<{message: string}>}
+ */
+export const addFollow = async (followerId, followingId) => {
+  if (followerId === followingId) {
+    throw HttpError(400, "Cannot follow yourself");
+  }
+
+  const targetUser = await db.User.findByPk(followingId);
+
+  if (!targetUser) {
+    throw HttpError(404, "User not found");
+  }
+
+  const [, created] = await db.Follow.findOrCreate({
+    where: { followerId, followingId },
+    defaults: { followerId, followingId },
+  });
+
+  if (!created) {
+    throw HttpError(409, "Already following this user");
+  }
+
+  return { message: "Followed successfully" };
+};
+
+/**
+ * Removes a follow relation between two users.
+ * @param {number} followerId
+ * @param {number} followingId
+ * @returns {Promise<{message: string}>}
+ */
+export const removeFollow = async (followerId, followingId) => {
+  const deleted = await db.Follow.destroy({
+    where: { followerId, followingId },
+  });
+
+  if (deleted === 0) {
+    throw HttpError(404, "Not following this user");
+  }
+
+  return { message: "Unfollowed successfully" };
 };
 
 export const getFollowingList = async (userId, { page, limit }) => {
