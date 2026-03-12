@@ -24,7 +24,9 @@
   font-size: var(--fd-input-text-size);
   font-weight: var(--fd-input-text-weight);
   line-height: var(--fd-input-text-height);
-  transition: border-color 150ms ease-in-out, box-shadow 150ms ease-in-out;
+  transition:
+    border-color 150ms ease-in-out,
+    box-shadow 150ms ease-in-out;
 }
 
 .input::placeholder {
@@ -87,5 +89,3 @@
   color: var(--fd-input-counter);
   line-height: var(--fd-line-height-18);
 }
-
-

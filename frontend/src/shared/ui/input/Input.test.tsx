@@ -78,16 +78,10 @@ describe("Input Component", () => {
 
     it("sets aria-invalid when error is present", () => {
       const { rerender } = render(<Input error="Error message" />);
-      expect(screen.getByRole("textbox")).toHaveAttribute(
-        "aria-invalid",
-        "true"
-      );
+      expect(screen.getByRole("textbox")).toHaveAttribute("aria-invalid", "true");
 
       rerender(<Input hasError={false} />);
-      expect(screen.getByRole("textbox")).toHaveAttribute(
-        "aria-invalid",
-        "false"
-      );
+      expect(screen.getByRole("textbox")).toHaveAttribute("aria-invalid", "false");
     });
 
     it("sets aria-describedby pointing to error id", () => {
@@ -108,9 +102,7 @@ describe("Input Component", () => {
     });
 
     it("hides hint text when error is present", () => {
-      const { rerender } = render(
-        <Input hint="This is a hint" error="This is an error" />
-      );
+      const { rerender } = render(<Input hint="This is a hint" error="This is an error" />);
       expect(screen.queryByText("This is a hint")).not.toBeInTheDocument();
       expect(screen.getByText("This is an error")).toBeInTheDocument();
 
@@ -153,9 +145,7 @@ describe("Input Component", () => {
       const input = screen.getByDisplayValue("initial") as HTMLInputElement;
       expect(input.value).toBe("initial");
 
-      rerender(
-        <Input value="updated" onChange={() => {}} data-testid="test-input" />
-      );
+      rerender(<Input value="updated" onChange={() => {}} data-testid="test-input" />);
       const updatedInput = screen.getByDisplayValue("updated") as HTMLInputElement;
       expect(updatedInput.value).toBe("updated");
     });
@@ -266,40 +256,21 @@ describe("Input Component", () => {
 
   describe("Accessibility", () => {
     it("has proper aria attributes for error state", () => {
-      render(
-        <Input
-          id="email-input"
-          label="Email"
-          error="Invalid email format"
-          type="email"
-        />
-      );
+      render(<Input id="email-input" label="Email" error="Invalid email format" type="email" />);
       const input = screen.getByRole("textbox");
       expect(input).toHaveAttribute("aria-invalid", "true");
       expect(input).toHaveAttribute("aria-describedby", "email-input-error");
     });
 
     it("has proper aria attributes for hint", () => {
-      render(
-        <Input
-          id="pwd-input"
-          label="Password"
-          hint="At least 8 characters"
-        />
-      );
+      render(<Input id="pwd-input" label="Password" hint="At least 8 characters" />);
       const input = screen.getByRole("textbox");
       expect(input).toHaveAttribute("aria-invalid", "false");
       expect(input).toHaveAttribute("aria-describedby", "pwd-input-hint");
     });
 
     it("has proper aria attributes when both error and hint provided", () => {
-      render(
-        <Input
-          id="usr-input"
-          error="Username taken"
-          hint="Must be 3-20 characters"
-        />
-      );
+      render(<Input id="usr-input" error="Username taken" hint="Must be 3-20 characters" />);
       const input = screen.getByRole("textbox");
       expect(input).toHaveAttribute("aria-invalid", "true");
       expect(input).toHaveAttribute("aria-describedby", "usr-input-error");
@@ -330,16 +301,12 @@ describe("Input Component", () => {
           type="email"
           placeholder="user@example.com"
           error="Please enter a valid email"
-        />
+        />,
       );
 
       expect(screen.getByText("Email Address")).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText("user@example.com")
-      ).toBeInTheDocument();
-      expect(screen.getByRole("alert")).toHaveTextContent(
-        "Please enter a valid email"
-      );
+      expect(screen.getByPlaceholderText("user@example.com")).toBeInTheDocument();
+      expect(screen.getByRole("alert")).toHaveTextContent("Please enter a valid email");
     });
 
     it("renders complete form field with label, input, and hint", () => {
@@ -350,28 +317,16 @@ describe("Input Component", () => {
           type="text"
           placeholder="Choose a username"
           hint="3-20 characters, letters and numbers only"
-        />
+        />,
       );
 
       expect(screen.getByText("Username")).toBeInTheDocument();
-      expect(
-        screen.getByPlaceholderText("Choose a username")
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText("3-20 characters, letters and numbers only")
-      ).toBeInTheDocument();
+      expect(screen.getByPlaceholderText("Choose a username")).toBeInTheDocument();
+      expect(screen.getByText("3-20 characters, letters and numbers only")).toBeInTheDocument();
     });
 
     it("handles all states together: label, error, disabled", () => {
-      render(
-        <Input
-          id="pwd"
-          label="Password"
-          type="password"
-          error="Password is required"
-          disabled
-        />
-      );
+      render(<Input id="pwd" label="Password" type="password" error="Password is required" disabled />);
 
       expect(screen.getByText("Password")).toBeInTheDocument();
       expect(screen.getByRole("alert")).toBeInTheDocument();
