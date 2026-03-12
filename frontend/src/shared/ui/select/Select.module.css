@@ -211,7 +211,7 @@
 }
 
 .label {
-  font-family: 'Mulish', sans-serif;
+  font-family: "Mulish", sans-serif;
   font-size: 14px;
   font-weight: 500;
   color: #050505;
@@ -232,14 +232,14 @@
   justify-content: space-between;
   padding: 16px 24px;
   background-color: #ffffff;
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
   border-radius: 100px; /* Повний овал */
-  
-  font-family: 'Mulish', sans-serif;
-  font-size: 14px; 
+
+  font-family: "Mulish", sans-serif;
+  font-size: 14px;
   font-weight: 500;
   color: #050505;
-  
+
   cursor: pointer;
   transition: all 0.2s ease;
   outline: none;
@@ -253,7 +253,7 @@
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .value {
@@ -283,17 +283,17 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  
+
   /* Точні параметри з останніх скріншотів Figma */
   background-color: #ffffff;
-  border: 1px solid #E0E0E0;
+  border: 1px solid #e0e0e0;
   border-radius: 15px; /* За макетом Radius: 15px */
-  padding: 16px 18px;  /* За макетом Padding: 16px 18px 16px 18px */
-  
+  padding: 16px 18px; /* За макетом Padding: 16px 18px 16px 18px */
+
   display: flex;
   flex-direction: column;
-  gap: 6px; 
-  
+  gap: 6px;
+
   list-style: none;
   margin: 0;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
@@ -306,41 +306,42 @@
   width: 4px;
 }
 .list::-webkit-scrollbar-thumb {
-  background: #E0E0E0;
+  background: #e0e0e0;
   border-radius: 10px;
 }
 
 /* --- Пункти списку (List Items) --- */
 .list > li {
-  font-family: 'Mulish', sans-serif;
+  font-family: "Mulish", sans-serif;
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
   letter-spacing: -0.02em; /* -2% Letter spacing */
   color: #050505;
-  
+
   padding: 8px 12px;
   cursor: pointer;
   border-radius: 8px; /* Невелике закруглення для hover-ефекту */
-  transition: background 0.15s ease, color 0.15s ease;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
 }
 
 .list > li:hover {
-  background-color: #F5F5F5;
+  background-color: #f5f5f5;
 }
 
 .list > li.selected {
-  background-color: #F0F0F0;
+  background-color: #f0f0f0;
   font-weight: 700;
 }
 
 /* Допоміжні класи помилок */
 .errorText {
-  color: #D32F2F;
+  color: #d32f2f;
   font-size: 12px;
   margin: 4px 0 0 12px;
 }
-
 
 /* =========================================
    АДАПТИВНІСТЬ (Media Queries)
@@ -357,9 +358,9 @@
 @media (min-width: 768px) {
   .container {
     /* На десктопі зазвичай обмежують максимальну ширину */
-    /* max-width: 343px; */ 
+    /* max-width: 343px; */
   }
-  
+
   .list {
     max-height: 326px;
   }

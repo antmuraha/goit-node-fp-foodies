@@ -53,9 +53,7 @@ const parseOptionsFromChildren = (children: ReactNode): ParsedOptions => {
     if (type === "optgroup") {
       const groupOptions: SelectOption[] = [];
       if (props.children) {
-        const groupChildren = Array.isArray(props.children)
-          ? props.children
-          : [props.children];
+        const groupChildren = Array.isArray(props.children) ? props.children : [props.children];
         groupChildren.forEach((child: any) => {
           if (child?.type === "option" && !child.props.hidden) {
             groupOptions.push({
@@ -178,22 +176,14 @@ export const Select = ({
     } else if (key === "Enter") {
       e.preventDefault();
       // Handle selection in list
-      const focusedOption = listRef.current?.querySelector(
-        "[data-focused=true]"
-      ) as HTMLLIElement;
+      const focusedOption = listRef.current?.querySelector("[data-focused=true]") as HTMLLIElement;
       if (focusedOption) {
         focusedOption.click();
       }
     }
   };
 
-  const wrapperClasses = [
-    styles.wrapper,
-    disabled ? styles.disabled : "",
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ");
+  const wrapperClasses = [styles.wrapper, disabled ? styles.disabled : "", className].filter(Boolean).join(" ");
 
   const buttonClasses = [
     styles.button,
@@ -227,24 +217,13 @@ export const Select = ({
           type="button"
         >
           <span className={styles.value}>{selectedLabel}</span>
-          <svg
-            className={styles.arrow}
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-          >
+          <svg className={styles.arrow} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16">
             <path fill="currentColor" d="M8 10L3 5h10z" />
           </svg>
         </button>
 
         {isOpen && (
-          <ul
-            ref={listRef}
-            id={`${selectId}-listbox`}
-            className={styles.list}
-            role="listbox"
-          >
+          <ul ref={listRef} id={`${selectId}-listbox`} className={styles.list} role="listbox">
             {parsedOptions.items.map((item, idx) => {
               if (isOptGroup(item)) {
                 return (
