@@ -1,5 +1,6 @@
 import type { InputHTMLAttributes, ReactElement } from "react";
 import styles from "./Input.module.css";
+import { FormErrorMessage } from "../form-error/FormErrorMessage";
 
 type InputType = "text" | "email" | "password" | "number";
 
@@ -61,9 +62,9 @@ export const Input = ({
         {...props}
       />
       {error && (
-        <span id={errorId} className={styles.errorText} role="alert">
+        <FormErrorMessage id={errorId} variant="field">
           {error}
-        </span>
+        </FormErrorMessage>
       )}
       {hint && !error && (
         <span id={hintId} className={styles.hintText}>
