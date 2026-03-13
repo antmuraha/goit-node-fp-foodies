@@ -39,7 +39,7 @@ Run checks:
 
 ```bash
 # Run formatting backend and frontend together
-npm --prefix backend run format && npm --prefix backend run format:check
+npm --prefix backend run format && npm --prefix frontend run format
 
 # OR
 npm --prefix backend run format:check
