@@ -34,4 +34,3 @@ usersRouter.patch(
 );
 
 export default usersRouter;
-
