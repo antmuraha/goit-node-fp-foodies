@@ -13,7 +13,6 @@ export const UiKitPage = (): ReactElement => {
   const [isPublished, setIsPublished] = useState<boolean>(true);
   const [servings, setServings] = useState<string>(SERVING_OPTIONS[0].value);
   const [isChecked, setIsChecked] = useState<boolean>(false);
-  const [isIndeterminate, setIsIndeterminate] = useState<boolean>(true);
 
   const handlePublishToggle = (event: ChangeEvent<HTMLInputElement>): void => {
     setIsPublished(event.target.checked);
@@ -155,7 +154,6 @@ export const UiKitPage = (): ReactElement => {
             <Checkbox label="Checked state" checked={isChecked} onChange={handleCheckboxToggle} />
             <Checkbox label="Disabled unchecked" disabled />
             <Checkbox label="Disabled checked" disabled defaultChecked />
-            <Checkbox label="Indeterminate state" indeterminate={isIndeterminate} />
           </div>
         </article>
 
