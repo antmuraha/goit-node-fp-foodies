@@ -1,5 +1,5 @@
-import { saveAvatar, validateAvatarUrl } from "../services/avatarServices.js";
-import db from "../models/index.js";
+import { saveAvatar, validateAvatarUrl } from '../services/avatarServices.js';
+import db from '../models/index.js';
 import {
   addFollow,
   getUserProfileWithMetrics,
@@ -7,7 +7,7 @@ import {
   getFollowingList,
   getOtherUserProfile,
   removeFollow,
-} from "../services/userServices.js";
+} from '../services/userServices.js';
 
 export const getCurrentUser = async (req, res, next) => {
   try {
@@ -37,7 +37,7 @@ export const updateAvatar = async (req, res, next) => {
       avatarUrl = req.body.avatar || null;
     } else {
       // No file or URL provided
-      throw { status: 400, message: "Avatar file or URL required" };
+      throw { status: 400, message: 'Avatar file or URL required' };
     }
 
     // Update user avatar in database
@@ -45,7 +45,7 @@ export const updateAvatar = async (req, res, next) => {
 
     // Fetch and return updated user profile
     const user = await db.User.findByPk(userId, {
-      attributes: { exclude: ["password", "token"] },
+      attributes: { exclude: ['password', 'token'] },
     });
 
     res.status(200).json({ user: user.toJSON() });
@@ -68,7 +68,10 @@ export const followUser = async (req, res, next) => {
 export const getFollowers = async (req, res, next) => {
   try {
     const page = Math.max(1, Number.parseInt(req.query.page, 10) || 1);
-    const limit = Math.min(Math.max(1, Number.parseInt(req.query.limit, 10) || 20), 100);
+    const limit = Math.min(
+      Math.max(1, Number.parseInt(req.query.limit, 10) || 20),
+      100,
+    );
     const result = await getFollowersList(req.user.id, { page, limit });
     res.status(200).json(result);
   } catch (err) {
@@ -88,7 +91,10 @@ export const getOtherUser = async (req, res, next) => {
 export const getFollowing = async (req, res, next) => {
   try {
     const page = Math.max(1, Number.parseInt(req.query.page, 10) || 1);
-    const limit = Math.min(Math.max(1, Number.parseInt(req.query.limit, 10) || 20), 100);
+    const limit = Math.min(
+      Math.max(1, Number.parseInt(req.query.limit, 10) || 20),
+      100,
+    );
     const result = await getFollowingList(req.user.id, { page, limit });
     res.status(200).json(result);
   } catch (err) {
