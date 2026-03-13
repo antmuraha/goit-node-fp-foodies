@@ -51,6 +51,6 @@ export const validateAvatarUrl = async (url) => {
     // Basic URL validation using URL constructor
     new URL(url);
   } catch (err) {
-    throw { status: 400, message: "Invalid avatar URL format" };
+    throw { status: 400, message: 'Invalid avatar URL format' };
   }
 };
