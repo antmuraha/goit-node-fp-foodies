@@ -13,17 +13,11 @@ interface SelectOptGroup {
 }
 
 type SelectProps = Omit<SelectHTMLAttributes<HTMLSelectElement>, "type"> & {
-  /** Label text displayed above the select */
   label?: string;
-  /** Error message displayed below the select */
   error?: string;
-  /** Hint/helper text displayed below the select (shown when no error) */
   hint?: string;
-  /** Whether the select has an error state (applies error styling) */
   hasError?: boolean;
-  /** Placeholder text for the disabled default option */
   placeholder?: string;
-  /** Children can be option or optgroup elements */
   children?: ReactNode;
 };
 
@@ -42,14 +36,12 @@ const parseOptionsFromChildren = (children: ReactNode): ParsedOptions => {
       return;
     }
 
-    // Check if node is a React element (has type property)
     if (typeof nodes !== "object" || !("type" in nodes)) return;
 
     const node = nodes as any;
     const type = node.type;
     const props = node.props;
 
-    // Handle optgroup
     if (type === "optgroup") {
       const groupOptions: SelectOption[] = [];
       if (props.children) {
@@ -69,9 +61,7 @@ const parseOptionsFromChildren = (children: ReactNode): ParsedOptions => {
           options: groupOptions,
         });
       }
-    }
-    // Handle option
-    else if (type === "option" && !props.hidden && !props.disabled) {
+    } else if (type === "option" && !props.hidden && !props.disabled) {
       items.push({
         value: props.value,
         label: props.children,
@@ -114,7 +104,6 @@ export const Select = ({
 
   const parsedOptions = parseOptionsFromChildren(children);
 
-  // Find label for selected value
   useEffect(() => {
     let label = placeholder || "";
     for (const item of parsedOptions.items) {
@@ -132,7 +121,6 @@ export const Select = ({
     setSelectedLabel(label);
   }, [selectedValue, parsedOptions, placeholder]);
 
-  // Handle external value changes
   useEffect(() => {
     if (value !== undefined) {
       setSelectedValue(value);
@@ -144,7 +132,6 @@ export const Select = ({
     setSelectedLabel(label);
     setIsOpen(false);
 
-    // Trigger onChange if provided
     if (onChange) {
       const event = {
         target: { value: val },
@@ -170,7 +157,6 @@ export const Select = ({
       buttonRef.current?.focus();
     } else if (key === "Enter") {
       e.preventDefault();
-      // Handle selection in list
       const focusedOption = listRef.current?.querySelector("[data-focused=true]") as HTMLLIElement;
       if (focusedOption) {
         focusedOption.click();
