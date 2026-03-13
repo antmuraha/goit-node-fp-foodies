@@ -1,2 +1,6 @@
 .env
+.env.prod.example
+docker/
 .idea/
+docker-compose.prod.yaml
+prod-compose-config.out

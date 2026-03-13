@@ -232,6 +232,74 @@ Content-Type: multipart/form-data
 
 Avatars are publicly accessible via static files, for example: `http://localhost:3000/avatars/1_1740693324123.png`.
 
+### Users
+
+All user follow endpoints require authentication.
+
+#### Follow user
+
+**POST** `/api/users/:id/follow`
+
+Creates a subscription from the authenticated user to another user.
+
+**Headers:**
+
+```
+Authorization: Bearer <token>
+```
+
+**Response:** `201 Created`
+
+```json
+{
+    "message": "Followed successfully"
+}
+```
+
+**Error responses:**
+
+- `400 Bad Request` if a user tries to follow themselves
+- `401 Unauthorized` if the token is missing or invalid
+- `404 Not Found` if the target user does not exist
+- `409 Conflict` if the follow already exists
+
+#### Unfollow user
+
+**DELETE** `/api/users/:id/follow`
+
+Removes a subscription from the authenticated user to another user.
+
+**Headers:**
+
+```
+Authorization: Bearer <token>
+```
+
+**Response:** `200 OK`
+
+```json
+{
+    "message": "Unfollowed successfully"
+}
+```
+
+**Error responses:**
+
+- `401 Unauthorized` if the token is missing or invalid
+- `404 Not Found` if the follow relation does not exist
+
+#### Follow model schema
+
+The `follows` table stores user-to-user subscriptions with this schema:
+
+- `id`: integer primary key
+- `followerId`: foreign key to `users.id`, `ON DELETE CASCADE`
+- `followingId`: foreign key to `users.id`, `ON DELETE CASCADE`
+- `createdAt`: timestamp
+- `updatedAt`: timestamp
+
+The pair `followerId + followingId` is protected by a composite unique index named `follows_follower_following_unique`.
+
 ### Contacts
 
 All contact endpoints require authentication. Include the JWT token in the `Authorization` header:

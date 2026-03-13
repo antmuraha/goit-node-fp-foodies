@@ -1,5 +1,4 @@
 "use strict";
-
 import { loadCSV } from "../helpers/parseCSV.js";
 
 /** @type {import('sequelize-cli').Migration} */

@@ -1,10 +1,10 @@
-import { promises as fs } from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import { promises as fs } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const AVATARS_DIR = path.join(__dirname, "../public/avatars");
+const AVATARS_DIR = path.join(__dirname, '../public/avatars');
 
 /**
  * Saves an uploaded avatar file for a user
@@ -14,7 +14,7 @@ const AVATARS_DIR = path.join(__dirname, "../public/avatars");
  */
 export const saveAvatar = async (userId, file) => {
   if (!file) {
-    throw { status: 400, message: "No file provided" };
+    throw { status: 400, message: 'No file provided' };
   }
 
   try {
@@ -32,7 +32,7 @@ export const saveAvatar = async (userId, file) => {
     // Return the URL path
     return `/avatars/${filename}`;
   } catch (err) {
-    throw { status: 500, message: "Failed to save avatar" };
+    throw { status: 500, message: 'Failed to save avatar' };
   }
 };
 
@@ -42,7 +42,7 @@ export const saveAvatar = async (userId, file) => {
  * @returns {Promise<void>}
  */
 export const validateAvatarUrl = async (url) => {
-  if (!url || url.trim() === "") {
+  if (!url || url.trim() === '') {
     // Allow empty URL to clear avatar
     return;
   }
@@ -51,6 +51,6 @@ export const validateAvatarUrl = async (url) => {
     // Basic URL validation using URL constructor
     new URL(url);
   } catch (err) {
-    throw { status: 400, message: "Invalid avatar URL format" };
+    throw { status: 400, message: 'Invalid avatar URL format' };
   }
 };

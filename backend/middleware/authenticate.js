@@ -1,25 +1,31 @@
-import jwt from "jsonwebtoken";
-import db from "../models/index.js";
+import jwt from 'jsonwebtoken';
+import db from '../models/index.js';
 
 const authenticate = async (req, res, next) => {
-  const token = req.headers.authorization?.split(" ")[1];
-
-  if (!token) {
-    return res.status(401).json({ message: "Not authorized" });
-  }
-
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await db.User.findByPk(decoded.id);
+    const authHeader = req.headers.authorization;
 
-    if (!user) {
-      return res.status(401).json({ message: "Not authorized" });
+    if (!authHeader) {
+      return res.status(401).json({ message: 'Not authorized' });
     }
 
-    req.user = { id: user.id };
+    const [scheme, token] = authHeader.split(' ');
+
+    if (scheme !== 'Bearer' || !token) {
+      return res.status(401).json({ message: 'Not authorized' });
+    }
+
+    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await db.User.findByPk(id);
+
+    if (!user || user.token !== token) {
+      return res.status(401).json({ message: 'Not authorized' });
+    }
+
+    req.user = user;
     next();
-  } catch (err) {
-    res.status(401).json({ message: "Not authorized" });
+  } catch {
+    return res.status(401).json({ message: 'Not authorized' });
   }
 };
 

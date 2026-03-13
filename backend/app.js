@@ -3,6 +3,7 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import db from "./models/index.js";
+import { swaggerUi, spec } from "./swagger.js";
 
 import categoriesRouter from "./routes/categoriesRouter.js";
 import authRouter from "./routes/authRouter.js";
@@ -11,6 +12,7 @@ import testimonialsRouter from "./routes/testimonialsRouter.js";
 import areasRouter from "./routes/areasRouter.js";
 import recipesRouter from "./routes/recipesRouter.js";
 import usersRouter from "./routes/usersRouter.js";
+import { printEndpointsTable } from "./helpers/printEndpointsTable.js";
 // import contactsRouter from "./routes/contactsRouter.js";
 
 const isDev = (process.env.NODE_ENV || "production") === "development";
@@ -22,6 +24,12 @@ app.use(morgan(isDev ? "dev" : "tiny"));
 app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
+
+if (isDev || process.env.ENABLE_SWAGGER === "true") {
+  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spec, { customSiteTitle: "Foodies API Docs" }));
+  app.get("/api-docs.json", (req, res) => res.json(spec));
+  console.log(`Swagger UI available at http://localhost:${process.env.APP_PORT || 3000}/api-docs`);
+}
 
 app.use("/api/categories", categoriesRouter);
 app.use("/api/ingredients", ingredientRouter);
@@ -97,6 +105,21 @@ if (isMain) {
       app.listen(PORT, () => {
         console.log(`Database connection successful.`);
         console.log(`Server is running. Use our API on port: ${PORT}`);
+
+        if (isDev) {
+          console.log("\n📋 Registered API endpoints:");
+          const routerPaths = [
+            ["/api/categories", categoriesRouter],
+            ["/api/ingredients", ingredientRouter],
+            ["/api/testimonials", testimonialsRouter],
+            ["/api/areas", areasRouter],
+            ["/api/recipes", recipesRouter],
+            ["/api/auth", authRouter],
+            ["/api/users", usersRouter],
+          ];
+
+          printEndpointsTable(routerPaths);
+        }
       });
     })
     .catch((err) => {

@@ -1,10 +1,11 @@
 import { Op } from "sequelize";
 import db from "../models/index.js";
 
-const { Recipe, Category, User, Ingredient, Area, RecipeIngredient, RecipeArea } = db;
+const { Recipe, Category, User, Ingredient, Area, RecipeIngredient, RecipeArea, Favorite } = db;
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
+const { fn, col, literal } = db.Sequelize;
 
 export const searchRecipes = async ({ categoryId, ingredientId, areaId, search, limit, offset }) => {
   const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
@@ -49,6 +50,33 @@ export const searchRecipes = async ({ categoryId, ingredientId, areaId, search, 
   });
 
   return { total: count, limit: safeLimit, offset: safeOffset, recipes: rows };
+};
+
+export const getPopularRecipesService = async ({ limit, offset }) => {
+  const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
+  const safeOffset = Math.max(Number(offset) || 0, 0);
+
+  const topFavorites = await Favorite.findAll({
+    attributes: ["recipeId", [fn("COUNT", col("recipeId")), "favoriteCount"]],
+    group: ["recipeId"],
+    order: [[literal('"favoriteCount"'), "DESC"]],
+    limit: safeLimit,
+    offset: safeOffset,
+    raw: true,
+  });
+
+  const recipeIds = topFavorites.map((r) => r.recipeId);
+  if (recipeIds.length === 0) return [];
+
+  const recipes = await Recipe.findAll({
+    where: { id: recipeIds },
+    include: [
+      { model: Category, attributes: ["id", "name", "image"] },
+      { model: User, as: "author", attributes: ["id", "name", "avatar"] },
+    ],
+  });
+
+  return recipeIds.map((id) => recipes.find((r) => r.id === id));
 };
 
 export const getRecipeById = async (id) => {
@@ -141,4 +169,71 @@ export const deleteRecipe = async (id, userId) => {
   }
 
   await recipe.destroy();
+};
+
+export const addFavoriteService = async (userId, recipeId) => {
+  const recipe = await Recipe.findByPk(recipeId);
+
+  if (!recipe) {
+    const err = new Error("Recipe not found");
+    err.status = 404;
+    throw err;
+  }
+
+  const existing = await Favorite.findOne({
+    where: { userId, recipeId },
+  });
+
+  if (existing) {
+    const err = new Error("Recipe already in favorites");
+    err.status = 409;
+    throw err;
+  }
+
+  return Favorite.create({
+    userId,
+    recipeId,
+  });
+};
+
+export const removeFavoriteService = async (userId, recipeId) => {
+  const favorite = await Favorite.findOne({
+    where: { userId, recipeId },
+  });
+
+  if (!favorite) {
+    const err = new Error("Favorite not found");
+    err.status = 404;
+    throw err;
+  }
+
+  await favorite.destroy();
+};
+
+export const listFavoritesService = async (userId, { limit, offset }) => {
+  const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
+  const safeOffset = Math.max(Number(offset) || 0, 0);
+
+  const { count, rows } = await Favorite.findAndCountAll({
+    where: { userId },
+    include: [
+      {
+        model: Recipe,
+        include: [
+          { model: Category, attributes: ["id", "name", "image"] },
+          { model: User, as: "author", attributes: ["id", "name", "avatar"] },
+        ],
+      },
+    ],
+    limit: safeLimit,
+    offset: safeOffset,
+    order: [["createdAt", "DESC"]],
+  });
+
+  return {
+    total: count,
+    limit: safeLimit,
+    offset: safeOffset,
+    recipes: rows.map((f) => f.Recipe),
+  };
 };
