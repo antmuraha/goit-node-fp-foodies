@@ -1,5 +1,105 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--fd-space-12);
+}
+
 .checkbox {
+  position: relative;
   width: 18px;
   height: 18px;
-  accent-color: var(--fd-action-primary-bg);
+  min-width: 18px;
+  min-height: 18px;
+  margin: 0;
+  padding: 0;
+  cursor: pointer;
+  border: 1px solid var(--fd-border-default);
+  border-radius: 5px;
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: transparent;
+}
+
+.checkbox:hover:not(:disabled) {
+  border-color: var(--fd-color-main);
+}
+
+.checkbox:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--fd-action-primary-bg, rgba(201, 68, 68, 0.1));
+  border-color: var(--fd-color-main);
+}
+
+.checkbox:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--fd-action-primary-bg, rgba(201, 68, 68, 0.1));
+  border-color: var(--fd-color-main);
+}
+
+.checkbox:checked {
+  background-color: var(--fd-color-main);
+  border-color: var(--fd-color-main);
+}
+
+.checkbox:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--fd-color-white);
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.checkbox.indeterminate {
+  background-color: var(--fd-color-main);
+  border-color: var(--fd-color-main);
+}
+
+.checkbox.indeterminate::after {
+  content: "−";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--fd-color-white);
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 1;
+}
+
+.checkbox:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  border-color: var(--fd-border-default);
+}
+
+.checkbox:disabled:checked {
+  background-color: var(--fd-border-default);
+}
+
+.label {
+  cursor: pointer;
+  user-select: none;
+  color: var(--fd-text-primary);
+  font-size: var(--fd-font-size-16);
+  line-height: var(--fd-line-height-24);
+  transition: color 0.2s ease;
+}
+
+.checkbox:disabled ~ .label,
+.wrapper:has(.checkbox:disabled) .label {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.checkbox:hover:not(:disabled) ~ .label {
+  color: var(--fd-color-main);
 }

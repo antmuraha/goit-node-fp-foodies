@@ -12,6 +12,8 @@ const SERVING_OPTIONS = [
 export const UiKitPage = (): ReactElement => {
   const [isPublished, setIsPublished] = useState<boolean>(true);
   const [servings, setServings] = useState<string>(SERVING_OPTIONS[0].value);
+  const [isChecked, setIsChecked] = useState<boolean>(false);
+  const [isIndeterminate, setIsIndeterminate] = useState<boolean>(true);
 
   const handlePublishToggle = (event: ChangeEvent<HTMLInputElement>): void => {
     setIsPublished(event.target.checked);
@@ -19,6 +21,10 @@ export const UiKitPage = (): ReactElement => {
 
   const handleServingsChange = (event: ChangeEvent<HTMLSelectElement>): void => {
     setServings(event.target.value);
+  };
+
+  const handleCheckboxToggle = (event: ChangeEvent<HTMLInputElement>): void => {
+    setIsChecked(event.target.checked);
   };
 
   return (
@@ -142,7 +148,19 @@ export const UiKitPage = (): ReactElement => {
         </article>
 
         <article className={styles.card}>
-          <h2 className={styles.cardTitle}>Selection controls</h2>
+          <h2 className={styles.cardTitle}>Checkbox</h2>
+          <div className={styles.column}>
+            <Checkbox label="Default unchecked" />
+            <Checkbox label="Default checked" defaultChecked />
+            <Checkbox label="Checked state" checked={isChecked} onChange={handleCheckboxToggle} />
+            <Checkbox label="Disabled unchecked" disabled />
+            <Checkbox label="Disabled checked" disabled defaultChecked />
+            <Checkbox label="Indeterminate state" indeterminate={isIndeterminate} />
+          </div>
+        </article>
+
+        <article className={styles.card}>
+          <h2 className={styles.cardTitle}>Selection controls (Radio)</h2>
           <div className={styles.controls}>
             <label className={styles.controlLabel}>
               <Checkbox checked={isPublished} onChange={handlePublishToggle} />
