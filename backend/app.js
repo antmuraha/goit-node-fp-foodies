@@ -25,7 +25,7 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static("public"));
 
-if (isDev) {
+if (isDev || process.env.ENABLE_SWAGGER === "true") {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spec, { customSiteTitle: "Foodies API Docs" }));
   app.get("/api-docs.json", (req, res) => res.json(spec));
   console.log(`Swagger UI available at http://localhost:${process.env.APP_PORT || 3000}/api-docs`);
