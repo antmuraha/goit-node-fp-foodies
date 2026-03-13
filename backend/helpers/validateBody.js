@@ -13,4 +13,3 @@ export const validateBody =
     req.body = value;
     next();
   };
-
