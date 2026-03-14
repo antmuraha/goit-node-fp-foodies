@@ -30,8 +30,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 24
-          cache: "npm"
-          cache-dependency-path: ${{ matrix.project }}/package-lock.json
 
       # Skip matrix item if project package.json is not present yet
       - name: Check project presence
@@ -47,6 +45,15 @@ jobs:
       - name: Project not found
         if: steps.project-check.outputs.exists != 'true'
         run: echo "Skipping ${{ matrix.project }} audit because package.json is missing"
+
+      - name: Cache npm dependencies
+        if: steps.project-check.outputs.exists == 'true'
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ matrix.project }}-${{ hashFiles(format('{0}/package-lock.json', matrix.project)) }}
+          restore-keys: |
+            npm-${{ runner.os }}-${{ matrix.project }}-
 
       # Install dependencies with clean install for security scanning
       - name: Install dependencies
