@@ -2,7 +2,7 @@
 import { loadCSV } from "../helpers/parseCSV.js";
 
 /** @type {import('sequelize-cli').Migration} */
-export default {
+module.exports = {
   async up(queryInterface) {
     const now = new Date();
     const rows = /** @type {Array<{ name: string; image?: string }>} */ (loadCSV("categories.csv"));

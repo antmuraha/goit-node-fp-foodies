@@ -1,7 +1,7 @@
 /** @type {import('sequelize-cli').Migration} */
-export default {
+module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("users", {
+    await queryInterface.createTable("categories", {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -11,27 +11,11 @@ export default {
       name: {
         type: Sequelize.STRING,
         allowNull: false,
-      },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
         unique: true,
       },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
-      avatar: {
+      image: {
         type: Sequelize.TEXT,
         allowNull: true,
-      },
-      token: {
-        type: Sequelize.TEXT,
-        allowNull: true,
-      },
-      verify: {
-        type: Sequelize.BOOLEAN,
-        defaultValue: true,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -45,6 +29,6 @@ export default {
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable("users");
+    await queryInterface.dropTable("categories");
   },
 };

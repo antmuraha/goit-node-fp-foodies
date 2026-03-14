@@ -1,6 +1,6 @@
 "use strict";
 /** @type {import('sequelize-cli').Migration} */
-export default {
+module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.renameColumn("recipes", "name", "title");
     await queryInterface.removeColumn("recipes", "servings");

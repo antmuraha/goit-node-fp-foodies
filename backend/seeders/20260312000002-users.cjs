@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import { loadCSV } from "../helpers/parseCSV.js";
 
 /** @type {import('sequelize-cli').Migration} */
-export default {
+module.exports = {
   async up(queryInterface) {
     const seedPassword = process.env.SEED_PASSWORD;
     if (!seedPassword) {

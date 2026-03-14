@@ -1,19 +1,16 @@
 "use strict";
-
 import { loadCSV } from "../helpers/parseCSV.js";
 
 /** @type {import('sequelize-cli').Migration} */
-export default {
+module.exports = {
   async up(queryInterface) {
     const now = new Date();
-    const rows = loadCSV("ingredients.csv");
+    const rows = loadCSV("areas.csv");
 
     await queryInterface.bulkInsert(
-      "ingredients",
+      "areas",
       rows.map((r) => ({
         name: r.name,
-        description: r.description || r.name,
-        image: r.img || null,
         createdAt: now,
         updatedAt: now,
       })),
@@ -22,6 +19,6 @@ export default {
   },
 
   async down(queryInterface) {
-    await queryInterface.bulkDelete("ingredients", null, {});
+    await queryInterface.bulkDelete("areas", null, {});
   },
 };

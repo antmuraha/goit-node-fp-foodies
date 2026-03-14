@@ -1,34 +1,27 @@
+"use strict";
 /** @type {import('sequelize-cli').Migration} */
-export default {
+module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("recipeIngredients", {
+    await queryInterface.createTable("follows", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      recipeId: {
+      followerId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "recipes", key: "id" },
+        references: { model: "users", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      ingredientId: {
+      followingId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "ingredients", key: "id" },
+        references: { model: "users", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
-      },
-      quantity: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
-      unit: {
-        type: Sequelize.STRING,
-        allowNull: true,
       },
       createdAt: {
         allowNull: false,
@@ -40,11 +33,15 @@ export default {
       },
     });
 
-    await queryInterface.addIndex("recipeIngredients", ["recipeId"]);
-    await queryInterface.addIndex("recipeIngredients", ["ingredientId"]);
+    await queryInterface.addIndex("follows", ["followerId"]);
+    await queryInterface.addIndex("follows", ["followingId"]);
+    await queryInterface.addIndex("follows", ["followerId", "followingId"], {
+      unique: true,
+      name: "follows_follower_following_unique",
+    });
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable("recipeIngredients");
+    await queryInterface.dropTable("follows");
   },
 };

@@ -1,25 +1,24 @@
-"use strict";
 /** @type {import('sequelize-cli').Migration} */
-export default {
+module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("follows", {
+    await queryInterface.createTable("recipeAreas", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      followerId: {
+      recipeId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "users", key: "id" },
+        references: { model: "recipes", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
-      followingId: {
+      areaId: {
         type: Sequelize.INTEGER,
         allowNull: false,
-        references: { model: "users", key: "id" },
+        references: { model: "areas", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
       },
@@ -33,15 +32,11 @@ export default {
       },
     });
 
-    await queryInterface.addIndex("follows", ["followerId"]);
-    await queryInterface.addIndex("follows", ["followingId"]);
-    await queryInterface.addIndex("follows", ["followerId", "followingId"], {
-      unique: true,
-      name: "follows_follower_following_unique",
-    });
+    await queryInterface.addIndex("recipeAreas", ["recipeId"]);
+    await queryInterface.addIndex("recipeAreas", ["areaId"]);
   },
 
   async down(queryInterface) {
-    await queryInterface.dropTable("follows");
+    await queryInterface.dropTable("recipeAreas");
   },
 };
