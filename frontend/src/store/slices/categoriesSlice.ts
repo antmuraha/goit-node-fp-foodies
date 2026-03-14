@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit/react";
-import { ApiError } from "../../shared/types/api";
+import type { ApiError } from "../../shared/types/api";
 import { categoriesApi } from "../../api/endpoints/categoriesApi";
 import { createSlice } from "@reduxjs/toolkit";
-import { CategoryListResponse } from "../../entities/category/model/types";
+import type { CategoryListResponse } from "../../entities/category/model/types";
 
 type CategoriesState = {
   list: Array<{
