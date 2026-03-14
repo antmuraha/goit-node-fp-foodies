@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { recipesApi } from "../../api/endpoints/recipesApi";
-import type { RecipeSearchParams, RecipeSummary } from "../../entities/recipe";
+import type { RecipeDetails, RecipeSearchParams, RecipeSummary } from "../../entities/recipe/types";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
 
 type RecipesState = {
@@ -8,11 +8,16 @@ type RecipesState = {
   total: number;
   limit: number;
   offset: number;
-  selectedRecipe: RecipeSummary | null;
+  selectedRecipe: RecipeDetails | null;
   listStatus: AsyncStatus;
   selectedRecipeStatus: AsyncStatus;
   listError: string | null;
   selectedRecipeError: string | null;
+  popularList: RecipeSummary[];
+  popularPage: number;
+  popularLimit: number;
+  popularListStatus: AsyncStatus;
+  popularListError: string | null;
 };
 
 const initialState: RecipesState = {
@@ -25,6 +30,11 @@ const initialState: RecipesState = {
   selectedRecipeStatus: "idle",
   listError: null,
   selectedRecipeError: null,
+  popularList: [],
+  popularPage: 0,
+  popularLimit: 0,
+  popularListStatus: "idle",
+  popularListError: null,
 };
 
 const getErrorMessage = (error: unknown): string => {
@@ -36,7 +46,7 @@ const getErrorMessage = (error: unknown): string => {
 };
 
 export const fetchRecipes = createAsyncThunk<
-  { recipes: RecipeSummary[]; total: number; limit: number; offset: number },
+  { data: RecipeSummary[]; total: number; limit: number; offset: number },
   RecipeSearchParams | undefined,
   { rejectValue: string }
 >("recipes/fetchRecipes", async (query, thunkApi) => {
@@ -47,7 +57,7 @@ export const fetchRecipes = createAsyncThunk<
   }
 });
 
-export const fetchRecipeById = createAsyncThunk<RecipeSummary, number, { rejectValue: string }>(
+export const fetchRecipeById = createAsyncThunk<RecipeDetails, number, { rejectValue: string }>(
   "recipes/fetchRecipeById",
   async (id, thunkApi) => {
     try {
@@ -57,6 +67,18 @@ export const fetchRecipeById = createAsyncThunk<RecipeSummary, number, { rejectV
     }
   },
 );
+
+export const fetchPopularRecipes = createAsyncThunk<
+  { data: RecipeSummary[]; total: number; limit: number; offset: number },
+  void,
+  { rejectValue: string }
+>("recipes/fetchPopularRecipes", async (_, thunkApi) => {
+  try {
+    return await recipesApi.getPopularRecipes();
+  } catch (error) {
+    return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
+  }
+});
 
 const recipesSlice = createSlice({
   name: "recipes",
@@ -76,7 +98,7 @@ const recipesSlice = createSlice({
       })
       .addCase(fetchRecipes.fulfilled, (state, action) => {
         state.listStatus = "succeeded";
-        state.list = action.payload.recipes;
+        state.list = action.payload.data;
         state.total = action.payload.total;
         state.limit = action.payload.limit;
         state.offset = action.payload.offset;
@@ -96,6 +118,20 @@ const recipesSlice = createSlice({
       .addCase(fetchRecipeById.rejected, (state, action) => {
         state.selectedRecipeStatus = "failed";
         state.selectedRecipeError = action.payload ?? "Unable to load recipe";
+      })
+      .addCase(fetchPopularRecipes.pending, (state) => {
+        state.popularListStatus = "loading";
+        state.popularListError = null;
+      })
+      .addCase(fetchPopularRecipes.fulfilled, (state, action) => {
+        state.popularListStatus = "succeeded";
+        state.popularList = action.payload.data;
+        state.popularPage = action.payload.offset / action.payload.limit;
+        state.popularLimit = action.payload.limit;
+      })
+      .addCase(fetchPopularRecipes.rejected, (state, action) => {
+        state.popularListStatus = "failed";
+        state.popularListError = typeof action.payload === "string" ? action.payload : "Unable to load popular recipes";
       });
   },
 });

@@ -47,7 +47,7 @@ export const HomePage = (): ReactElement => {
           <h2>Recent recipes</h2>
           {recipes.map((recipe) => (
             <article key={recipe.id}>
-              <h3>{recipe.name}</h3>
+              <h3>{recipe.title}</h3>
               <p>{recipe.description ?? "No description yet"}</p>
             </article>
           ))}

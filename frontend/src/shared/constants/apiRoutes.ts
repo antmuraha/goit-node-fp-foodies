@@ -12,6 +12,7 @@ export const API_ROUTES = {
   RECIPES: {
     ROOT: "/recipes",
     BY_ID: (id: number | string): string => `/recipes/${id}`,
+    POPULAR: "/recipes/popular",
   },
   CATEGORIES: {
     ROOT: "/categories",
