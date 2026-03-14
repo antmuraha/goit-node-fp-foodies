@@ -202,8 +202,8 @@ export const UiKitPage = (): ReactElement => {
         closeOnOverlayClick
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          <Input type="email" label="Email" placeholder="user@example.com" />
-          <Input type="password" label="Password" placeholder="Enter your password" />
+          <Input type="email" placeholder="Email*" />
+          <Input type="password" placeholder="Password" />
           <Button onClick={() => setIsSignInModalOpen(false)}>Sign In</Button>
           <p style={{ textAlign: "center", margin: "0", fontSize: "14px" }}>
             Don&apos;t have an account?{" "}
@@ -236,9 +236,9 @@ export const UiKitPage = (): ReactElement => {
         closeOnOverlayClick
       >
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <Input type="text" label="Name" placeholder="Full Name" />
-          <Input type="email" label="Email" placeholder="user@example.com" />
-          <Input type="password" label="Password" placeholder="Enter your password" />
+          <Input type="text" placeholder="Name*" />
+          <Input type="email" placeholder="Email*" />
+          <Input type="password" placeholder="Password" />
           <Button style={{ marginTop: "8px" }} onClick={() => setIsSignUpModalOpen(false)}>
             CREATE
           </Button>
