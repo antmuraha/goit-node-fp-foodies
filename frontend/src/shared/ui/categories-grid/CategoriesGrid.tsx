@@ -1,4 +1,5 @@
 // TODO - Implement CategoriesGrid component to display categories with images
+import { NavLink } from "react-router-dom";
 import { useDataCategories } from "../../hooks/useDataCategories";
 import { ImageCategory } from "../image-category";
 
@@ -13,7 +14,11 @@ const CategoriesGrid = () => {
           {categories.length > 0 &&
             categories.map(
               (category) =>
-                category.image && <ImageCategory key={category.id} src={category.image} alt={category.name} />,
+                category.image && (
+                  <NavLink key={category.id} to={`/category/${category.id}`}>
+                    <ImageCategory key={category.id} src={category.image} alt={category.name} />
+                  </NavLink>
+                ),
             )}
         </div>
       </section>
