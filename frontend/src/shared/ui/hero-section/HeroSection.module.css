@@ -78,10 +78,7 @@
 /* ── Decorative images ── */
 .images {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 320px;
+  inset: 0;
   pointer-events: none;
 }
 
@@ -162,6 +159,10 @@
     border-radius: var(--fd-radius-pill);
   }
 
+  .content {
+    padding-top: 154px;
+  }
+
   .title {
     font-size: 90px;
     line-height: 90px;
@@ -186,16 +187,14 @@
   .imageMain {
     width: 302px;
     height: 273px;
-    right: 260px;
-    bottom: 116px;
-    border-radius: var(--fd-radius-pill);
+    right: 449px;
+    bottom: 82px;
   }
 
   .imageSmall {
     width: 128px;
     height: 116px;
-    left: 448px;
-    bottom: 97px;
-    border-radius: var(--fd-radius-md);
+    left: 449px;
+    bottom: 135px;
   }
 }
