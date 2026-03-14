@@ -23,3 +23,11 @@ export type RecipeSearchParams = {
   limit?: number;
   offset?: number;
 };
+
+export type CategorySummary = {
+  id: number;
+  name: string;
+  image?: string;
+};
+
+export type CategoryListResponse = CategorySummary[];

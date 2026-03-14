@@ -2,6 +2,7 @@ import type { ReactElement } from "react";
 import { Link } from "react-router-dom";
 import { useDataRecipes } from "../../shared/hooks";
 import { APP_ROUTES } from "../../shared/constants/routes";
+import { CategoriesGrid } from "../../shared/ui/categories-grid";
 
 const TEMP_ROUTE_LINKS = [
   { label: "Home", path: APP_ROUTES.HOME },
@@ -51,6 +52,7 @@ export const HomePage = (): ReactElement => {
           ))}
         </section>
       )}
+      <CategoriesGrid />
     </main>
   );
 };
