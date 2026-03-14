@@ -26,11 +26,11 @@ jobs:
 
     steps:
       # Checkout repository code
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # Setup Node.js runtime for project commands
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
 
@@ -51,7 +51,7 @@ jobs:
 
       - name: Cache npm dependencies
         if: steps.project-check.outputs.exists == 'true'
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/.npm
           key: npm-${{ runner.os }}-${{ matrix.project }}-${{ hashFiles(format('{0}/package-lock.json', matrix.project)) }}
@@ -110,7 +110,7 @@ jobs:
       # Preserve audit reports as artifacts for investigation
       - name: Upload audit artifacts
         if: always() && steps.project-check.outputs.exists == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: npm-audit-${{ matrix.project }}
           path: ${{ matrix.project }}/audit.*
