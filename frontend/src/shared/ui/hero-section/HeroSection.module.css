@@ -82,24 +82,24 @@
   pointer-events: none;
 }
 
-/* Large rotated food image (bottom-right) */
+/* Large rotated food image — right of center */
 .imageMain {
   position: absolute;
   width: 190px;
   height: 172px;
-  right: 16px;
+  left: calc(50% - 49px);
   bottom: 88px;
   border-radius: var(--fd-radius-pill);
   object-fit: cover;
   transform: rotate(-12deg);
 }
 
-/* Small rotated food image (bottom-left) */
+/* Small rotated food image — left of center */
 .imageSmall {
   position: absolute;
   width: 77px;
   height: 70px;
-  left: 27px;
+  left: calc(50% - 147px);
   bottom: 100px;
   border-radius: var(--fd-radius-md);
   object-fit: cover;
@@ -122,6 +122,7 @@
     line-height: 70px;
     letter-spacing: -1.4px;
     max-width: 678px;
+    margin-bottom: var(--fd-space-40);
   }
 
   .subtitle {
@@ -129,6 +130,7 @@
     line-height: var(--fd-type-main-desktop-height);
     letter-spacing: -0.32px;
     max-width: 577px;
+    margin-bottom: var(--fd-space-40);
   }
 
   .ctaButton {
@@ -140,14 +142,14 @@
   .imageMain {
     width: 302px;
     height: 273px;
-    right: 117px;
+    left: calc(50% - 76px);
     bottom: 91px;
   }
 
   .imageSmall {
     width: 128px;
     height: 116px;
-    left: 117px;
+    left: calc(50% - 241px);
     bottom: 144px;
   }
 }
@@ -168,6 +170,7 @@
     line-height: 90px;
     letter-spacing: -1.8px;
     max-width: 875px;
+    margin-bottom: var(--fd-space-40);
   }
 
   .subtitle {
@@ -175,7 +178,7 @@
     line-height: var(--fd-type-main-desktop-height);
     letter-spacing: -0.32px;
     max-width: 577px;
-    margin-bottom: var(--fd-space-24);
+    margin-bottom: var(--fd-space-40);
   }
 
   .ctaButton {
@@ -187,14 +190,14 @@
   .imageMain {
     width: 302px;
     height: 273px;
-    right: 449px;
+    left: calc(50% - 76px);
     bottom: 82px;
   }
 
   .imageSmall {
     width: 128px;
     height: 116px;
-    left: 449px;
+    left: calc(50% - 241px);
     bottom: 135px;
   }
 }
