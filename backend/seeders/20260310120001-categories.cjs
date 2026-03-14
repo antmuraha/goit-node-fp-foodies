@@ -1,5 +1,5 @@
 "use strict";
-import { loadCSV } from "../helpers/parseCSV.js";
+const { loadCSV } = require("../helpers/parseCSV.cjs");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {

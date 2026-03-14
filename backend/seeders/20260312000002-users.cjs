@@ -1,7 +1,7 @@
 "use strict";
 
-import bcrypt from "bcrypt";
-import { loadCSV } from "../helpers/parseCSV.js";
+const bcrypt = require("bcrypt");
+const { loadCSV } = require("../helpers/parseCSV.cjs");
 
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
