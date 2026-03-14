@@ -26,11 +26,13 @@ export const getPopularRecipes = async (req, res, next) => {
     const { limit, offset } = req.query;
     const result = await getPopularRecipesService({ limit, offset });
 
-    if (!result || result.length === 0) {
-      return res.status(404).json({ message: "No popular result found" });
-    }
+    const data = {
+      data: result || [],
+      page: Number(offset) || 0,
+      limit: Number(limit) || 10,
+    };
 
-    res.status(200).json(result);
+    res.status(200).json(data);
   } catch (err) {
     next(err);
   }
