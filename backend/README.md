@@ -67,9 +67,14 @@ A Node.js REST API application for managing contacts with PostgreSQL database an
     ```
 
 6. (Optional) Seed the database with sample data:
+
+    The seeder requires a `SEED_PASSWORD` environment variable — the plain-text password that will be hashed and assigned to every seeded user.
+
     ```bash
-    npm run db:seed
+    SEED_PASSWORD=ExampleSecurePassword npm run db:seed
     ```
+
+    > **Note:** Omitting `SEED_PASSWORD` will cause the seeder to exit with an error.
 
 ## Quick Start
 
@@ -226,6 +231,74 @@ Content-Type: multipart/form-data
 ```
 
 Avatars are publicly accessible via static files, for example: `http://localhost:3000/avatars/1_1740693324123.png`.
+
+### Users
+
+All user follow endpoints require authentication.
+
+#### Follow user
+
+**POST** `/api/users/:id/follow`
+
+Creates a subscription from the authenticated user to another user.
+
+**Headers:**
+
+```
+Authorization: Bearer <token>
+```
+
+**Response:** `201 Created`
+
+```json
+{
+    "message": "Followed successfully"
+}
+```
+
+**Error responses:**
+
+- `400 Bad Request` if a user tries to follow themselves
+- `401 Unauthorized` if the token is missing or invalid
+- `404 Not Found` if the target user does not exist
+- `409 Conflict` if the follow already exists
+
+#### Unfollow user
+
+**DELETE** `/api/users/:id/follow`
+
+Removes a subscription from the authenticated user to another user.
+
+**Headers:**
+
+```
+Authorization: Bearer <token>
+```
+
+**Response:** `200 OK`
+
+```json
+{
+    "message": "Unfollowed successfully"
+}
+```
+
+**Error responses:**
+
+- `401 Unauthorized` if the token is missing or invalid
+- `404 Not Found` if the follow relation does not exist
+
+#### Follow model schema
+
+The `follows` table stores user-to-user subscriptions with this schema:
+
+- `id`: integer primary key
+- `followerId`: foreign key to `users.id`, `ON DELETE CASCADE`
+- `followingId`: foreign key to `users.id`, `ON DELETE CASCADE`
+- `createdAt`: timestamp
+- `updatedAt`: timestamp
+
+The pair `followerId + followingId` is protected by a composite unique index named `follows_follower_following_unique`.
 
 ### Contacts
 
@@ -495,20 +568,67 @@ podman-compose -f docker-compose.dev.yaml down
 
 Sequelize migrations manage database schema changes. Migrations are versioned and allow you to evolve your database schema over time.
 
-Current migrations include users, contacts, and `avatarURL` column for users.
+**Recipe-domain migrations (9 total, in apply order):**
+
+| # | File | Table |
+|---|------|-------|
+| 1 | `20260310120000-create-categories.js` | `categories` |
+| 2 | `20260310140000-create-users.js` | `users` |
+| 3 | `20260311104817-create-area.js` | `areas` |
+| 4 | `20260311121928-create-ingredient.js` | `ingredients` |
+| 5 | `20260311152926-create-testimonials.js` | `testimonials` |
+| 6 | `20260312000000-create-recipes.js` | `recipes` |
+| 7 | `20260312000001-create-recipe-ingredients.js` | `recipeIngredients` |
+| 8 | `20260312000002-create-recipe-areas.js` | `recipeAreas` |
+| 9 | `20260312000003-create-favorites.js` | `favorites` |
+| 10 | `20260312000004-create-follows.js` | `follows` |
+
+Junction tables (`recipeIngredients`, `recipeAreas`, `favorites`, `follows`) reference parent tables via foreign keys with `ON DELETE CASCADE`, so they are always rolled back before their parents.
 
 **Available migration commands:**
 
 ```bash
 # Apply all pending migrations
-pnpm db:migrate
+npm --prefix backend run db:migrate
 
 # Undo the last migration
-pnpm db:migrate:undo
+npm --prefix backend run db:migrate:undo
 
-# Reset database (undo all migrations and reapply)
-pnpm db:reset
+# Undo ALL migrations
+npm --prefix backend run db:migrate:undo:all
+
+# Show applied/pending migration status
+npm --prefix backend run db:migrate:status
+
+# Reset database (undo all + reapply)
+npm --prefix backend run db:reset
+
+# Purge database (drop + recreate + reapply migrations)
+# WARNING: destructive operation intended for local/dev environments.
+npm --prefix backend run db:purge
+
+# Run full rollback verification suite
+npm --prefix backend run db:migrate:verify
 ```
+
+#### 2a. Migration Rollback Verification
+
+The script `backend/scripts/test-migrations.sh` validates that every migration can be safely rolled back. It runs four phases:
+
+1. **Apply** — runs `db:migrate` and checks that all 10 tables exist.
+2. **Rollback** — runs `db:migrate:undo` once per migration and verifies no orphaned tables remain.
+3. **Idempotency** — re-applies all migrations to confirm the schema rebuilds cleanly.
+4. **Sequence check** — confirms PostgreSQL auto-increment sequences are present.
+
+```bash
+# Run from the repository root
+bash backend/scripts/test-migrations.sh
+
+# Or via npm script (from repository root)
+npm --prefix backend run db:migrate:verify
+```
+
+Prerequisites: PostgreSQL must be running and `backend/.env` must contain valid credentials.
 
 **Creating a new migration:**
 

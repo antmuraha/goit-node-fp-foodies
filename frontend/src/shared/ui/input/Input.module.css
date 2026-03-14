@@ -1,12 +1,32 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-12);
+}
+
+.label {
+  font-size: var(--fd-input-text-size);
+  font-weight: var(--fd-font-weight-medium);
+  color: var(--fd-input-value);
+  line-height: var(--fd-input-text-height);
+  cursor: pointer;
+}
+
 .input {
   width: 100%;
-  min-height: var(--fd-control-height-md);
-  border: 1px solid var(--fd-input-line-default);
-  border-radius: var(--fd-radius-sm);
-  background-color: var(--fd-bg-canvas);
+  min-height: var(--fd-control-height-lg);
+  border: 2px solid var(--fd-input-line-default);
+  border-radius: var(--fd-radius-pill);
+  background-color: var(--fd-form-field-bg);
   color: var(--fd-input-value);
-  padding: var(--fd-space-8) var(--fd-space-12);
+  padding: var(--fd-space-12) var(--fd-space-20);
   font: inherit;
+  font-size: var(--fd-input-text-size);
+  font-weight: var(--fd-input-text-weight);
+  line-height: var(--fd-input-text-height);
+  transition:
+    border-color 150ms ease-in-out,
+    box-shadow 150ms ease-in-out;
 }
 
 .input::placeholder {
@@ -19,7 +39,53 @@
   box-shadow: var(--fd-shadow-focus);
 }
 
-.error {
+.input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: var(--fd-bg-muted);
+}
+
+.input:read-only {
+  background-color: var(--fd-bg-muted);
+  cursor: default;
+}
+
+.input.error {
   border-color: var(--fd-input-line-error);
   color: var(--fd-input-text-error);
+}
+
+.input.error::placeholder {
+  color: var(--fd-input-text-error);
+}
+
+.input.error:focus {
+  border-color: var(--fd-input-line-error);
+  box-shadow: 0 0 0 2px rgba(200, 0, 0, 0.15);
+}
+
+.input.disabled.error {
+  border-color: var(--fd-input-line-error);
+}
+
+.disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.readOnly {
+  background-color: var(--fd-bg-muted);
+  cursor: default;
+}
+
+.errorText {
+  font-size: var(--fd-font-size-12);
+  color: var(--fd-input-text-error);
+  line-height: var(--fd-line-height-18);
+}
+
+.hintText {
+  font-size: var(--fd-font-size-12);
+  color: var(--fd-input-counter);
+  line-height: var(--fd-line-height-18);
 }
