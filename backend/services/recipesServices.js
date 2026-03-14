@@ -5,7 +5,6 @@ const { Recipe, Category, User, Ingredient, Area, RecipeIngredient, RecipeArea, 
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
-const { fn, col, literal } = db.Sequelize;
 
 export const searchRecipes = async ({ categoryId, ingredientId, areaId, search, limit, offset }) => {
   const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
@@ -58,6 +57,7 @@ export const getPopularRecipesService = async ({ limit, offset }) => {
   /*
 TODO: Temporary commented for testing without favorites.
 
+  const { fn, col, literal } = db.Sequelize;
   const topFavorites = await Favorite.findAll({
     attributes: ["recipeId", [fn("COUNT", col("recipeId")), "favoriteCount"]],
     group: ["recipeId"],
@@ -78,6 +78,7 @@ TODO: Temporary commented for testing without favorites.
     ],
   });
 
+  return recipeIds.map((id) => recipes.find((r) => r.id === id));
   */
 
   // TODO: START TEMPORARY BLOCK
@@ -86,7 +87,7 @@ TODO: Temporary commented for testing without favorites.
     { model: User, as: "author", attributes: ["id", "name", "avatar"] },
   ];
 
-  const { count, rows } = await Recipe.findAndCountAll({
+  const { rows } = await Recipe.findAndCountAll({
     include,
     limit: safeLimit,
     offset: safeOffset,
@@ -96,8 +97,6 @@ TODO: Temporary commented for testing without favorites.
 
   return rows;
   // TODO: END TEMPORARY BLOCK
-
-  return recipeIds.map((id) => recipes.find((r) => r.id === id));
 };
 
 export const getRecipeById = async (id) => {

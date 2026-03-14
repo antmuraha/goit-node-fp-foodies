@@ -1,4 +1,4 @@
-import { fileURLToPath } from "url";
+import { fileURLToPath } from "node:url";
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
@@ -27,7 +27,7 @@ app.use(express.static("public"));
 
 if (isDev || process.env.ENABLE_SWAGGER === "true") {
   app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(spec, { customSiteTitle: "Foodies API Docs" }));
-  app.get("/api-docs.json", (req, res) => res.json(spec));
+  app.get("/api-docs.json", (_req, res) => res.json(spec));
   console.log(`Swagger UI available at http://localhost:${process.env.APP_PORT || 3000}/api-docs`);
 }
 
@@ -44,11 +44,11 @@ app.use((_, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-app.use((err, req, res, next) => {
+app.use((err, _req, res, _next) => {
   // Handle Sequelize database errors
   if (err.name === "SequelizeDatabaseError") {
     // Check if the error is about missing relation (table)
-    if (err.original && err.original.message && err.original.message.includes("does not exist")) {
+    if (err.original?.message?.includes("does not exist")) {
       return res.status(503).json(
         isDev
           ? {
@@ -76,7 +76,7 @@ app.use((err, req, res, next) => {
   }
 
   // Handle other Sequelize errors
-  if (err.name && err.name.startsWith("Sequelize")) {
+  if (err.name?.startsWith("Sequelize")) {
     return res.status(500).json(
       isDev
         ? {

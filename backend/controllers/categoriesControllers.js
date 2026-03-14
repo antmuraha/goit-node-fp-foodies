@@ -2,7 +2,7 @@ import { listCategories } from "../services/categoriesServices.js";
 
 const baseImageUrl = process.env.BASE_IMAGE_URL || "http://localhost:3000";
 
-export const getCategories = async (req, res, next) => {
+export const getCategories = async (_req, res, next) => {
   try {
     const categories = await listCategories();
     res.set("Cache-Control", "public, max-age=3600, stale-while-revalidate=86400");

@@ -1,7 +1,7 @@
 "use strict";
 
-const { readFileSync } = require("fs");
-const { join } = require("path");
+const { readFileSync } = require("node:fs");
+const { join } = require("node:path");
 
 /**
  * Reads a CSV file from backend/data/ and returns an array of objects
