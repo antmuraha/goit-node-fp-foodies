@@ -1,6 +1,6 @@
 import { apiClient } from "../client";
 import { API_ROUTES } from "../../shared/constants/apiRoutes";
-import { CategoryListResponse } from "../../entities/recipe/model/types";
+import { CategoryListResponse } from "../../entities/category/model/types";
 
 export const categoriesApi = {
   client: apiClient,
