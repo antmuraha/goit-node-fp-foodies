@@ -109,6 +109,52 @@
   transform: rotate(11deg);
 }
 
+/* ── Tablet ── */
+@media (min-width: 768px) {
+  .hero {
+    min-height: 992px;
+    border-radius: var(--fd-radius-pill);
+  }
+
+  .content {
+    padding-top: 217px;
+  }
+
+  .title {
+    font-size: 70px;
+    line-height: 70px;
+    letter-spacing: -1.4px;
+    max-width: 678px;
+  }
+
+  .subtitle {
+    font-size: var(--fd-type-main-desktop-size);
+    line-height: var(--fd-type-main-desktop-height);
+    letter-spacing: -0.32px;
+    max-width: 577px;
+  }
+
+  .ctaButton {
+    padding: 16px 32px;
+    font-size: var(--fd-type-main-desktop-size);
+    line-height: var(--fd-line-height-24);
+  }
+
+  .imageMain {
+    width: 302px;
+    height: 273px;
+    right: 117px;
+    bottom: 91px;
+  }
+
+  .imageSmall {
+    width: 128px;
+    height: 116px;
+    left: 117px;
+    bottom: 144px;
+  }
+}
+
 /* ── Desktop ── */
 @media (min-width: 1280px) {
   .hero {
