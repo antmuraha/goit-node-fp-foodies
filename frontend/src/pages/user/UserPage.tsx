@@ -21,7 +21,6 @@ export const UserPage = (): ReactElement => {
         <section>
           <h2>{user.name}</h2>
           <p>ID: {user.id}</p>
-          {user.email && <p>Email: {user.email}</p>}
         </section>
       )}
       {!isLoading && !error && !user && <p>No user selected.</p>}
