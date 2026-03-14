@@ -1,8 +1,8 @@
 import { createAsyncThunk } from "@reduxjs/toolkit/react";
-import { ApiError } from "../../shared/types/api";
+import type { ApiError } from "../../shared/types/api";
 import { createSlice } from "@reduxjs/toolkit";
 import { testimonialApi } from "../../api/endpoints/testimonialApi";
-import { TestimonialListResponse, TestimonialSummary } from "../../entities/testimonial/model/types";
+import type { TestimonialListResponse, TestimonialSummary } from "../../entities/testimonial/model/types";
 
 type TestimonialState = {
   list: TestimonialSummary[];

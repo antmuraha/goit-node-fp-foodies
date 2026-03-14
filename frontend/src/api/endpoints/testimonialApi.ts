@@ -1,6 +1,6 @@
 import { apiClient } from "../client";
 import { API_ROUTES } from "../../shared/constants/apiRoutes";
-import { TestimonialListResponse } from "../../entities/testimonial/model/types";
+import type { TestimonialListResponse } from "../../entities/testimonial/model/types";
 
 export const testimonialApi = {
   client: apiClient,
