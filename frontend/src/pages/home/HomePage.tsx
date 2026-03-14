@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useDataRecipes } from "../../shared/hooks";
 import { APP_ROUTES } from "../../shared/constants/routes";
 import { CategoriesGrid } from "../../shared/ui/categories-grid";
+import { TestimonialsSection } from "../../shared/ui/testimonials-section";
 
 const TEMP_ROUTE_LINKS = [
   { label: "Home", path: APP_ROUTES.HOME },
@@ -53,6 +54,7 @@ export const HomePage = (): ReactElement => {
         </section>
       )}
       <CategoriesGrid />
+      <TestimonialsSection />
     </main>
   );
 };
