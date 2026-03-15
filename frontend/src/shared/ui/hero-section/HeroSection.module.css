@@ -1,0 +1,203 @@
+/* Hero Section — mobile-first */
+
+.hero {
+  position: relative;
+  background-color: var(--fd-color-main);
+  border-radius: 20px;
+  overflow: hidden;
+  min-height: 796px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── Content ── */
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 194px var(--fd-space-16) 0;
+  width: 100%;
+}
+
+.title {
+  font-size: 40px;
+  line-height: 40px;
+  font-weight: var(--fd-font-weight-extrabold);
+  letter-spacing: -0.8px;
+  text-transform: uppercase;
+  color: var(--fd-color-white);
+  margin: 0 0 var(--fd-space-20);
+  max-width: 327px;
+}
+
+.subtitle {
+  font-size: var(--fd-type-main-mobile-size);
+  line-height: var(--fd-type-main-mobile-height);
+  font-weight: var(--fd-font-weight-medium);
+  letter-spacing: var(--fd-letter-spacing-tight);
+  color: var(--fd-color-white);
+  margin: 0 0 var(--fd-space-20);
+  max-width: 326px;
+}
+
+/* CTA — white outline link on dark background */
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px var(--fd-space-24);
+  border: 1px solid var(--fd-color-white);
+  border-radius: var(--fd-radius-pill);
+  background-color: transparent;
+  color: var(--fd-color-white);
+  font-family: var(--fd-font-family-base);
+  font-size: var(--fd-type-main-mobile-size);
+  line-height: var(--fd-type-main-mobile-height);
+  font-weight: var(--fd-font-weight-bold);
+  letter-spacing: var(--fd-letter-spacing-tight);
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.ctaButton:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.ctaButton:focus-visible {
+  outline: 2px solid var(--fd-color-white);
+  outline-offset: 2px;
+}
+
+/* ── Decorative images ── */
+.images {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Large rotated food image — right of center */
+.imageMain {
+  position: absolute;
+  width: 190px;
+  height: 172px;
+  left: calc(50% - 49px);
+  bottom: 88px;
+  border-radius: var(--fd-radius-pill);
+  object-fit: cover;
+  transform: rotate(-12deg);
+}
+
+/* Small rotated food image — left of center */
+.imageSmall {
+  position: absolute;
+  width: 77px;
+  height: 70px;
+  left: calc(50% - 147px);
+  bottom: 100px;
+  border-radius: var(--fd-radius-md);
+  object-fit: cover;
+  transform: rotate(11deg);
+}
+
+/* ── Tablet ── */
+@media (min-width: 768px) {
+  .hero {
+    min-height: 992px;
+    border-radius: var(--fd-radius-pill);
+  }
+
+  .content {
+    padding-top: 217px;
+  }
+
+  .title {
+    font-size: 70px;
+    line-height: 70px;
+    letter-spacing: -1.4px;
+    max-width: 678px;
+    margin-bottom: var(--fd-space-40);
+  }
+
+  .subtitle {
+    font-size: var(--fd-type-main-desktop-size);
+    line-height: var(--fd-type-main-desktop-height);
+    letter-spacing: -0.32px;
+    max-width: 577px;
+    margin-bottom: var(--fd-space-40);
+  }
+
+  .ctaButton {
+    padding: 16px 32px;
+    font-size: var(--fd-type-main-desktop-size);
+    line-height: var(--fd-line-height-24);
+  }
+
+  .imageMain {
+    width: 302px;
+    height: 273px;
+    left: calc(50% - 76px);
+    bottom: 91px;
+  }
+
+  .imageSmall {
+    width: 128px;
+    height: 116px;
+    left: calc(50% - 241px);
+    bottom: 144px;
+  }
+}
+
+/* ── Desktop ── */
+@media (min-width: 1280px) {
+  .hero {
+    min-height: 970px;
+    border-radius: var(--fd-radius-pill);
+  }
+
+  .content {
+    padding-top: 154px;
+  }
+
+  .title {
+    font-size: 90px;
+    line-height: 90px;
+    letter-spacing: -1.8px;
+    max-width: 875px;
+    margin-bottom: var(--fd-space-40);
+  }
+
+  .subtitle {
+    font-size: var(--fd-type-main-desktop-size);
+    line-height: var(--fd-type-main-desktop-height);
+    letter-spacing: -0.32px;
+    max-width: 577px;
+    margin-bottom: var(--fd-space-40);
+  }
+
+  .ctaButton {
+    padding: 16px 32px;
+    font-size: var(--fd-type-main-desktop-size);
+    line-height: var(--fd-line-height-24);
+  }
+
+  .imageMain {
+    width: 302px;
+    height: 273px;
+    left: calc(50% - 76px);
+    bottom: 82px;
+  }
+
+  .imageSmall {
+    width: 128px;
+    height: 116px;
+    left: calc(50% - 241px);
+    bottom: 135px;
+  }
+}

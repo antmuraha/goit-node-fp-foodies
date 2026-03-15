@@ -9,14 +9,32 @@ import { UserPage } from "../pages/user/UserPage";
 import { UiKitPage } from "../pages/ui-kit/UiKitPage";
 import { NotFoundPage } from "../pages/not-found/NotFoundPage";
 import { SignInPage } from "../pages/sign-in/SignInPage";
+import AuthPage from "../shared/components/AuthPage";
+import { CategoryPage } from "../pages/category/CategoryPage";
 
 export const AppRouter = (): ReactElement => {
   return (
     <Routes>
       <Route element={<SharedLayout />}>
         <Route index element={<HomePage />} />
+        <Route path={APP_ROUTES.CATEGORY} element={<CategoryPage />} />
         <Route path={APP_ROUTES.RECIPE_DETAILS} element={<RecipePage />} />
-        <Route path={APP_ROUTES.RECIPE_ADD} element={<AddRecipePage />} />
+        <Route
+          path={APP_ROUTES.RECIPE_ADD}
+          element={
+            <AuthPage>
+              <AddRecipePage />
+            </AuthPage>
+          }
+        />
+        <Route
+          path={APP_ROUTES.RECIPE_EDIT}
+          element={
+            <AuthPage>
+              <AddRecipePage />
+            </AuthPage>
+          }
+        />
         <Route path={APP_ROUTES.USER} element={<UserPage />} />
         <Route path={APP_ROUTES.UI_KIT} element={<UiKitPage />} />
         <Route path={APP_ROUTES.SIGN_IN} element={<SignInPage />} />

@@ -7,6 +7,9 @@ on:
       - main
       - master
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   format-check:
     runs-on: ubuntu-latest
@@ -17,17 +20,23 @@ jobs:
           - frontend
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: "22.x"
-          cache: npm
-          cache-dependency-path: ${{ matrix.project }}/package-lock.json
+          node-version: "24.x"
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v5
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ matrix.project }}-${{ hashFiles(format('{0}/package-lock.json', matrix.project)) }}
+          restore-keys: |
+            npm-${{ runner.os }}-${{ matrix.project }}-
 
       - name: Install dependencies
-        run: npm --prefix ${{ matrix.project }} install
+        run: npm --prefix ${{ matrix.project }} ci
 
       - name: Run formatter check
         run: npm --prefix ${{ matrix.project }} run format:check

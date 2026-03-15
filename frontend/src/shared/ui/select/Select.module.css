@@ -138,7 +138,6 @@
   }
 }
 
-/* Від 768px (Планшети та Десктоп) */
 @media (min-width: 768px) {
   .list {
     max-height: 326px;
