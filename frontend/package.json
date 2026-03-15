@@ -10,7 +10,8 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint --write .",
-    "lint:check": "biome lint ."
+    "lint:check": "biome lint .",
+    "gen:icons-types": "node scripts/genTypesForIcons.js"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
@@ -23,6 +24,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.6",
+    "@spiriit/vite-plugin-svg-spritemap": "^6.0.0",
     "@types/node": "^25.4.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",

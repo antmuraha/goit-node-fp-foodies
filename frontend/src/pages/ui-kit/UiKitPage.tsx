@@ -2,11 +2,12 @@ import type { ChangeEvent, ReactElement } from "react";
 import { useState } from "react";
 import { Button, Checkbox, Input, Radio, Select, TextArea } from "../../shared/ui";
 import styles from "./UiKitPage.module.css";
+import { Icon } from "../../shared/components/Icon";
 
 const SERVING_OPTIONS = [
   { value: "1", label: "1 serving" },
   { value: "2", label: "2 servings" },
-  { value: "4", label: "4 servings" },
+  { value: "0", label: "4 servings" },
 ];
 
 export const UiKitPage = (): ReactElement => {
@@ -172,6 +173,22 @@ export const UiKitPage = (): ReactElement => {
               <Radio name="visibility" />
               Private draft
             </label>
+          </div>
+        </article>
+
+        <article className={styles.card}>
+          <h2 className={styles.cardTitle}>Icons</h2>
+          <div className={styles.row}>
+            <Icon name="eye" color="action-secondary-text" size={24} />
+            <Icon name="eye-off" color="action-secondary-text" size={24} />
+            <Icon name="arrow-up-right" color="action-secondary-text" size={24} />
+            <Icon name="burger-menu" color="action-secondary-text" size={24} />
+            <Icon name="chevron-down" color="action-secondary-text" size={24} />
+            <Icon name="close" color="action-secondary-text" size={24} />
+            <Icon name="heart" color="action-secondary-text" size={24} />
+            <Icon name="logo" color="action-secondary-text" size={24} />
+            <Icon name="quote" color="action-secondary-text" size={24} />
+            <Icon name="trash" color="action-secondary-text" size={24} />
           </div>
         </article>
       </section>
