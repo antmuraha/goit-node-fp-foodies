@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from "react";
+import { type ReactElement, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDataRecipes } from "../../shared/hooks";
 import RecipeCard from "../../shared/ui/recipe-card";

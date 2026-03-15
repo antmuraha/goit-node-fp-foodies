@@ -1,7 +1,7 @@
 import { apiClient } from "../client";
 import { API_ROUTES } from "../../shared/constants/apiRoutes";
 import type { RecipeListResponse, RecipeSearchParams } from "../../entities/recipe/types";
-import { RecipeDetails } from "../../entities/recipe/types";
+import type { RecipeDetails } from "../../entities/recipe/types";
 
 export const recipesApi = {
   client: apiClient,

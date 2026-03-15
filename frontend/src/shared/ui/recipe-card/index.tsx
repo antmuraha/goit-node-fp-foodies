@@ -1,5 +1,5 @@
 import { NavLink } from "react-router-dom";
-import { RecipeSummary } from "../../../entities/recipe/types";
+import type { RecipeSummary } from "../../../entities/recipe/types";
 
 type RecipeCardProps = RecipeSummary;
 
