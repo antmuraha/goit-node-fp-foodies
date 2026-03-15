@@ -17,64 +17,64 @@ A Node.js REST API application for managing contacts with PostgreSQL database an
 
 2. Install dependencies:
 
-    ```bash
-    npm install
-    ```
+   ```bash
+   npm install
+   ```
 
-    Upload directories are already prepared in the repository:
-    - `temp/.gitkeep`
-    - `public/avatars/.gitkeep`
+   Upload directories are already prepared in the repository:
+   - `temp/.gitkeep`
+   - `public/avatars/.gitkeep`
 
-    The `.gitignore` keeps these folders in Git but ignores uploaded files.
+   The `.gitignore` keeps these folders in Git but ignores uploaded files.
 
 3. Create a `.env` file in the root directory:
 
-    ```env
-    # Application
-    APP_PORT=3000
+   ```env
+   # Application
+   APP_PORT=3000
 
-    # PostgreSQL Database
-    POSTGRES_USER=your_username
-    POSTGRES_PASSWORD=your_password
-    POSTGRES_DB=contacts_db
-    POSTGRES_HOST=localhost
-    POSTGRES_PORT=5432
+   # PostgreSQL Database
+   POSTGRES_USER=your_username
+   POSTGRES_PASSWORD=your_password
+   POSTGRES_DB=contacts_db
+   POSTGRES_HOST=localhost
+   POSTGRES_PORT=5432
 
-    # JWT Configuration
-    JWT_SECRET=your-secret-key-for-jwt-tokens
-    JWT_EXPIRES_IN=24h
+   # JWT Configuration
+   JWT_SECRET=your-secret-key-for-jwt-tokens
+   JWT_EXPIRES_IN=24h
 
-    # pgAdmin (for development)
-    PGADMIN_DEFAULT_EMAIL=admin@example.com
-    PGADMIN_DEFAULT_PASSWORD=admin
-    PGADMIN_DEFAULT_PORT=5050
-    ```
+   # pgAdmin (for development)
+   PGADMIN_DEFAULT_EMAIL=admin@example.com
+   PGADMIN_DEFAULT_PASSWORD=admin
+   PGADMIN_DEFAULT_PORT=5050
+   ```
 
 4. Start the PostgreSQL database with Docker Compose:
 
-    ```bash
-    # Using Docker
-    docker-compose -f docker-compose.dev.yaml up -d
+   ```bash
+   # Using Docker
+   docker-compose -f docker-compose.dev.yaml up -d
 
-    # Or using Podman
-    podman-compose -f docker-compose.dev.yaml up -d
-    ```
+   # Or using Podman
+   podman-compose -f docker-compose.dev.yaml up -d
+   ```
 
 5. Run database migrations:
 
-    ```bash
-    npm run db:migrate
-    ```
+   ```bash
+   npm run db:migrate
+   ```
 
 6. (Optional) Seed the database with sample data:
 
-    The seeder requires a `SEED_PASSWORD` environment variable — the plain-text password that will be hashed and assigned to every seeded user.
+   The seeder requires a `SEED_PASSWORD` environment variable — the plain-text password that will be hashed and assigned to every seeded user.
 
-    ```bash
-    SEED_PASSWORD=ExampleSecurePassword npm run db:seed
-    ```
+   ```bash
+   SEED_PASSWORD=ExampleSecurePassword npm run db:seed
+   ```
 
-    > **Note:** Omitting `SEED_PASSWORD` will cause the seeder to exit with an error.
+   > **Note:** Omitting `SEED_PASSWORD` will cause the seeder to exit with an error.
 
 ## Quick Start
 
@@ -116,8 +116,8 @@ Creates a new user account.
 
 ```json
 {
-    "email": "user@example.com",
-    "password": "securePassword123"
+  "email": "user@example.com",
+  "password": "securePassword123"
 }
 ```
 
@@ -125,11 +125,11 @@ Creates a new user account.
 
 ```json
 {
-    "user": {
-        "email": "user@example.com",
-        "subscription": "starter",
-        "avatarURL": "/avatars/1_1740692242338.jpg"
-    }
+  "user": {
+    "email": "user@example.com",
+    "subscription": "starter",
+    "avatarURL": "/avatars/1_1740692242338.jpg"
+  }
 }
 ```
 
@@ -150,8 +150,8 @@ Authenticates user and returns JWT token.
 
 ```json
 {
-    "email": "user@example.com",
-    "password": "securePassword123"
+  "email": "user@example.com",
+  "password": "securePassword123"
 }
 ```
 
@@ -159,13 +159,13 @@ Authenticates user and returns JWT token.
 
 ```json
 {
-    "user": {
-        "id": 1,
-        "email": "user@example.com",
-        "subscription": "starter",
-        "avatarURL": "/avatars/1_1740692242338.jpg"
-    },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+  "user": {
+    "id": 1,
+    "email": "user@example.com",
+    "subscription": "starter",
+    "avatarURL": "/avatars/1_1740692242338.jpg"
+  },
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
 }
 ```
 
@@ -199,34 +199,48 @@ Authorization: Bearer <token>
 
 ```json
 {
-    "email": "user@example.com",
-    "subscription": "starter",
-    "avatarURL": "/avatars/1_1740692242338.jpg"
+  "email": "user@example.com",
+  "subscription": "starter",
+  "avatarURL": "/avatars/1_1740692242338.jpg"
 }
 ```
 
 #### Update user avatar
 
-**PATCH** `/api/auth/avatars`
+**PATCH** `/api/users/avatar`
 
-Uploads a new avatar image for the authenticated user.
+Updates avatar for the authenticated user.
+Supports both multipart file upload and JSON URL update.
 
 **Headers:**
 
 ```
 Authorization: Bearer <token>
-Content-Type: multipart/form-data
+Content-Type: multipart/form-data OR application/json
 ```
 
-**Form-data:**
+**Form-data (upload):**
 
-- `avatar` (required): image file (`jpg`, `png`, `gif`), max size `1MB`
+- `avatar` (required): image file (`jpg`, `png`, `gif`, `webp`), max size `5MB`
+
+**JSON body (external URL):**
+
+```json
+{
+  "avatarURL": "https://example.com/avatar.png"
+}
+```
 
 **Response:** `200 OK`
 
 ```json
 {
-    "avatarURL": "/avatars/1_1740693324123.png"
+  "user": {
+    "id": 1,
+    "name": "John Doe",
+    "email": "john@example.com",
+    "avatarURL": "/avatars/1.png"
+  }
 }
 ```
 
@@ -252,7 +266,7 @@ Authorization: Bearer <token>
 
 ```json
 {
-    "message": "Followed successfully"
+  "message": "Followed successfully"
 }
 ```
 
@@ -279,7 +293,7 @@ Authorization: Bearer <token>
 
 ```json
 {
-    "message": "Unfollowed successfully"
+  "message": "Unfollowed successfully"
 }
 ```
 
@@ -324,17 +338,17 @@ Returns an array of contacts for the authenticated user with pagination support 
 
 ```json
 {
-    "data": [
-        {
-            "id": 1,
-            "name": "Chaim Lewis",
-            "email": "dui.in@egetlacus.ca",
-            "phone": "(294) 840-6685",
-            "favorite": false
-        }
-    ],
-    "page": 1,
-    "limit": 20
+  "data": [
+    {
+      "id": 1,
+      "name": "Chaim Lewis",
+      "email": "dui.in@egetlacus.ca",
+      "phone": "(294) 840-6685",
+      "favorite": false
+    }
+  ],
+  "page": 1,
+  "limit": 20
 }
 ```
 
@@ -348,11 +362,11 @@ Returns a single contact by ID.
 
 ```json
 {
-    "id": 1,
-    "name": "Chaim Lewis",
-    "email": "dui.in@egetlacus.ca",
-    "phone": "(294) 840-6685",
-    "favorite": false
+  "id": 1,
+  "name": "Chaim Lewis",
+  "email": "dui.in@egetlacus.ca",
+  "phone": "(294) 840-6685",
+  "favorite": false
 }
 ```
 
@@ -366,9 +380,9 @@ Creates a new contact for the authenticated user.
 
 ```json
 {
-    "name": "Mango",
-    "email": "mango@gmail.com",
-    "phone": "(322) 222-2222"
+  "name": "Mango",
+  "email": "mango@gmail.com",
+  "phone": "(322) 222-2222"
 }
 ```
 
@@ -376,11 +390,11 @@ Creates a new contact for the authenticated user.
 
 ```json
 {
-    "id": 1,
-    "name": "Mango",
-    "email": "mango@gmail.com",
-    "phone": "(322) 222-2222",
-    "favorite": false
+  "id": 1,
+  "name": "Mango",
+  "email": "mango@gmail.com",
+  "phone": "(322) 222-2222",
+  "favorite": false
 }
 ```
 
@@ -400,9 +414,9 @@ Updates all fields of an existing contact. All fields are required.
 
 ```json
 {
-    "name": "Updated Name",
-    "email": "updated@email.com",
-    "phone": "(111) 222-3333"
+  "name": "Updated Name",
+  "email": "updated@email.com",
+  "phone": "(111) 222-3333"
 }
 ```
 
@@ -410,11 +424,11 @@ Updates all fields of an existing contact. All fields are required.
 
 ```json
 {
-    "id": 1,
-    "name": "Updated Name",
-    "email": "updated@email.com",
-    "phone": "(111) 222-3333",
-    "favorite": false
+  "id": 1,
+  "name": "Updated Name",
+  "email": "updated@email.com",
+  "phone": "(111) 222-3333",
+  "favorite": false
 }
 ```
 
@@ -428,7 +442,7 @@ Updates one or more fields of an existing contact. At least one field is require
 
 ```json
 {
-    "phone": "(999) 888-7777"
+  "phone": "(999) 888-7777"
 }
 ```
 
@@ -436,11 +450,11 @@ Updates one or more fields of an existing contact. At least one field is require
 
 ```json
 {
-    "id": 1,
-    "name": "Updated Name",
-    "email": "updated@email.com",
-    "phone": "(999) 888-7777",
-    "favorite": false
+  "id": 1,
+  "name": "Updated Name",
+  "email": "updated@email.com",
+  "phone": "(999) 888-7777",
+  "favorite": false
 }
 ```
 
@@ -454,7 +468,7 @@ Updates the favorite status of a contact.
 
 ```json
 {
-    "favorite": true
+  "favorite": true
 }
 ```
 
@@ -462,11 +476,11 @@ Updates the favorite status of a contact.
 
 ```json
 {
-    "id": 1,
-    "name": "Chaim Lewis",
-    "email": "dui.in@egetlacus.ca",
-    "phone": "(294) 840-6685",
-    "favorite": true
+  "id": 1,
+  "name": "Chaim Lewis",
+  "email": "dui.in@egetlacus.ca",
+  "phone": "(294) 840-6685",
+  "favorite": true
 }
 ```
 
@@ -480,11 +494,11 @@ Removes a contact by ID.
 
 ```json
 {
-    "id": 1,
-    "name": "Chaim Lewis",
-    "email": "dui.in@egetlacus.ca",
-    "phone": "(294) 840-6685",
-    "favorite": false
+  "id": 1,
+  "name": "Chaim Lewis",
+  "email": "dui.in@egetlacus.ca",
+  "phone": "(294) 840-6685",
+  "favorite": false
 }
 ```
 
@@ -570,18 +584,18 @@ Sequelize migrations manage database schema changes. Migrations are versioned an
 
 **Recipe-domain migrations (9 total, in apply order):**
 
-| # | File | Table |
-|---|------|-------|
-| 1 | `20260310120000-create-categories.js` | `categories` |
-| 2 | `20260310140000-create-users.js` | `users` |
-| 3 | `20260311104817-create-area.js` | `areas` |
-| 4 | `20260311121928-create-ingredient.js` | `ingredients` |
-| 5 | `20260311152926-create-testimonials.js` | `testimonials` |
-| 6 | `20260312000000-create-recipes.js` | `recipes` |
-| 7 | `20260312000001-create-recipe-ingredients.js` | `recipeIngredients` |
-| 8 | `20260312000002-create-recipe-areas.js` | `recipeAreas` |
-| 9 | `20260312000003-create-favorites.js` | `favorites` |
-| 10 | `20260312000004-create-follows.js` | `follows` |
+| #   | File                                          | Table               |
+| --- | --------------------------------------------- | ------------------- |
+| 1   | `20260310120000-create-categories.js`         | `categories`        |
+| 2   | `20260310140000-create-users.js`              | `users`             |
+| 3   | `20260311104817-create-area.js`               | `areas`             |
+| 4   | `20260311121928-create-ingredient.js`         | `ingredients`       |
+| 5   | `20260311152926-create-testimonials.js`       | `testimonials`      |
+| 6   | `20260312000000-create-recipes.js`            | `recipes`           |
+| 7   | `20260312000001-create-recipe-ingredients.js` | `recipeIngredients` |
+| 8   | `20260312000002-create-recipe-areas.js`       | `recipeAreas`       |
+| 9   | `20260312000003-create-favorites.js`          | `favorites`         |
+| 10  | `20260312000004-create-follows.js`            | `follows`           |
 
 Junction tables (`recipeIngredients`, `recipeAreas`, `favorites`, `follows`) reference parent tables via foreign keys with `ON DELETE CASCADE`, so they are always rolled back before their parents.
 
@@ -634,48 +648,48 @@ Prerequisites: PostgreSQL must be running and `backend/.env` must contain valid 
 
 1. Generate a migration file:
 
-    ```bash
-    pnpm sequelize-cli migration:generate --name create-your-table
-    ```
+   ```bash
+   pnpm sequelize-cli migration:generate --name create-your-table
+   ```
 
 2. After generation, change the file extension to `.cjs` (CommonJS format)
 
 3. Edit the migration file to define your schema:
 
-    ```javascript
-    "use strict";
+   ```javascript
+   'use strict';
 
-    module.exports = {
-        async up(queryInterface, Sequelize) {
-            await queryInterface.createTable("YourTable", {
-                id: {
-                    allowNull: false,
-                    autoIncrement: true,
-                    primaryKey: true,
-                    type: Sequelize.INTEGER,
-                },
-                // ... other fields
-                createdAt: {
-                    allowNull: false,
-                    type: Sequelize.DATE,
-                },
-                updatedAt: {
-                    allowNull: false,
-                    type: Sequelize.DATE,
-                },
-            });
-        },
+   module.exports = {
+     async up(queryInterface, Sequelize) {
+       await queryInterface.createTable('YourTable', {
+         id: {
+           allowNull: false,
+           autoIncrement: true,
+           primaryKey: true,
+           type: Sequelize.INTEGER,
+         },
+         // ... other fields
+         createdAt: {
+           allowNull: false,
+           type: Sequelize.DATE,
+         },
+         updatedAt: {
+           allowNull: false,
+           type: Sequelize.DATE,
+         },
+       });
+     },
 
-        async down(queryInterface, Sequelize) {
-            await queryInterface.dropTable("YourTable");
-        },
-    };
-    ```
+     async down(queryInterface, Sequelize) {
+       await queryInterface.dropTable('YourTable');
+     },
+   };
+   ```
 
 4. Run the migration:
-    ```bash
-    pnpm db:migrate
-    ```
+   ```bash
+   pnpm db:migrate
+   ```
 
 #### 3. Database Seeders
 
@@ -691,36 +705,36 @@ pnpm db:seed
 
 1. Generate a seeder file:
 
-    ```bash
-    pnpm sequelize-cli seed:generate --name your-seed-name
-    ```
+   ```bash
+   pnpm sequelize-cli seed:generate --name your-seed-name
+   ```
 
 2. Change the file extension to `.cjs`
 
 3. Edit the seeder file to insert data:
 
-    ```javascript
-    "use strict";
+   ```javascript
+   'use strict';
 
-    module.exports = {
-        async up(queryInterface, Sequelize) {
-            await queryInterface.bulkInsert("Contacts", [
-                {
-                    name: "John Doe",
-                    email: "john@example.com",
-                    phone: "(123) 456-7890",
-                    createdAt: new Date(),
-                    updatedAt: new Date(),
-                },
-                // ... more records
-            ]);
-        },
+   module.exports = {
+     async up(queryInterface, Sequelize) {
+       await queryInterface.bulkInsert('Contacts', [
+         {
+           name: 'John Doe',
+           email: 'john@example.com',
+           phone: '(123) 456-7890',
+           createdAt: new Date(),
+           updatedAt: new Date(),
+         },
+         // ... more records
+       ]);
+     },
 
-        async down(queryInterface, Sequelize) {
-            await queryInterface.bulkDelete("Contacts", null, {});
-        },
-    };
-    ```
+     async down(queryInterface, Sequelize) {
+       await queryInterface.bulkDelete('Contacts', null, {});
+     },
+   };
+   ```
 
 #### 4. Database Administration
 
@@ -728,12 +742,12 @@ pnpm db:seed
 
 1. Open browser to `http://localhost:5050` (or the port specified in `.env`)
 2. Login with credentials from `.env` file:
-    - Email: `PGADMIN_DEFAULT_EMAIL`
-    - Password: `PGADMIN_DEFAULT_PASSWORD`
+   - Email: `PGADMIN_DEFAULT_EMAIL`
+   - Password: `PGADMIN_DEFAULT_PASSWORD`
 3. Add a new server connection:
-    - Host: `postgres` (container name) or `localhost` (from host machine)
-    - Port: `5432`
-    - Username/Password: From `.env` file
+   - Host: `postgres` (container name) or `localhost` (from host machine)
+   - Port: `5432`
+   - Username/Password: From `.env` file
 
 **Direct PostgreSQL access:**
 
@@ -781,11 +795,11 @@ When adding a new model:
 
 ```javascript
 export default (sequelize, DataTypes) => {
-    const YourModel = sequelize.define("YourModel", {
-        // Define fields here
-    });
+  const YourModel = sequelize.define('YourModel', {
+    // Define fields here
+  });
 
-    return YourModel;
+  return YourModel;
 };
 ```
 
@@ -841,7 +855,7 @@ nodemon --permission --allow-fs-read=. ./app.js
 - ✅ JWT user authentication (register, login, logout)
 - ✅ Current user endpoint with avatar URL
 - ✅ Automatic Gravatar download on registration
-- ✅ Avatar upload endpoint with multipart/form-data (`PATCH /api/auth/avatars`)
+- ✅ Avatar update endpoint with multipart and JSON URL (`PATCH /api/users/avatar`)
 - ✅ Static avatar hosting from `public/avatars`
 - ✅ User-based contact management
 - ✅ Full CRUD operations for contacts
@@ -897,9 +911,15 @@ curl http://localhost:3000/api/auth/current \
   -H "Authorization: Bearer TOKEN"
 
 # Upload custom avatar
-curl -X PATCH http://localhost:3000/api/auth/avatars \
+curl -X PATCH http://localhost:3000/api/users/avatar \
   -H "Authorization: Bearer TOKEN" \
   -F "avatar=@/absolute/path/to/avatar.png"
+
+# Set external avatar URL
+curl -X PATCH http://localhost:3000/api/users/avatar \
+    -H "Authorization: Bearer TOKEN" \
+    -H "Content-Type: application/json" \
+    -d '{"avatarURL":"https://example.com/avatar.png"}'
 
 # Get all contacts with pagination
 curl "http://localhost:3000/api/contacts?page=1&limit=20" \

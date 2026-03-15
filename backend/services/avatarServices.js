@@ -1,10 +1,15 @@
-import { promises as fs } from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
+import { promises as fs } from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { Jimp } from 'jimp';
+import HttpError from '../helpers/HttpError.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const AVATARS_DIR = path.join(__dirname, "../public/avatars");
+const AVATARS_DIR = path.join(__dirname, '../public/avatars');
+const AVATAR_SIZE = 250;
+const AVATAR_OUTPUT_EXTENSION = '.png';
+const AVATAR_OUTPUT_MIME = 'image/png';
 
 /**
  * Saves an uploaded avatar file for a user
@@ -14,25 +19,23 @@ const AVATARS_DIR = path.join(__dirname, "../public/avatars");
  */
 export const saveAvatar = async (userId, file) => {
   if (!file) {
-    throw { status: 400, message: "No file provided" };
+    throw HttpError(400, 'No file provided');
   }
 
   try {
-    // Create avatars directory if it doesn"t exist
     await fs.mkdir(AVATARS_DIR, { recursive: true });
 
-    // Generate filename with user ID and original extension
-    const ext = path.extname(file.originalname);
-    const filename = `${userId}${ext}`;
+    const filename = `${userId}${AVATAR_OUTPUT_EXTENSION}`;
     const filepath = path.join(AVATARS_DIR, filename);
 
-    // Save file to disk
-    await fs.writeFile(filepath, file.buffer);
+    const image = await Jimp.read(file.buffer);
+    image.cover({ w: AVATAR_SIZE, h: AVATAR_SIZE });
+    const imageBuffer = await image.getBuffer(AVATAR_OUTPUT_MIME);
+    await fs.writeFile(filepath, imageBuffer);
 
-    // Return the URL path
     return `/avatars/${filename}`;
-  } catch (err) {
-    throw { status: 500, message: "Failed to save avatar" };
+  } catch {
+    throw HttpError(500, 'Failed to save avatar');
   }
 };
 
@@ -42,15 +45,13 @@ export const saveAvatar = async (userId, file) => {
  * @returns {Promise<void>}
  */
 export const validateAvatarUrl = async (url) => {
-  if (!url || url.trim() === "") {
-    // Allow empty URL to clear avatar
+  if (!url || url.trim() === '') {
     return;
   }
 
   try {
-    // Basic URL validation using URL constructor
     new URL(url);
-  } catch (err) {
-    throw { status: 400, message: "Invalid avatar URL format" };
+  } catch {
+    throw HttpError(400, 'Invalid avatar URL format');
   }
 };
