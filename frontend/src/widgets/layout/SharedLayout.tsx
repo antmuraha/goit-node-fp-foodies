@@ -6,7 +6,7 @@ export const SharedLayout = (): ReactElement => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // @ts-ignore
+  // @ts-expect-error
   const handleSignInSuccess = () => {
     const returnTo = location.state?.returnTo ?? APP_ROUTES.HOME;
     navigate(returnTo, { replace: true });

@@ -4,18 +4,20 @@ import { Button } from "../button/Button";
 import defaultAvatar from "../../../assets/images/defaultAvatar.svg";
 
 interface Author {
-  id: number | string;
+  id: string | number;
   name: string;
-  avatar?: string; 
+  avatar?: string;
 }
 
 interface ItemCardProps {
-  id: number | string;
-  name: string;      
+  id: string | number;
+  title: string;
   description: string;
-  image?: string;     
-  author: Author;   
+  thumb?: string;
+  author?: Author;
   isFavorite?: boolean;
+  variant?: "grid" | "list";
+  actionIcon?: "heart" | "trash";
   onFavoriteClick?: (id: string | number) => void;
   onAuthorClick?: (authorId: string | number) => void;
   onDetailsClick?: (id: string | number) => void;
@@ -23,77 +25,99 @@ interface ItemCardProps {
 
 export const ItemCard = ({
   id,
-  name,             
+  title,
   description,
-  image,
+  thumb,
   author,
   isFavorite = false,
+  variant = "grid",
+  actionIcon = "heart",
   onFavoriteClick,
   onAuthorClick,
   onDetailsClick,
-}: ItemCardProps): ReactElement => { 
+}: ItemCardProps): ReactElement => {
+  const handleActionClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onFavoriteClick?.(id);
+  };
+
+  const handleDetailsClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onDetailsClick?.(id);
+  };
+
   return (
-    <article className={styles.card}>
+    <article className={`${styles.card} ${styles[variant]}`} onClick={() => onDetailsClick?.(id)}>
       <div className={styles.imageWrapper}>
-        <img 
-          src={image || "path/to/fallback-image.png"}
-          alt={name}
-          loading="lazy"
-        />
+        <img src={thumb || "https://placehold.co/600x400?text=Foodies"} alt={title} className={styles.image} />
       </div>
 
       <div className={styles.content}>
         <div className={styles.header}>
-          <h4 className={styles.title}>{name}</h4>
-          <p className={styles.description}>
-            {description}
-          </p>
+          <h4 className={styles.title}>{title}</h4>
+
+          {variant === "list" && (
+            <div className={styles.actions}>
+              <Button
+                variant="secondary"
+                isIconOnly
+                className={styles.iconBtn}
+                onClick={handleDetailsClick}
+                aria-label="View details"
+              >
+                {/* TODO: Замінити на іконку */}
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <rect width="20" height="20" fill="#E2E2E2" />
+                </svg>
+              </Button>
+              <Button
+                variant="secondary"
+                isIconOnly
+                className={styles.iconBtn}
+                onClick={handleActionClick}
+                aria-label={actionIcon === "trash" ? "Delete" : "Favorite"}
+              >
+                {/* TODO: Замінити на іконку */}
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <rect width="20" height="20" fill="#E2E2E2" />
+                </svg>
+              </Button>
+            </div>
+          )}
         </div>
 
-        <div className={styles.footer}>
-          <button
-            type="button"
-            className={styles.authorBtn}
-            onClick={() => onAuthorClick?.(author.id)}
-          >
-            <div 
-              className={styles.avatar} 
-              style={{ backgroundImage: `url(${author.avatar || defaultAvatar})` }} 
-            />
-            <span className={styles.authorName}>{author.name}</span>
-          </button>
+        <p className={styles.description}>{description || "No description available"}</p>
 
-          <div className={styles.actions}>
-            <Button
-              variant="secondary"
-              isIconOnly
-              className={`${styles.iconBtn} ${isFavorite ? styles.favoriteActive : ""}`}
+        {variant === "grid" && (
+          <div className={styles.footer}>
+            <button
+              type="button"
+              className={styles.authorBtn}
               onClick={(e) => {
                 e.stopPropagation();
-                onFavoriteClick?.(id);
+                onAuthorClick?.(author?.id || "");
               }}
             >
-              <svg width="18" height="18">
-                <use href="/src/shared/assets/sprite.svg#icon-heart" />
-              </svg>
-              {/* Тимчасова заглушка поверх або замість іконки */}
-              <span style={{ position: 'absolute', fontSize: '12px' }}>❤️</span>
-            </Button>
+              <div className={styles.avatar} style={{ backgroundImage: `url(${author?.avatar || defaultAvatar})` }} />
+              <span className={styles.authorName}>{author?.name || "Anonymous"}</span>
+            </button>
 
-            <Button
-              variant="secondary"
-              isIconOnly
-              className={styles.iconBtn}
-              onClick={() => onDetailsClick?.(id)}
-            >
-              <svg width="18" height="18">
-                <use href="/src/shared/assets/sprite.svg#icon-arrow-up-right" />
-              </svg>
-              {/* Тимчасова заглушка поверх або замість іконки */}
-              <span style={{ position: 'absolute', fontSize: '12px' }}>❤️</span>
-            </Button>
+            <div className={styles.actions}>
+              <Button variant="secondary" isIconOnly className={styles.iconBtn} onClick={handleActionClick}>
+                {/* TODO: Замінити на іконку */}
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <rect width="20" height="20" fill="#E2E2E2" />
+                </svg>
+              </Button>
+              <Button variant="secondary" isIconOnly className={styles.iconBtn} onClick={handleDetailsClick}>
+                {/* TODO: Замінити на іконку */}
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                  <rect width="20" height="20" fill="#E2E2E2" />
+                </svg>
+              </Button>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </article>
   );
