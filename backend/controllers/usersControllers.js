@@ -1,3 +1,6 @@
+import { saveAvatar, validateAvatarUrl } from "../services/avatarServices.js";
+import db from "../models/index.js";
+import HttpError from "../helpers/HttpError.js";
 import {
   addFollow,
   getUserProfileWithMetrics,
@@ -11,6 +14,40 @@ export const getCurrentUser = async (req, res, next) => {
   try {
     const profile = await getUserProfileWithMetrics(req.user.id);
     res.status(200).json(profile);
+  } catch (err) {
+    next(err);
+  }
+};
+
+/**
+ * Updates user avatar - supports both file upload and URL update
+ * Accepts multipart/form-data with "avatar" file OR application/json with avatar URL
+ */
+export const updateAvatar = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    let avatarUrl;
+
+    if (req.file) {
+      avatarUrl = await saveAvatar(userId, req.file);
+    } else if (req.body.avatarURL !== undefined) {
+      await validateAvatarUrl(req.body.avatarURL);
+      avatarUrl = req.body.avatarURL || null;
+    } else {
+      throw HttpError(400, "Avatar file or URL required");
+    }
+
+    await db.User.update({ avatarURL: avatarUrl }, { where: { id: userId } });
+
+    const user = await db.User.findByPk(userId, {
+      attributes: { exclude: ["password", "token"] },
+    });
+
+    if (!user) {
+      throw HttpError(404, "User not found");
+    }
+
+    res.status(200).json({ user: user.toJSON() });
   } catch (err) {
     next(err);
   }

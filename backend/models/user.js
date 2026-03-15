@@ -4,10 +4,16 @@ export default (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       if (models.Testimonial) {
-        User.hasMany(models.Testimonial, { foreignKey: "userId", as: "testimonials" });
+        User.hasMany(models.Testimonial, {
+          foreignKey: "userId",
+          as: "testimonials",
+        });
       }
       if (models.Recipe) {
-        User.hasMany(models.Recipe, { as: "authoredRecipes", foreignKey: "userId" });
+        User.hasMany(models.Recipe, {
+          as: "authoredRecipes",
+          foreignKey: "userId",
+        });
       }
       if (models.Favorite) {
         User.belongsToMany(models.Recipe, {
@@ -55,9 +61,10 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      avatar: {
+      avatarURL: {
         type: DataTypes.TEXT,
         allowNull: true,
+        field: "avatar",
       },
       token: {
         type: DataTypes.TEXT,

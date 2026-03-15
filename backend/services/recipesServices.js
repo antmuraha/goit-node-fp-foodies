@@ -17,7 +17,7 @@ export const searchRecipes = async ({ categoryId, ingredientId, areaId, search, 
 
   const include = [
     { model: Category, attributes: ["id", "name", "image"] },
-    { model: User, as: "author", attributes: ["id", "name", "avatar"] },
+    { model: User, as: "author", attributes: ["id", "name", "avatarURL"] },
   ];
 
   if (ingredientId) {
@@ -83,7 +83,7 @@ TODO: Temporary commented for testing without favorites.
   // TODO: START TEMPORARY BLOCK
   const include = [
     { model: Category, attributes: ["id", "name", "image"] },
-    { model: User, as: "author", attributes: ["id", "name", "avatar"] },
+    { model: User, as: "author", attributes: ["id", "name", "avatarURL"] },
   ];
 
   const { count, rows } = await Recipe.findAndCountAll({
@@ -104,7 +104,7 @@ export const getRecipeById = async (id) => {
   return Recipe.findByPk(id, {
     include: [
       { model: Category, attributes: ["id", "name", "image"] },
-      { model: User, as: "author", attributes: ["id", "name", "avatar"] },
+      { model: User, as: "author", attributes: ["id", "name", "avatarURL"] },
       {
         model: Ingredient,
         through: { attributes: ["quantity", "unit"] },
@@ -164,7 +164,7 @@ export const getOwnRecipes = async (userId, { limit, offset }) => {
     where: { userId },
     include: [
       { model: Category, attributes: ["id", "name", "image"] },
-      { model: User, as: "author", attributes: ["id", "name", "avatar"] },
+      { model: User, as: "author", attributes: ["id", "name", "avatarURL"] },
     ],
     limit: safeLimit,
     offset: safeOffset,
@@ -242,7 +242,11 @@ export const listFavoritesService = async (userId, { limit, offset }) => {
         model: Recipe,
         include: [
           { model: Category, attributes: ["id", "name", "image"] },
-          { model: User, as: "author", attributes: ["id", "name", "avatar"] },
+          {
+            model: User,
+            as: "author",
+            attributes: ["id", "name", "avatarURL"],
+          },
         ],
       },
     ],
