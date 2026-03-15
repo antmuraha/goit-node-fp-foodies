@@ -98,6 +98,27 @@ jobs:
         working-directory: ${{ matrix.project }}
         run: npx --yes npm-audit-sarif audit.json > audit.sarif
 
+      # Normalize SARIF levels to values accepted by upload-sarif
+      - name: Normalize SARIF levels
+        if: steps.project-check.outputs.exists == 'true'
+        working-directory: ${{ matrix.project }}
+        run: |
+          jq '
+            .runs |= map(
+              .results |= map(
+                .level = (
+                  if .level == "error" or .level == "warning" or .level == "note" or .level == "none" then .level
+                  elif .level == "critical" or .level == "high" then "error"
+                  elif .level == "moderate" then "warning"
+                  elif .level == "low" or .level == "info" or .level == "informational" then "note"
+                  else "warning"
+                  end
+                )
+              )
+            )
+          ' audit.sarif > audit.normalized.sarif
+          mv audit.normalized.sarif audit.sarif
+
       # Upload SARIF file to GitHub Code Scanning
       - name: Upload SARIF
         if: steps.project-check.outputs.exists == 'true'

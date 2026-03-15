@@ -1,33 +1,14 @@
-import { Op } from 'sequelize';
-import db from '../models/index.js';
+import { Op } from "sequelize";
+import db from "../models/index.js";
 
-const {
-  Recipe,
-  Category,
-  User,
-  Ingredient,
-  Area,
-  RecipeIngredient,
-  RecipeArea,
-  Favorite,
-} = db;
+const { Recipe, Category, User, Ingredient, Area, RecipeIngredient, RecipeArea, Favorite } = db;
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
 const { fn, col, literal } = db.Sequelize;
 
-export const searchRecipes = async ({
-  categoryId,
-  ingredientId,
-  areaId,
-  search,
-  limit,
-  offset,
-}) => {
-  const safeLimit = Math.min(
-    Math.max(Number(limit) || DEFAULT_LIMIT, 1),
-    MAX_LIMIT,
-  );
+export const searchRecipes = async ({ categoryId, ingredientId, areaId, search, limit, offset }) => {
+  const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
   const safeOffset = Math.max(Number(offset) || 0, 0);
 
   const where = {};
@@ -35,8 +16,8 @@ export const searchRecipes = async ({
   if (search) where.name = { [Op.iLike]: `%${search}%` };
 
   const include = [
-    { model: Category, attributes: ['id', 'name', 'image'] },
-    { model: User, as: 'author', attributes: ['id', 'name', 'avatarURL'] },
+    { model: Category, attributes: ["id", "name", "image"] },
+    { model: User, as: "author", attributes: ["id", "name", "avatarURL"] },
   ];
 
   if (ingredientId) {
@@ -65,17 +46,14 @@ export const searchRecipes = async ({
     limit: safeLimit,
     offset: safeOffset,
     distinct: true,
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
   });
 
   return { total: count, limit: safeLimit, offset: safeOffset, data: rows };
 };
 
 export const getPopularRecipesService = async ({ limit, offset }) => {
-  const safeLimit = Math.min(
-    Math.max(Number(limit) || DEFAULT_LIMIT, 1),
-    MAX_LIMIT,
-  );
+  const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
   const safeOffset = Math.max(Number(offset) || 0, 0);
   /*
 TODO: Temporary commented for testing without favorites.
@@ -104,8 +82,8 @@ TODO: Temporary commented for testing without favorites.
 
   // TODO: START TEMPORARY BLOCK
   const include = [
-    { model: Category, attributes: ['id', 'name', 'image'] },
-    { model: User, as: 'author', attributes: ['id', 'name', 'avatarURL'] },
+    { model: Category, attributes: ["id", "name", "image"] },
+    { model: User, as: "author", attributes: ["id", "name", "avatarURL"] },
   ];
 
   const { count, rows } = await Recipe.findAndCountAll({
@@ -113,7 +91,7 @@ TODO: Temporary commented for testing without favorites.
     limit: safeLimit,
     offset: safeOffset,
     distinct: true,
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
   });
 
   return rows;
@@ -125,17 +103,17 @@ TODO: Temporary commented for testing without favorites.
 export const getRecipeById = async (id) => {
   return Recipe.findByPk(id, {
     include: [
-      { model: Category, attributes: ['id', 'name', 'image'] },
-      { model: User, as: 'author', attributes: ['id', 'name', 'avatarURL'] },
+      { model: Category, attributes: ["id", "name", "image"] },
+      { model: User, as: "author", attributes: ["id", "name", "avatarURL"] },
       {
         model: Ingredient,
-        through: { attributes: ['quantity', 'unit'] },
-        attributes: ['id', 'name', 'image'],
+        through: { attributes: ["quantity", "unit"] },
+        attributes: ["id", "name", "image"],
       },
       {
         model: Area,
         through: { attributes: [] },
-        attributes: ['id', 'name'],
+        attributes: ["id", "name"],
       },
     ],
   });
@@ -179,22 +157,19 @@ export const createRecipe = async (userId, data) => {
 };
 
 export const getOwnRecipes = async (userId, { limit, offset }) => {
-  const safeLimit = Math.min(
-    Math.max(Number(limit) || DEFAULT_LIMIT, 1),
-    MAX_LIMIT,
-  );
+  const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
   const safeOffset = Math.max(Number(offset) || 0, 0);
 
   const { count, rows } = await Recipe.findAndCountAll({
     where: { userId },
     include: [
-      { model: Category, attributes: ['id', 'name', 'image'] },
-      { model: User, as: 'author', attributes: ['id', 'name', 'avatarURL'] },
+      { model: Category, attributes: ["id", "name", "image"] },
+      { model: User, as: "author", attributes: ["id", "name", "avatarURL"] },
     ],
     limit: safeLimit,
     offset: safeOffset,
     distinct: true,
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
   });
   return { total: count, limit: safeLimit, offset: safeOffset, recipes: rows };
 };
@@ -203,13 +178,13 @@ export const deleteRecipe = async (id, userId) => {
   const recipe = await Recipe.findByPk(id);
 
   if (!recipe) {
-    const err = new Error('Recipe not found');
+    const err = new Error("Recipe not found");
     err.status = 404;
     throw err;
   }
 
   if (recipe.userId !== userId) {
-    const err = new Error('Not authorized');
+    const err = new Error("Not authorized");
     err.status = 403;
     throw err;
   }
@@ -221,7 +196,7 @@ export const addFavoriteService = async (userId, recipeId) => {
   const recipe = await Recipe.findByPk(recipeId);
 
   if (!recipe) {
-    const err = new Error('Recipe not found');
+    const err = new Error("Recipe not found");
     err.status = 404;
     throw err;
   }
@@ -231,7 +206,7 @@ export const addFavoriteService = async (userId, recipeId) => {
   });
 
   if (existing) {
-    const err = new Error('Recipe already in favorites');
+    const err = new Error("Recipe already in favorites");
     err.status = 409;
     throw err;
   }
@@ -248,7 +223,7 @@ export const removeFavoriteService = async (userId, recipeId) => {
   });
 
   if (!favorite) {
-    const err = new Error('Favorite not found');
+    const err = new Error("Favorite not found");
     err.status = 404;
     throw err;
   }
@@ -257,10 +232,7 @@ export const removeFavoriteService = async (userId, recipeId) => {
 };
 
 export const listFavoritesService = async (userId, { limit, offset }) => {
-  const safeLimit = Math.min(
-    Math.max(Number(limit) || DEFAULT_LIMIT, 1),
-    MAX_LIMIT,
-  );
+  const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
   const safeOffset = Math.max(Number(offset) || 0, 0);
 
   const { count, rows } = await Favorite.findAndCountAll({
@@ -269,18 +241,18 @@ export const listFavoritesService = async (userId, { limit, offset }) => {
       {
         model: Recipe,
         include: [
-          { model: Category, attributes: ['id', 'name', 'image'] },
+          { model: Category, attributes: ["id", "name", "image"] },
           {
             model: User,
-            as: 'author',
-            attributes: ['id', 'name', 'avatarURL'],
+            as: "author",
+            attributes: ["id", "name", "avatarURL"],
           },
         ],
       },
     ],
     limit: safeLimit,
     offset: safeOffset,
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
   });
 
   return {

@@ -1,15 +1,15 @@
-import { promises as fs } from 'fs';
-import path from 'path';
-import { fileURLToPath } from 'url';
-import { Jimp } from 'jimp';
-import HttpError from '../helpers/HttpError.js';
+import { promises as fs } from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+import { Jimp } from "jimp";
+import HttpError from "../helpers/HttpError.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const AVATARS_DIR = path.join(__dirname, '../public/avatars');
+const AVATARS_DIR = path.join(__dirname, "../public/avatars");
 const AVATAR_SIZE = 250;
-const AVATAR_OUTPUT_EXTENSION = '.png';
-const AVATAR_OUTPUT_MIME = 'image/png';
+const AVATAR_OUTPUT_EXTENSION = ".png";
+const AVATAR_OUTPUT_MIME = "image/png";
 
 /**
  * Saves an uploaded avatar file for a user
@@ -19,7 +19,7 @@ const AVATAR_OUTPUT_MIME = 'image/png';
  */
 export const saveAvatar = async (userId, file) => {
   if (!file) {
-    throw HttpError(400, 'No file provided');
+    throw HttpError(400, "No file provided");
   }
 
   try {
@@ -35,7 +35,7 @@ export const saveAvatar = async (userId, file) => {
 
     return `/avatars/${filename}`;
   } catch {
-    throw HttpError(500, 'Failed to save avatar');
+    throw HttpError(500, "Failed to save avatar");
   }
 };
 
@@ -45,13 +45,13 @@ export const saveAvatar = async (userId, file) => {
  * @returns {Promise<void>}
  */
 export const validateAvatarUrl = async (url) => {
-  if (!url || url.trim() === '') {
+  if (!url || url.trim() === "") {
     return;
   }
 
   try {
     new URL(url);
   } catch {
-    throw HttpError(400, 'Invalid avatar URL format');
+    throw HttpError(400, "Invalid avatar URL format");
   }
 };

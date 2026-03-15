@@ -1,40 +1,40 @@
-import { Model } from 'sequelize';
+import { Model } from "sequelize";
 
 export default (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
       if (models.Testimonial) {
         User.hasMany(models.Testimonial, {
-          foreignKey: 'userId',
-          as: 'testimonials',
+          foreignKey: "userId",
+          as: "testimonials",
         });
       }
       if (models.Recipe) {
         User.hasMany(models.Recipe, {
-          as: 'authoredRecipes',
-          foreignKey: 'userId',
+          as: "authoredRecipes",
+          foreignKey: "userId",
         });
       }
       if (models.Favorite) {
         User.belongsToMany(models.Recipe, {
           through: models.Favorite,
-          foreignKey: 'userId',
-          otherKey: 'recipeId',
-          as: 'favoriteRecipes',
+          foreignKey: "userId",
+          otherKey: "recipeId",
+          as: "favoriteRecipes",
         });
       }
       if (models.Follow) {
         User.belongsToMany(models.User, {
           through: models.Follow,
-          foreignKey: 'followerId',
-          otherKey: 'followingId',
-          as: 'following',
+          foreignKey: "followerId",
+          otherKey: "followingId",
+          as: "following",
         });
         User.belongsToMany(models.User, {
           through: models.Follow,
-          foreignKey: 'followingId',
-          otherKey: 'followerId',
-          as: 'followers',
+          foreignKey: "followingId",
+          otherKey: "followerId",
+          as: "followers",
         });
       }
     }
@@ -64,7 +64,7 @@ export default (sequelize, DataTypes) => {
       avatarURL: {
         type: DataTypes.TEXT,
         allowNull: true,
-        field: 'avatar',
+        field: "avatar",
       },
       token: {
         type: DataTypes.TEXT,
@@ -77,8 +77,8 @@ export default (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'User',
-      tableName: 'users',
+      modelName: "User",
+      tableName: "users",
     },
   );
 
