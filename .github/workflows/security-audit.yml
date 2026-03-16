@@ -8,6 +8,9 @@ on:
     # Run workflow on pull requests targeting main
     branches: [main]
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   audit:
     runs-on: ubuntu-latest
@@ -23,15 +26,13 @@ jobs:
 
     steps:
       # Checkout repository code
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      # Setup Node.js and enable npm cache
+      # Setup Node.js runtime for project commands
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: 24
-          cache: "npm"
-          cache-dependency-path: ${{ matrix.project }}/package-lock.json
 
       # Skip matrix item if project package.json is not present yet
       - name: Check project presence
@@ -47,6 +48,15 @@ jobs:
       - name: Project not found
         if: steps.project-check.outputs.exists != 'true'
         run: echo "Skipping ${{ matrix.project }} audit because package.json is missing"
+
+      - name: Cache npm dependencies
+        if: steps.project-check.outputs.exists == 'true'
+        uses: actions/cache@v5
+        with:
+          path: ~/.npm
+          key: npm-${{ runner.os }}-${{ matrix.project }}-${{ hashFiles(format('{0}/package-lock.json', matrix.project)) }}
+          restore-keys: |
+            npm-${{ runner.os }}-${{ matrix.project }}-
 
       # Install dependencies with clean install for security scanning
       - name: Install dependencies
@@ -91,16 +101,16 @@ jobs:
       # Upload SARIF file to GitHub Code Scanning
       - name: Upload SARIF
         if: steps.project-check.outputs.exists == 'true'
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@v4
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           sarif_file: ${{ matrix.project }}/audit.sarif
           category: npm-audit-${{ matrix.project }}
 
       # Preserve audit reports as artifacts for investigation
       - name: Upload audit artifacts
         if: always() && steps.project-check.outputs.exists == 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: npm-audit-${{ matrix.project }}
           path: ${{ matrix.project }}/audit.*
