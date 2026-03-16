@@ -1,6 +1,6 @@
-import { AreaSummary } from "../area/types";
-import { CategorySummary } from "../category/model/types";
-import { RecipeIngredientDetails } from "../ingredient/types";
+import type { AreaSummary } from "../area/types";
+import type { CategorySummary } from "../category/model/types";
+import type { RecipeIngredientDetails } from "../ingredient/types";
 import type { UserSummary } from "../user";
 
 export type RecipeSummary = {

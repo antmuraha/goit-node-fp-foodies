@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import { useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { useDataRecipe } from "../../shared/hooks";
-import { RecipeIngredientDetails } from "../../entities/ingredient/types";
+import type { RecipeIngredientDetails } from "../../entities/ingredient/types";
 import PopularRecipesList from "../../shared/ui/popular-recipes-list";
 
 export const RecipePage = (): ReactElement => {
