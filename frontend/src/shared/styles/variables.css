@@ -71,8 +71,12 @@
   --fd-space-24: 24px;
   --fd-space-28: 28px;
   --fd-space-30: 30px;
+  --fd-space-32: 32px;
   --fd-space-40: 40px;
+  --fd-space-72: 72px;
   --fd-space-80: 80px;
+  --fd-space-100: 100px;
+  --fd-space-120: 120px;
 
   /* Control sizes */
   --fd-control-height-sm: 40px;

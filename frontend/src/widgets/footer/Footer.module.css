@@ -1,0 +1,111 @@
+.footer {
+  background-color: var(--fd-bg-canvas);
+}
+
+.inner {
+  margin: 0 auto;
+  padding: 0 var(--fd-space-16);
+}
+
+.inner:first-of-type {
+  margin-top: var(--fd-space-80);
+  padding-bottom: var(--fd-space-40);
+}
+
+.inner:last-of-type {
+  padding-top: var(--fd-space-40);
+  margin-bottom: var(--fd-space-16);
+}
+
+.top {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-family: var(--fd-font-family-base);
+  font-weight: var(--fd-font-weight-extrabold);
+  font-size: var(--fd-font-size-24);
+  line-height: var(--fd-line-height-28);
+  letter-spacing: var(--fd-letter-spacing-tight);
+  color: var(--fd-text-primary);
+  text-transform: lowercase;
+  text-decoration: none;
+}
+
+.logo:hover {
+  opacity: 0.8;
+}
+
+.socialList {
+  display: flex;
+  gap: var(--fd-space-16);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: var(--fd-border-width-hairline) solid var(--fd-border-default);
+  border-radius: var(--fd-radius-full);
+  color: var(--fd-text-primary);
+  transition: opacity 0.2s ease;
+}
+
+.socialLink:hover {
+  opacity: 0.7;
+}
+
+.divider {
+  border: none;
+  border-top: var(--fd-border-width-hairline) solid var(--fd-border-default);
+  margin: 0;
+}
+
+.copyright {
+  font-family: var(--fd-font-family-base);
+  font-weight: var(--fd-font-weight-medium);
+  font-size: var(--fd-font-size-16);
+  line-height: var(--fd-line-height-24);
+  letter-spacing: var(--fd-letter-spacing-tight);
+  color: var(--fd-text-secondary);
+  text-align: center;
+  margin: 0;
+}
+
+@media (min-width: 768px) {
+  .inner {
+    padding-left: var(fd-space-32);
+    padding-right: var(fd-space-32);
+  }
+
+  .inner:first-of-type {
+    margin-top: var(--fd-space-100);
+  }
+
+  .inner:last-of-type {
+    margin-bottom: var(--fd-space-32);
+  }
+}
+
+@media (min-width: 1440px) {
+  .inner {
+    padding-left: var(--fd-space-80);
+    padding-right: var(--fd-space-80);
+  }
+
+  .inner:first-of-type {
+    margin-top: var(--fd-space-120);
+  }
+
+  .inner:last-of-type {
+    margin-bottom: var(--fd-space-72);
+  }
+}
