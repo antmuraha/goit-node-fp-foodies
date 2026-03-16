@@ -1,6 +1,8 @@
 import { apiClient } from "../client";
 import { API_ROUTES } from "../../shared/constants/apiRoutes";
-import type { UserListResponse, UserSummary } from "../../entities/user";
+import type { UserListResponse } from "../../entities/user";
+import { getAuthHeaders } from "./helpers";
+import { UserDetailsResponse } from "../../entities/user/model/types";
 
 type UsersQuery = {
   limit?: number;
@@ -13,16 +15,6 @@ type GetUsersConfig = {
   token?: string;
 };
 
-const getAuthHeaders = (token?: string): Record<string, string> | undefined => {
-  if (!token) {
-    return undefined;
-  }
-
-  return {
-    Authorization: `Bearer ${token}`,
-  };
-};
-
 export const usersApi = {
   client: apiClient,
   getUsers: ({ query, token }: GetUsersConfig = {}): Promise<UserListResponse> =>
@@ -30,8 +22,8 @@ export const usersApi = {
       query,
       headers: getAuthHeaders(token),
     }),
-  getUserById: (id: number, token?: string): Promise<UserSummary> =>
-    apiClient.get<UserSummary>(API_ROUTES.USERS.BY_ID(id), {
+  getUserById: (id: number, token?: string): Promise<UserDetailsResponse> =>
+    apiClient.get<UserDetailsResponse>(API_ROUTES.USERS.BY_ID(id), {
       headers: getAuthHeaders(token),
     }),
 };

@@ -103,19 +103,34 @@
   --fd-button-text-height: var(--fd-line-height-18);
   --fd-button-text-weight: var(--fd-font-weight-bold);
   --fd-button-radius: var(--fd-radius-pill);
-  --fd-button-height: var(--fd-control-height-xl);
 
-  --fd-button-primary-bg: var(--fd-action-primary-bg);
+  --fd-button-primary-bg: #1a1a1a;
   --fd-button-primary-text: var(--fd-action-primary-text);
-  --fd-button-primary-border: transparent;
-  --fd-button-primary-hover-bg: var(--fd-color-main);
+  --fd-button-primary-border: #e8e8e8;
+  --fd-button-primary-hover-bg: #050505;
   --fd-button-primary-hover-text: var(--fd-color-white);
+  --fd-button-muted-bg: #bfbebe;
 
   --fd-button-secondary-bg: var(--fd-action-secondary-bg);
   --fd-button-secondary-text: var(--fd-action-secondary-text);
   --fd-button-secondary-border: var(--fd-border-default);
   --fd-button-secondary-hover-bg: var(--fd-color-surface-soft);
   --fd-button-secondary-hover-text: var(--fd-color-main);
+
+  --fd-button-height-small: var(--fd-control-height-md);
+  --fd-button-space-small: var(--fd-space-28);
+  --fd-button-text-size-small: var(--fd-font-size-12);
+
+  --fd-button-height: var(--fd-control-height-lg);
+  --fd-button-space-medium: var(--fd-space-30);
+  --fd-button-text-size: var(--fd-font-size-16);
+
+  --fd-button-height-large: var(--fd-control-height-xl);
+  --fd-button-space-large: var(--fd-space-40);
+  --fd-button-text-size-large: var(--fd-font-size-16);
+
+  --fd-button-disabled-bg: var(--fd-color-muted);
+  --fd-button-disabled-text: var(--fd-color-white);
 
   /* Header tokens (92:1485) */
   --fd-header-bg: var(--fd-color-main);

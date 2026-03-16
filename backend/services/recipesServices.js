@@ -49,12 +49,14 @@ export const searchRecipes = async ({ categoryId, ingredientId, areaId, search, 
     order: [["createdAt", "DESC"]],
   });
 
-  return { total: count, limit: safeLimit, offset: safeOffset, recipes: rows };
+  return { total: count, limit: safeLimit, offset: safeOffset, data: rows };
 };
 
 export const getPopularRecipesService = async ({ limit, offset }) => {
   const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
   const safeOffset = Math.max(Number(offset) || 0, 0);
+  /*
+TODO: Temporary commented for testing without favorites.
 
   const topFavorites = await Favorite.findAll({
     attributes: ["recipeId", [fn("COUNT", col("recipeId")), "favoriteCount"]],
@@ -75,6 +77,25 @@ export const getPopularRecipesService = async ({ limit, offset }) => {
       { model: User, as: "author", attributes: ["id", "name", "avatar"] },
     ],
   });
+
+  */
+
+  // TODO: START TEMPORARY BLOCK
+  const include = [
+    { model: Category, attributes: ["id", "name", "image"] },
+    { model: User, as: "author", attributes: ["id", "name", "avatar"] },
+  ];
+
+  const { count, rows } = await Recipe.findAndCountAll({
+    include,
+    limit: safeLimit,
+    offset: safeOffset,
+    distinct: true,
+    order: [["createdAt", "DESC"]],
+  });
+
+  return rows;
+  // TODO: END TEMPORARY BLOCK
 
   return recipeIds.map((id) => recipes.find((r) => r.id === id));
 };

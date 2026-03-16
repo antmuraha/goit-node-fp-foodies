@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { fetchRecipes } from "../../store/slices/recipesSlice";
-import type { RecipeSearchParams } from "../../entities/recipe";
+import type { RecipeSearchParams } from "../../entities/recipe/types";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
 
 export const useDataRecipes = (query?: RecipeSearchParams) => {

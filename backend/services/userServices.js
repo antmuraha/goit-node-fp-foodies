@@ -97,7 +97,7 @@ export const getOtherUserProfile = async (targetId) => {
     id,
     name,
     email: maskEmail(email),
-    avatarURL: avatar,
+    avatar,
     createdAt,
     recipesCreated,
     followersCount,

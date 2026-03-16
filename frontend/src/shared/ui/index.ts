@@ -6,3 +6,5 @@ export { Checkbox } from "./checkbox";
 export { Radio } from "./radio";
 export { FormErrorMessage } from "./form-error";
 export { Modal } from "./modal";
+export { ImageCategory } from "./image-category";
+export { HeroSection } from "./hero-section";

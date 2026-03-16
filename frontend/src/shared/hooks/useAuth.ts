@@ -4,14 +4,16 @@ import { login, clearAuthSession, type LoginCredentials } from "../../store/slic
 import {
   selectIsAuthenticated,
   selectCurrentUser,
+  selectIsProfileLoading,
   selectIsSigningIn,
   selectLoginError,
 } from "../../store/slices/authSelectors";
-import type { UserProfile } from "../../entities/user";
+import { MeProfile } from "../../entities/user/model/types";
 
 type UseAuthReturn = {
   isAuthenticated: boolean;
-  currentUser: UserProfile | null;
+  currentUser: MeProfile | null;
+  isProfileLoading: boolean;
   isSigningIn: boolean;
   loginError: string | null;
   signIn: (credentials: LoginCredentials) => Promise<boolean>;
@@ -23,6 +25,7 @@ export const useAuth = (): UseAuthReturn => {
 
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const currentUser = useAppSelector(selectCurrentUser);
+  const isProfileLoading = useAppSelector(selectIsProfileLoading);
   const isSigningIn = useAppSelector(selectIsSigningIn);
   const loginError = useAppSelector(selectLoginError);
 
@@ -38,5 +41,5 @@ export const useAuth = (): UseAuthReturn => {
     dispatch(clearAuthSession());
   }, [dispatch]);
 
-  return { isAuthenticated, currentUser, isSigningIn, loginError, signIn, signOut };
+  return { isAuthenticated, currentUser, isProfileLoading, isSigningIn, loginError, signIn, signOut };
 };

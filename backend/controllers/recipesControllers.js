@@ -14,7 +14,6 @@ export const getRecipes = async (req, res, next) => {
   try {
     const { categoryId, ingredientId, areaId, search, limit, offset } = req.query;
     const result = await searchRecipes({ categoryId, ingredientId, areaId, search, limit, offset });
-    res.set("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
     res.json(result);
   } catch (err) {
     next(err);
@@ -26,11 +25,13 @@ export const getPopularRecipes = async (req, res, next) => {
     const { limit, offset } = req.query;
     const result = await getPopularRecipesService({ limit, offset });
 
-    if (!result || result.length === 0) {
-      return res.status(404).json({ message: "No popular result found" });
-    }
+    const data = {
+      data: result || [],
+      page: Number(offset) || 0,
+      limit: Number(limit) || 10,
+    };
 
-    res.status(200).json(result);
+    res.status(200).json(data);
   } catch (err) {
     next(err);
   }
@@ -46,7 +47,6 @@ export const getRecipeById = async (req, res, next) => {
     if (!recipe) {
       return res.status(404).json({ message: "Recipe not found" });
     }
-    res.set("Cache-Control", "public, max-age=600, stale-while-revalidate=1800");
     res.json(recipe);
   } catch (err) {
     next(err);
@@ -67,7 +67,6 @@ export const getOwnRecipes = async (req, res, next) => {
     const userId = req.user.id;
     const { limit, offset } = req.query;
     const recipesList = await getOwnRecipesService(userId, { limit, offset });
-    res.set("Cache-Control", "private, no-store");
     res.status(200).json(recipesList);
   } catch (err) {
     next(err);
@@ -128,8 +127,6 @@ export const listFavorites = async (req, res, next) => {
       limit,
       offset,
     });
-
-    res.set("Cache-Control", "private, no-store");
     res.status(200).json(result);
   } catch (err) {
     next(err);
