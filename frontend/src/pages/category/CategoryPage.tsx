@@ -25,7 +25,19 @@ export const CategoryPage = (): ReactElement => {
         <section>
           {isLoading && <p>Loading category...</p>}
           {error && <p>Category error: {error}</p>}
-          {!isLoading && !error && recipes.map((recipe) => <RecipeCard key={recipe.id} {...recipe} />)}
+          {!isLoading &&
+            !error &&
+            recipes.map((recipe) => (
+              <RecipeCard
+                key={recipe.id}
+                id={recipe.id}
+                title={recipe.title}
+                description={recipe.description}
+                image={recipe.image}
+                thumbnail={recipe.thumbnail}
+                author={recipe.author}
+              />
+            ))}
         </section>
       </main>
     </>

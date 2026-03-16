@@ -6,7 +6,7 @@ import type { UserSummary } from "../user";
 export type RecipeSummary = {
   id: number;
   title: string;
-  description: string | null;
+  description: string;
   instructions: string;
   cookingTime: number;
   thumbnail: string | null;
