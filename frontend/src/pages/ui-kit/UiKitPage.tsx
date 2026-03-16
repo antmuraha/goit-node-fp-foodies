@@ -186,9 +186,7 @@ export const UiKitPage = (): ReactElement => {
             <div className={styles.row}>
               <Button onClick={() => setIsSignInModalOpen(true)}>Sign In Modal</Button>
               <Button onClick={() => setIsSignUpModalOpen(true)}>Sign Up Modal</Button>
-              <Button onClick={() => setIsConfirmationModalOpen(true)}>Confirmation Modal</Button>
               <Button onClick={() => setIsLogoutModalOpen(true)}>Logout Modal</Button>
-              <Button onClick={() => setIsCustomModalOpen(true)}>Custom Modal</Button>
             </div>
           </div>
         </article>
@@ -201,9 +199,11 @@ export const UiKitPage = (): ReactElement => {
         closeOnEscape
         closeOnOverlayClick
       >
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           <Input type="email" placeholder="Email*" />
           <Input type="password" placeholder="Password" />
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
           <Button onClick={() => setIsSignInModalOpen(false)}>Sign In</Button>
           <p style={{ textAlign: "center", margin: "0", fontSize: "14px" }}>
             Don&apos;t have an account?{" "}
@@ -239,6 +239,8 @@ export const UiKitPage = (): ReactElement => {
           <Input type="text" placeholder="Name*" />
           <Input type="email" placeholder="Email*" />
           <Input type="password" placeholder="Password" />
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           <Button style={{ marginTop: "8px" }} onClick={() => setIsSignUpModalOpen(false)}>
             CREATE
           </Button>
@@ -266,82 +268,42 @@ export const UiKitPage = (): ReactElement => {
       </Modal>
 
       <Modal
-        isOpen={isConfirmationModalOpen}
-        title="Confirm Action"
-        onClose={() => setIsConfirmationModalOpen(false)}
-        closeOnEscape
-        closeOnOverlayClick
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          <p>Are you sure you want to delete this item? This action cannot be undone.</p>
-          <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
-            <Button variant="secondary" onClick={() => setIsConfirmationModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={() => setIsConfirmationModalOpen(false)}>Delete</Button>
-          </div>
-        </div>
-      </Modal>
-
-      <Modal
         isOpen={isLogoutModalOpen}
         title="ARE YOU LOGGING OUT?"
         onClose={() => setIsLogoutModalOpen(false)}
         closeOnEscape
         closeOnOverlayClick
       >
-        <div className={styles.logoutWrapper} style={{ alignItems: "center" }}>
-          <p className={styles.logoutDescription}>You can always log back in at any time.</p>
+        <p className={styles.logoutDescription}>You can always log back in at any time.</p>
 
-          <div style={{ display: "flex", flexDirection: "column", width: "100%" }}>
-            <Button
-              onClick={() => setIsLogoutModalOpen(false)}
-              style={{
-                width: "100%",
-                height: "56px",
-                borderRadius: "30px",
-                backgroundColor: "#050505",
-                color: "#fff",
-                marginBottom: "20px",
-              }}
-            >
-              LOG OUT
-            </Button>
+        <div style={{ display: "flex", flexDirection: "column", width: "100%", gap: "16px" }}>
+          <Button
+            onClick={() => setIsLogoutModalOpen(false)}
+            style={{
+              width: "100%",
+              height: "56px",
+              borderRadius: "30px",
+              backgroundColor: "#050505",
+              color: "#fff",
+            }}
+          >
+            LOG OUT
+          </Button>
 
-            <Button
-              variant="secondary"
-              onClick={() => setIsLogoutModalOpen(false)}
-              style={{
-                width: "100%",
-                height: "56px",
-                borderRadius: "30px",
-                border: "1px solid #050505",
-                backgroundColor: "#fff",
-                color: "#050505",
-              }}
-            >
-              CANCEL
-            </Button>
-          </div>
-        </div>
-      </Modal>
-
-      <Modal
-        isOpen={isCustomModalOpen}
-        title="Custom Modal"
-        onClose={() => setIsCustomModalOpen(false)}
-        closeOnEscape
-        closeOnOverlayClick={false}
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          <p>This modal requires an explicit action to close (cannot click overlay).</p>
-          <Checkbox label="I understand" />
-          <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end" }}>
-            <Button variant="secondary" onClick={() => setIsCustomModalOpen(false)}>
-              Close
-            </Button>
-            <Button onClick={() => setIsCustomModalOpen(false)}>Confirm</Button>
-          </div>
+          <Button
+            variant="secondary"
+            onClick={() => setIsLogoutModalOpen(false)}
+            style={{
+              width: "100%",
+              height: "56px",
+              borderRadius: "30px",
+              border: "1px solid #050505",
+              backgroundColor: "#fff",
+              color: "#050505",
+            }}
+          >
+            CANCEL
+          </Button>
         </div>
       </Modal>
     </main>
