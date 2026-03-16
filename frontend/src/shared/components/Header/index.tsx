@@ -5,11 +5,11 @@ import styles from "./styles.module.css";
 const Header = () => {
   return (
     <header className={styles.header}>
-      <NavLink to="/">LOGO</NavLink>
-      <NavLink to="/">Home</NavLink>
+      <NavLink to={APP_ROUTES.HOME}>LOGO</NavLink>
+      <NavLink to={APP_ROUTES.HOME}>Home</NavLink>
       <NavLink to={APP_ROUTES.RECIPE_ADD}>Add Recipe</NavLink>
       <section>
-        <a href="#">SIGN IN</a>
+        <a href={APP_ROUTES.SIGN_IN}>SIGN IN</a>
         <a href="#">SIGN UP</a>
       </section>
     </header>
