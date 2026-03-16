@@ -93,11 +93,9 @@ npm run dev
 ```bash
 # Check formatting and linting
 npm run format:check
-npm run lint:check
 
 # Apply fixes
 npm run format
-npm run lint
 ```
 
 The API will be available at `http://localhost:3000`
