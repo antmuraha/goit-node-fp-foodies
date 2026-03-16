@@ -29,6 +29,7 @@ export const ItemCard = ({
   description,
   thumb,
   author,
+  // @ts-ignore TODO: Need to remove after implementing favorite functionality
   isFavorite = false,
   variant = "grid",
   actionIcon = "heart",
