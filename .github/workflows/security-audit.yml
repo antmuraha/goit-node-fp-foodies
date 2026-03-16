@@ -27,6 +27,8 @@ jobs:
     steps:
       # Checkout repository code
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       # Setup Node.js runtime for project commands
       - name: Setup Node.js
