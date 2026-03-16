@@ -35,7 +35,14 @@ export const AppRouter = (): ReactElement => {
             </AuthPage>
           }
         />
-        <Route path={APP_ROUTES.USER} element={<UserPage />} />
+        <Route
+          path={APP_ROUTES.USER}
+          element={
+            <AuthPage>
+              <UserPage />
+            </AuthPage>
+          }
+        />
         <Route path={APP_ROUTES.UI_KIT} element={<UiKitPage />} />
         <Route path={APP_ROUTES.SIGN_IN} element={<SignInPage />} />
         <Route path={APP_ROUTES.NOT_FOUND} element={<NotFoundPage />} />

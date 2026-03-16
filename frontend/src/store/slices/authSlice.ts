@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { authApi } from "../../api/endpoints/authApi";
-import type { UserProfile } from "../../entities/user";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
 import { sessionStorageAdapter } from "../../shared/services/sessionStorage";
+import { MeProfile } from "../../entities/user/model/types";
 
 export type LoginCredentials = {
   email: string;
@@ -11,7 +11,7 @@ export type LoginCredentials = {
 
 type AuthState = {
   token: string | null;
-  currentUser: UserProfile | null;
+  currentUser: MeProfile | null;
   profileStatus: AsyncStatus;
   profileError: string | null;
   loginStatus: AsyncStatus;
@@ -35,20 +35,25 @@ const getErrorMessage = (error: unknown): string => {
   return "Unexpected request error";
 };
 
-export const login = createAsyncThunk<{ token: string; user: UserProfile }, LoginCredentials, { rejectValue: string }>(
+const isUnauthorizedError = (error: unknown): error is ApiError => {
+  return typeof error === "object" && error !== null && "status" in error && error.status === 401;
+};
+
+export const login = createAsyncThunk<{ token: string; user: MeProfile }, LoginCredentials, { rejectValue: string }>(
   "auth/login",
   async (credentials, thunkApi) => {
     try {
       const response = await authApi.login(credentials);
+      const me = await authApi.getProfile(response.token);
       sessionStorageAdapter.save(response.token);
-      return response;
+      return { ...response, user: me };
     } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
     }
   },
 );
 
-export const fetchProfile = createAsyncThunk<UserProfile, void, { state: { auth: AuthState }; rejectValue: string }>(
+export const fetchProfile = createAsyncThunk<MeProfile, void, { state: { auth: AuthState }; rejectValue: string }>(
   "auth/fetchProfile",
   async (_, thunkApi) => {
     const token = thunkApi.getState().auth.token;
@@ -60,6 +65,10 @@ export const fetchProfile = createAsyncThunk<UserProfile, void, { state: { auth:
     try {
       return await authApi.getProfile(token);
     } catch (error) {
+      if (isUnauthorizedError(error)) {
+        thunkApi.dispatch(clearAuthSession());
+      }
+
       return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
     }
   },
@@ -69,7 +78,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuthSession: (state, action: PayloadAction<{ token: string; user?: UserProfile }>) => {
+    setAuthSession: (state, action: PayloadAction<{ token: string; user?: MeProfile }>) => {
       state.token = action.payload.token;
       sessionStorageAdapter.save(action.payload.token);
       if (action.payload.user) {
@@ -114,6 +123,10 @@ const authSlice = createSlice({
         state.currentUser = action.payload;
       })
       .addCase(fetchProfile.rejected, (state, action) => {
+        if (!state.token) {
+          return;
+        }
+
         state.profileStatus = "failed";
         state.profileError = action.payload ?? "Unable to load profile";
       });

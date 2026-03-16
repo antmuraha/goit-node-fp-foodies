@@ -3,11 +3,11 @@ export const API_ROUTES = {
     REGISTER: "/auth/register",
     LOGIN: "/auth/login",
     LOGOUT: "/auth/logout",
-    PROFILE: "/auth/me",
   },
   USERS: {
     ROOT: "/users",
     BY_ID: (id: number | string): string => `/users/${id}`,
+    ME: "/users/me",
   },
   RECIPES: {
     ROOT: "/recipes",

@@ -1,6 +1,7 @@
 import { apiClient } from "../client";
 import { API_ROUTES } from "../../shared/constants/apiRoutes";
 import type { UserProfile } from "../../entities/user";
+import { MeProfile } from "../../entities/user/model/types";
 
 type LoginPayload = {
   email: string;
@@ -15,7 +16,6 @@ type RegisterPayload = {
 
 type AuthResponse = {
   token: string;
-  user: UserProfile;
 };
 
 export const authApi = {
@@ -30,8 +30,8 @@ export const authApi = {
         Authorization: `Bearer ${token}`,
       },
     }),
-  getProfile: (token: string): Promise<UserProfile> =>
-    apiClient.get<UserProfile>(API_ROUTES.AUTH.PROFILE, {
+  getProfile: (token: string): Promise<MeProfile> =>
+    apiClient.get<MeProfile>(API_ROUTES.USERS.ME, {
       headers: {
         Authorization: `Bearer ${token}`,
       },

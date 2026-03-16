@@ -4,10 +4,11 @@ import { usersApi } from "../../api/endpoints/usersApi";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
 import type { RootState } from "../store";
 import { AUTH_REQUIRED_USER_REQUEST_ERROR } from "./constants";
+import { UserDetailsResponse } from "../../entities/user/model/types";
 
 type UsersState = {
   list: UserSummary[];
-  selectedUser: UserSummary | null;
+  selectedUser: UserDetailsResponse | null;
   listStatus: AsyncStatus;
   selectedUserStatus: AsyncStatus;
   listError: string | null;
@@ -49,7 +50,7 @@ export const fetchUsers = createAsyncThunk<UserSummary[], void, { state: RootSta
   },
 );
 
-export const fetchUserById = createAsyncThunk<UserSummary, number, { state: RootState; rejectValue: string }>(
+export const fetchUserById = createAsyncThunk<UserDetailsResponse, number, { state: RootState; rejectValue: string }>(
   "users/fetchUserById",
   async (id, thunkApi) => {
     const token = thunkApi.getState().auth.token;
