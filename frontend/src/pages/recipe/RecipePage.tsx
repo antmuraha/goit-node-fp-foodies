@@ -1,6 +1,6 @@
 import type { ReactElement } from "react";
 import { useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { useDataRecipe } from "../../shared/hooks";
 import type { RecipeIngredientDetails } from "../../entities/ingredient/types";
 import PopularRecipesList from "../../shared/ui/popular-recipes-list";
@@ -25,7 +25,7 @@ export const RecipePage = (): ReactElement => {
             <h2>{recipe.title}</h2>
             <img src={recipe.image ?? recipe.thumbnail ?? undefined} alt={recipe.title} width={300} />
             <p>{recipe.description ?? "No description yet"}</p>
-            {recipe.author && <p>Author: {recipe.author.name}</p>}
+            <NavLink to={`/user/${recipe.author.id}`}>Author: {recipe.author.name}</NavLink>
             <p>Cooking time: {recipe.cookingTime} minutes</p>
             <p>Category: {recipe.Category.name}</p>
             <h3>Ingredients:</h3>
