@@ -1,12 +1,6 @@
 name: Security Audit (npm -> SARIF)
 
 on:
-  push:
-    # Run workflow when commits are pushed to main branch
-    branches: [main]
-  pull_request:
-    # Run workflow on pull requests targeting main
-    branches: [main]
   workflow_run:
     workflows: ["Verify Frontend Build And Backend Syntax"]
     types:
@@ -17,7 +11,8 @@ env:
 
 jobs:
   audit:
-    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
+    # Run only when the upstream verify workflow completed successfully.
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
