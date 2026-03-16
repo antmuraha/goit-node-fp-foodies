@@ -16,9 +16,7 @@ export const UiKitPage = (): ReactElement => {
   const [isChecked, setIsChecked] = useState<boolean>(false);
   const [isSignInModalOpen, setIsSignInModalOpen] = useState<boolean>(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState<boolean>(false);
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState<boolean>(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
-  const [isCustomModalOpen, setIsCustomModalOpen] = useState<boolean>(false);
 
   const handlePublishToggle = (event: ChangeEvent<HTMLInputElement>): void => {
     setIsPublished(event.target.checked);
@@ -181,7 +179,7 @@ export const UiKitPage = (): ReactElement => {
           </div>
         </article>
         <article className={styles.card}>
-         <h2 className={styles.cardTitle}>Modal</h2>
+          <h2 className={styles.cardTitle}>Modal</h2>
           <div className={styles.column}>
             <div className={styles.row}>
               <Button onClick={() => setIsSignInModalOpen(true)}>Sign In Modal</Button>
