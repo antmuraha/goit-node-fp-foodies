@@ -91,7 +91,7 @@ components:
           type: string
           description: Partially masked (e.g. j***@example.com)
           example: j***@example.com
-        avatarURL:
+        avatar:
           type: string
           nullable: true
           example: https://gravatar.com/avatar/xyz
