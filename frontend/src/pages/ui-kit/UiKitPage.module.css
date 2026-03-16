@@ -72,6 +72,24 @@
   gap: var(--fd-space-8);
 }
 
+.logoutWrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+}
+
+.logoutDescription {
+  width: 100%;
+  text-align: center;
+  margin: 0;
+  font-family: "Mulish", sans-serif;
+  font-size: 18px;
+  line-height: 1.4;
+  color: #000;
+}
+
 @media (min-width: 768px) {
   .page {
     padding: var(--fd-space-30);
