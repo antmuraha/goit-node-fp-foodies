@@ -7,12 +7,17 @@ on:
   pull_request:
     # Run workflow on pull requests targeting main
     branches: [main]
+  workflow_run:
+    workflows: ["Verify Frontend Build And Backend Syntax"]
+    types:
+      - completed
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   audit:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
