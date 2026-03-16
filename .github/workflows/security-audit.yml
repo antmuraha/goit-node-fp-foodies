@@ -12,8 +12,6 @@ env:
 
 jobs:
   audit:
-    # Run only when the upstream verify workflow completed successfully.
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
     strategy:
