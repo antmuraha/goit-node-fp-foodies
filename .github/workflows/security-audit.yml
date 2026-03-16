@@ -1,10 +1,11 @@
 name: Security Audit (npm -> SARIF)
 
 on:
-  workflow_run:
-    workflows: ["Verify Frontend Build And Backend Syntax"]
-    types:
-      - completed
+  pull_request:
+  push:
+    branches:
+      - main
+      - master
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
