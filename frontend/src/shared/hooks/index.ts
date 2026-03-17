@@ -1,4 +1,5 @@
 export { useDataProfile } from "./useDataProfile";
+export { useDataProfileFavorites, useDataProfileFollowers, useDataProfileFollowing } from "./useDataProfile";
 export { useDataRecipe } from "./useDataRecipe";
 export { useDataRecipes } from "./useDataRecipes";
 export { useDataUser } from "./useDataUser";

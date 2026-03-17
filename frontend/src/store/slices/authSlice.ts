@@ -98,6 +98,22 @@ const authSlice = createSlice({
       state.loginError = null;
       sessionStorageAdapter.clear();
     },
+    adjustFollowingCount: (state, action: PayloadAction<number>) => {
+      if (!state.currentUser) {
+        return;
+      }
+
+      const nextCount = state.currentUser.followingCount + action.payload;
+      state.currentUser.followingCount = Math.max(0, nextCount);
+    },
+    adjustFavoritesCount: (state, action: PayloadAction<number>) => {
+      if (!state.currentUser) {
+        return;
+      }
+
+      const nextCount = state.currentUser.favoritesCount + action.payload;
+      state.currentUser.favoritesCount = Math.max(0, nextCount);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -133,5 +149,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAuthSession, rehydrateSession, clearAuthSession } = authSlice.actions;
+export const { setAuthSession, rehydrateSession, clearAuthSession, adjustFollowingCount, adjustFavoritesCount } =
+  authSlice.actions;
 export const authReducer = authSlice.reducer;

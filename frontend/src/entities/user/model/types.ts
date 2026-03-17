@@ -5,6 +5,11 @@ export type UserSummary = {
   avatar: string | null;
 };
 
+export type UserListQuery = {
+  limit?: number;
+  offset?: number;
+};
+
 export type UserProfile = UserSummary;
 
 export type UserListResponse = {
@@ -12,6 +17,13 @@ export type UserListResponse = {
   total?: number;
   limit?: number;
   offset?: number;
+};
+
+export type PaginatedUserListResponse = {
+  data: UserSummary[];
+  total: number;
+  limit: number;
+  offset: number;
 };
 
 export type UserDetailsResponse = {

@@ -15,7 +15,7 @@ export const getFollowersList = async (userId, { page, limit }) => {
     limit,
     offset,
   });
-  return { followers: rows.map((f) => f.follower), total: count, page, limit };
+  return { data: rows.map((f) => f.follower), total: count, page, limit };
 };
 
 /**
@@ -74,7 +74,28 @@ export const getFollowingList = async (userId, { page, limit }) => {
     limit,
     offset,
   });
-  return { following: rows.map((f) => f.following), total: count, page, limit };
+  return { data: rows.map((f) => f.following), total: count, page, limit };
+};
+
+export const getFollowStatus = async (followerId, followingId) => {
+  if (followerId === followingId) {
+    return { userId: followingId, isFollowing: false };
+  }
+
+  const targetUser = await db.User.findByPk(followingId);
+
+  if (!targetUser) {
+    throw HttpError(404, "User not found");
+  }
+
+  const follow = await db.Follow.findOne({
+    where: { followerId, followingId },
+  });
+
+  return {
+    userId: followingId,
+    isFollowing: Boolean(follow),
+  };
 };
 
 export const getOtherUserProfile = async (targetId) => {

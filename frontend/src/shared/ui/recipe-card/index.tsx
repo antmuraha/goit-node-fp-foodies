@@ -1,8 +1,9 @@
-import type { ReactElement } from "react";
+import { useEffect, type ReactElement } from "react";
 import styles from "./RecipeCard.module.css";
 import { Button } from "../button/Button";
 import defaultAvatar from "../../../assets/images/defaultAvatar.svg";
 import { NavLink } from "react-router-dom";
+import { useUserFavorites } from "../../helpers/useUserFavorites";
 
 interface Author {
   id: number;
@@ -17,10 +18,10 @@ interface RecipeCardProps {
   image: string | null;
   thumbnail: string | null;
   author: Author;
-  isFavorite?: boolean;
+  // isFavorite?: boolean;
   variant?: "grid" | "list";
   actionIcon?: "heart" | "trash";
-  onFavoriteClick?: (id: string | number) => void;
+  // onFavoriteClick?: (id: string | number) => void;
   onAuthorClick?: (authorId: string | number) => void;
   onDetailsClick?: (id: string | number) => void;
 }
@@ -31,23 +32,28 @@ const RecipeCard = ({
   description,
   image,
   author,
-  // @ts-ignore TODO: Need to remove after implementing favorite functionality
-  isFavorite = false,
+  // isFavorite = false,
   variant = "grid",
   actionIcon = "heart",
-  onFavoriteClick,
+  // onFavoriteClick,
   onAuthorClick,
   onDetailsClick,
 }: RecipeCardProps): ReactElement => {
+  const { ensureFavoriteStatus, isFavorite, toggleFavorite } = useUserFavorites();
+
   const handleActionClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onFavoriteClick?.(id);
+    toggleFavorite(id, isFavorite(id));
   };
 
   const handleDetailsClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDetailsClick?.(id);
   };
+
+  useEffect(() => {
+    ensureFavoriteStatus(id);
+  }, [id]);
 
   return (
     <article className={`${styles.card} ${styles[variant]}`} onClick={() => onDetailsClick?.(id)}>
@@ -69,9 +75,15 @@ const RecipeCard = ({
                 aria-label="View details"
               >
                 {/* TODO: Замінити на іконку */}
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                {/* <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <rect width="20" height="20" fill="#E2E2E2" />
-                </svg>
+                </svg> */}
+                {/* TODO: Example */}
+                {isFavorite(id) ? (
+                  <span className={styles.favoriteIndicator}>♥</span>
+                ) : (
+                  <span className={styles.favoriteIndicator}>♡</span>
+                )}
               </Button>
               <Button
                 variant="secondary"
@@ -108,9 +120,15 @@ const RecipeCard = ({
             <div className={styles.actions}>
               <Button variant="secondary" isIconOnly className={styles.iconBtn} onClick={handleActionClick}>
                 {/* TODO: Замінити на іконку */}
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                {/* <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
                   <rect width="20" height="20" fill="#E2E2E2" />
-                </svg>
+                </svg> */}
+                {/* TODO: Example */}
+                {isFavorite(id) ? (
+                  <span className={styles.favoriteIndicator}>♥</span>
+                ) : (
+                  <span className={styles.favoriteIndicator}>♡</span>
+                )}
               </Button>
               <Button variant="secondary" isIconOnly className={styles.iconBtn} onClick={handleDetailsClick}>
                 {/* TODO: Замінити на іконку */}

@@ -8,6 +8,7 @@ import {
   addFavoriteService,
   removeFavoriteService,
   listFavoritesService,
+  getFavoriteStatusService,
 } from "../services/recipesServices.js";
 
 export const getRecipes = async (req, res, next) => {
@@ -64,7 +65,7 @@ export const createRecipe = async (req, res, next) => {
 
 export const getOwnRecipes = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = Number.parseInt(req.params.id, 10);
     const { limit, offset } = req.query;
     const recipesList = await getOwnRecipesService(userId, { limit, offset });
     res.status(200).json(recipesList);
@@ -114,6 +115,21 @@ export const removeFavorite = async (req, res, next) => {
 
     await removeFavoriteService(req.user.id, recipeId);
     res.status(204).send();
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getFavoriteStatus = async (req, res, next) => {
+  try {
+    const recipeId = Number(req.params.id);
+
+    if (!Number.isInteger(recipeId) || recipeId <= 0) {
+      return res.status(400).json({ message: "Invalid recipe id" });
+    }
+
+    const result = await getFavoriteStatusService(req.user.id, recipeId);
+    res.status(200).json(result);
   } catch (err) {
     next(err);
   }

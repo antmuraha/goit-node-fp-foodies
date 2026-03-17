@@ -76,6 +76,18 @@ const usersSlice = createSlice({
       state.selectedUserError = null;
       state.selectedUserStatus = "idle";
     },
+    adjustSelectedUserFollowersCount: (state, action: { payload: { userId: number | string; delta: number } }) => {
+      if (!state.selectedUser) {
+        return;
+      }
+
+      if (String(state.selectedUser.id) !== String(action.payload.userId)) {
+        return;
+      }
+
+      const nextCount = state.selectedUser.followersCount + action.payload.delta;
+      state.selectedUser.followersCount = Math.max(0, nextCount);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -106,5 +118,5 @@ const usersSlice = createSlice({
   },
 });
 
-export const { clearSelectedUser } = usersSlice.actions;
+export const { clearSelectedUser, adjustSelectedUserFollowersCount } = usersSlice.actions;
 export const usersReducer = usersSlice.reducer;
