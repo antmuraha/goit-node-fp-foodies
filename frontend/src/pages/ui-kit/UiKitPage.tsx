@@ -201,6 +201,9 @@ export const UiKitPage = (): ReactElement => {
             <Icon name="logo" color="action-secondary-text" size={24} />
             <Icon name="quote" color="action-secondary-text" size={24} />
             <Icon name="trash" color="action-secondary-text" size={24} />
+            <Icon name="instagram" color="action-secondary-text" size={24} />
+            <Icon name="youtube" color="action-secondary-text" size={24} />
+            <Icon name="facebook" color="action-secondary-text" size={24} />
           </div>
         </article>
       </section>

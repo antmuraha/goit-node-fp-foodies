@@ -12,7 +12,10 @@ export type IconName =
   | "close"
   | "eye-off"
   | "eye"
+  | "facebook"
   | "heart"
+  | "instagram"
   | "logo"
   | "quote"
-  | "trash";
+  | "trash"
+  | "youtube";
