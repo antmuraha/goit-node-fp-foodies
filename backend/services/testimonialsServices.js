@@ -9,7 +9,7 @@ export const listTestimonials = async (options) => {
 
   const testimonials = await Testimonial.findAll({
     where: { isPublished: true },
-    include: [{ model: User, as: "owner", attributes: ["id", "email"] }],
+    include: [{ model: User, as: "owner", attributes: ["id", "name", "email"] }],
     order: [["createdAt", "DESC"]],
     limit,
     offset,

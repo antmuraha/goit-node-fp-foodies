@@ -8,6 +8,7 @@ export type TestimonialSummary = {
   updatedAt: string;
   owner: {
     id: number;
+    name: string;
     email: string;
   };
 };
