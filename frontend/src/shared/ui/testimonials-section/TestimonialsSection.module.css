@@ -1,0 +1,132 @@
+/* Testimonials Section — mobile-first (FE-MAIN-03) */
+
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fd-space-40);
+  padding: 0 var(--fd-space-16);
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--fd-space-16);
+  text-align: center;
+}
+
+.subtitle {
+  font-size: var(--fd-type-main-mobile-size);
+  line-height: var(--fd-type-main-mobile-height);
+  font-weight: var(--fd-font-weight-medium);
+  letter-spacing: var(--fd-letter-spacing-tight);
+  color: var(--fd-color-main-alt);
+  max-width: 261px;
+  margin: 0;
+}
+
+.title {
+  font-size: 28px;
+  line-height: 32px;
+  font-weight: var(--fd-font-weight-extrabold);
+  letter-spacing: -0.56px;
+  text-transform: uppercase;
+  color: var(--fd-color-main);
+  margin: 0;
+  white-space: nowrap;
+}
+
+/* ── Slide area ── */
+.reviews {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 64px;
+  width: 100%;
+}
+
+.quoteIcon {
+  position: absolute;
+  left: 8px;
+  top: 80px;
+  width: 40px;
+  height: 32px;
+  color: var(--fd-color-muted);
+  pointer-events: none;
+}
+
+/* ── Quote block ── */
+.quote {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 64px;
+}
+
+.quoteText {
+  font-size: var(--fd-type-h3-mobile-size);
+  line-height: 24px;
+  font-weight: var(--fd-font-weight-medium);
+  letter-spacing: -0.36px;
+  color: var(--fd-color-main);
+  text-align: center;
+  max-width: 343px;
+  margin: 0;
+}
+
+/* ── Author ── */
+.author {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.authorName {
+  font-size: var(--fd-font-size-16);
+  line-height: var(--fd-line-height-24);
+  font-weight: var(--fd-font-weight-extrabold);
+  letter-spacing: -0.32px;
+  text-transform: uppercase;
+  color: var(--fd-color-main);
+  font-style: normal;
+  white-space: nowrap;
+}
+
+/* ── Slider dots ── */
+.dots {
+  display: flex;
+  align-items: center;
+  gap: var(--fd-space-8);
+  height: 14px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--fd-radius-full);
+  background-color: var(--fd-color-muted);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: background-color 0.2s ease, width 0.2s ease;
+}
+
+.dotActive {
+  width: 18px;
+  background-color: var(--fd-color-main);
+  border-radius: var(--fd-radius-pill);
+}
+
+/* ── Empty / loading ── */
+.emptyText,
+.loadingText {
+  font-size: var(--fd-type-main-mobile-size);
+  line-height: var(--fd-type-main-mobile-height);
+  font-weight: var(--fd-font-weight-medium);
+  color: var(--fd-text-muted);
+  text-align: center;
+}
