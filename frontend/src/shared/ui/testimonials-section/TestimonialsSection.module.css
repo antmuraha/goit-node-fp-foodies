@@ -58,6 +58,11 @@
   pointer-events: none;
 }
 
+.quoteIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
 /* ── Quote block ── */
 .quote {
   margin: 0;
@@ -129,4 +134,61 @@
   font-weight: var(--fd-font-weight-medium);
   color: var(--fd-text-muted);
   text-align: center;
+}
+
+/* ── Tablet (768px+) ── */
+@media (min-width: 768px) {
+  /* Section keeps mobile 16px padding — reviews controls its own width */
+  .reviews {
+    gap: 80px;
+    max-width: 704px;
+  }
+
+  .subtitle {
+    font-size: var(--fd-type-main-desktop-size);
+    line-height: var(--fd-type-main-desktop-height);
+    letter-spacing: -0.32px;
+  }
+
+  .title {
+    font-size: var(--fd-type-h2-size);
+    line-height: var(--fd-type-h2-height);
+    letter-spacing: -0.8px;
+  }
+
+  .quoteText {
+    font-size: var(--fd-font-size-24);
+    line-height: 36px;
+    letter-spacing: -0.48px;
+    max-width: 100%;
+  }
+
+  .authorName {
+    font-size: var(--fd-font-size-20);
+    letter-spacing: -0.4px;
+  }
+
+  .quoteIcon {
+    width: 59px;
+    height: 48px;
+    left: 40px;
+    top: 76px;
+  }
+
+  .quote {
+    gap: 80px;
+  }
+
+  .dots {
+    height: 16px;
+  }
+
+  .dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .dotActive {
+    width: 22px;
+  }
 }
