@@ -10,15 +10,9 @@ const CategoriesGrid = () => {
         <h2>CategoriesGrid</h2>
         <div>
           {categories.length > 0 &&
-            categories.map(
-              (category) => (
-                <CategoryCard 
-                  key={category.id} 
-                  id={category.id} 
-                  name={category.name} 
-                  image={category.image} />
-                ),
-            )}
+            categories.map((category) => (
+              <CategoryCard key={category.id} id={category.id} name={category.name} image={category.image} />
+            ))}
         </div>
       </section>
     </div>
@@ -26,4 +20,3 @@ const CategoriesGrid = () => {
 };
 
 export default CategoriesGrid;
-
