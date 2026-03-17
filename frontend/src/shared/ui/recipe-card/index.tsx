@@ -81,10 +81,10 @@ const RecipeCard = ({
                 onClick={handleActionClick}
                 aria-label={actionIcon === "trash" ? "Delete" : "Favorite"}
               >
-                <Icon 
-                  name={actionIcon} 
-                  color={actionIcon === "heart" && isFavorite(id) ? "color-danger" : "text-primary"} 
-                  size={18} 
+                <Icon
+                  name={actionIcon}
+                  color={actionIcon === "heart" && isFavorite(id) ? "color-danger" : "text-primary"}
+                  size={18}
                 />
               </Button>
             </div>
@@ -103,32 +103,25 @@ const RecipeCard = ({
                 onAuthorClick?.(author?.id || "");
               }}
             >
-              <div 
-                className={styles.avatar} 
-                style={{ backgroundImage: `url(${author?.avatar || defaultAvatar})` }} 
-              />
+              <div className={styles.avatar} style={{ backgroundImage: `url(${author?.avatar || defaultAvatar})` }} />
               <span className={styles.authorName}>{author?.name || "Anonymous"}</span>
             </button>
 
             <div className={styles.actions}>
-              <Button 
-                variant="secondary" 
-                isIconOnly 
-                className={styles.iconBtn} 
+              <Button
+                variant="secondary"
+                isIconOnly
+                className={styles.iconBtn}
                 onClick={handleActionClick}
                 aria-label="Favorite"
               >
-                <Icon 
-                  name="heart" 
-                  color={isFavorite(id) ? "color-danger" : "text-primary"} 
-                  size={18} 
-                />
+                <Icon name="heart" color={isFavorite(id) ? "color-danger" : "text-primary"} size={18} />
               </Button>
 
-              <Button 
-                variant="secondary" 
-                isIconOnly 
-                className={styles.iconBtn} 
+              <Button
+                variant="secondary"
+                isIconOnly
+                className={styles.iconBtn}
                 onClick={handleDetailsClick}
                 aria-label="View details"
               >
