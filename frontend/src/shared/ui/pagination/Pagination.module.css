@@ -88,4 +88,9 @@
   .button {
     border-color: transparent;
   }
+
+  .button.active {
+    background-color: var(--fd-bg-canvas);
+    border-color: var(--fd-text-muted);
+  }
 }
