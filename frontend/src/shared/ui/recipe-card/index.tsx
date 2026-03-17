@@ -1,9 +1,10 @@
-import type { ReactElement } from "react";
+import { useEffect, type ReactElement } from "react";
 import styles from "./RecipeCard.module.css";
 import { Button } from "../button/Button";
 import defaultAvatar from "../../../assets/images/defaultAvatar.svg";
 import { NavLink } from "react-router-dom";
 import { Icon } from "../../../shared/components/Icon/index";
+import { useUserFavorites } from "../../helpers/useUserFavorites";
 
 interface Author {
   id: number;
@@ -18,10 +19,8 @@ interface RecipeCardProps {
   image: string | null;
   thumbnail: string | null;
   author: Author;
-  isFavorite?: boolean;
   variant?: "grid" | "list";
   actionIcon?: "heart" | "trash";
-  onFavoriteClick?: (id: string | number) => void;
   onAuthorClick?: (authorId: string | number) => void;
   onDetailsClick?: (id: string | number) => void;
 }
@@ -32,23 +31,26 @@ const RecipeCard = ({
   description,
   image,
   author,
-  // @ts-ignore TODO: Need to remove after implementing favorite functionality
-  isFavorite = false,
   variant = "grid",
   actionIcon = "heart",
-  onFavoriteClick,
   onAuthorClick,
   onDetailsClick,
 }: RecipeCardProps): ReactElement => {
+  const { ensureFavoriteStatus, isFavorite, toggleFavorite } = useUserFavorites();
+
   const handleActionClick = (e: React.MouseEvent) => {
     e.stopPropagation();
-    onFavoriteClick?.(id);
+    toggleFavorite(id, isFavorite(id));
   };
 
   const handleDetailsClick = (e: React.MouseEvent) => {
     e.stopPropagation();
     onDetailsClick?.(id);
   };
+
+  useEffect(() => {
+    ensureFavoriteStatus(id);
+  }, [id]);
 
   return (
     <article className={`${styles.card} ${styles[variant]}`} onClick={() => onDetailsClick?.(id)}>
@@ -71,6 +73,7 @@ const RecipeCard = ({
               >
                 <Icon name="arrow-up-right" color="text-primary" size={18} />
               </Button>
+
               <Button
                 variant="secondary"
                 isIconOnly
@@ -78,7 +81,11 @@ const RecipeCard = ({
                 onClick={handleActionClick}
                 aria-label={actionIcon === "trash" ? "Delete" : "Favorite"}
               >
-                <Icon name={actionIcon} color="text-primary" size={18} />
+                <Icon 
+                  name={actionIcon} 
+                  color={actionIcon === "heart" && isFavorite(id) ? "color-danger" : "text-primary"} 
+                  size={18} 
+                />
               </Button>
             </div>
           )}
@@ -96,15 +103,35 @@ const RecipeCard = ({
                 onAuthorClick?.(author?.id || "");
               }}
             >
-              <div className={styles.avatar} style={{ backgroundImage: `url(${author?.avatar || defaultAvatar})` }} />
+              <div 
+                className={styles.avatar} 
+                style={{ backgroundImage: `url(${author?.avatar || defaultAvatar})` }} 
+              />
               <span className={styles.authorName}>{author?.name || "Anonymous"}</span>
             </button>
 
             <div className={styles.actions}>
-              <Button variant="secondary" isIconOnly className={styles.iconBtn} onClick={handleActionClick}>
-                <Icon name="heart" color="text-primary" size={18} />
+              <Button 
+                variant="secondary" 
+                isIconOnly 
+                className={styles.iconBtn} 
+                onClick={handleActionClick}
+                aria-label="Favorite"
+              >
+                <Icon 
+                  name="heart" 
+                  color={isFavorite(id) ? "color-danger" : "text-primary"} 
+                  size={18} 
+                />
               </Button>
-              <Button variant="secondary" isIconOnly className={styles.iconBtn} onClick={handleDetailsClick}>
+
+              <Button 
+                variant="secondary" 
+                isIconOnly 
+                className={styles.iconBtn} 
+                onClick={handleDetailsClick}
+                aria-label="View details"
+              >
                 <Icon name="arrow-up-right" color="text-primary" size={18} />
               </Button>
             </div>

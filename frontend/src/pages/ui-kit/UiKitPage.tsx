@@ -1,6 +1,6 @@
 import type { ChangeEvent, ReactElement } from "react";
 import { useState } from "react";
-import { Button, Checkbox, Input, Modal, Radio, Select, TextArea } from "../../shared/ui";
+import { Button, Checkbox, Input, Modal, Radio, Select, TextArea, Pagination } from "../../shared/ui";
 import styles from "./UiKitPage.module.css";
 import { Icon } from "../../shared/components/Icon";
 
@@ -17,6 +17,8 @@ export const UiKitPage = (): ReactElement => {
   const [isSignInModalOpen, setIsSignInModalOpen] = useState<boolean>(false);
   const [isSignUpModalOpen, setIsSignUpModalOpen] = useState<boolean>(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPageManyPages, setCurrentPageManyPages] = useState<number>(1);
 
   const handlePublishToggle = (event: ChangeEvent<HTMLInputElement>): void => {
     setIsPublished(event.target.checked);
@@ -201,6 +203,26 @@ export const UiKitPage = (): ReactElement => {
             <Icon name="logo" color="action-secondary-text" size={24} />
             <Icon name="quote" color="action-secondary-text" size={24} />
             <Icon name="trash" color="action-secondary-text" size={24} />
+            <Icon name="instagram" color="action-secondary-text" size={24} />
+            <Icon name="youtube" color="action-secondary-text" size={24} />
+            <Icon name="facebook" color="action-secondary-text" size={24} />
+          </div>
+        </article>
+        <article className={styles.card}>
+          <h2 className={styles.cardTitle}>Pagination</h2>
+          <div className={styles.column}>
+            <div>
+              <p style={{ margin: "0 0 16px 0", fontSize: "14px", color: "var(--fd-text-muted)" }}>
+                Pagination with 5 pages
+              </p>
+              <Pagination currentPage={currentPage} totalPages={5} onPageChange={setCurrentPage} />
+            </div>
+            <div style={{ marginTop: "24px" }}>
+              <p style={{ margin: "0 0 16px 0", fontSize: "14px", color: "var(--fd-text-muted)" }}>
+                Pagination with 15 pages (shows ellipsis)
+              </p>
+              <Pagination currentPage={currentPageManyPages} totalPages={15} onPageChange={setCurrentPageManyPages} />
+            </div>
           </div>
         </article>
       </section>

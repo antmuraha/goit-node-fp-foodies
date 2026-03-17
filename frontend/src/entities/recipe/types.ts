@@ -39,3 +39,11 @@ export type RecipeSearchParams = {
   limit?: number;
   offset?: number;
 };
+
+export type FavoriteRecipe = {
+  id: number;
+  userId: number;
+  recipeId: number;
+  createdAt: string;
+  updatedAt: string;
+};

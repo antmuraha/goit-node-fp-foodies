@@ -4,11 +4,11 @@ import {
   getRecipeById,
   createRecipe,
   deleteRecipe,
-  getOwnRecipes,
   getPopularRecipes,
   addFavorite,
   removeFavorite,
   listFavorites,
+  getFavoriteStatus,
 } from "../controllers/recipesControllers.js";
 import { createRecipeSchema } from "../schemas/recipeSchemas.js";
 import { validateBody } from "../helpers/validateBody.js";
@@ -18,8 +18,8 @@ const recipesRouter = new Router();
 
 recipesRouter.get("/", getRecipes);
 recipesRouter.get("/popular", getPopularRecipes);
-recipesRouter.get("/own", authenticate, getOwnRecipes);
 recipesRouter.get("/favorites", authenticate, listFavorites);
+recipesRouter.get("/:id/favorite", authenticate, getFavoriteStatus);
 recipesRouter.get("/:id", getRecipeById);
 recipesRouter.post("/", authenticate, validateBody(createRecipeSchema), createRecipe);
 recipesRouter.delete("/:id", authenticate, deleteRecipe);
