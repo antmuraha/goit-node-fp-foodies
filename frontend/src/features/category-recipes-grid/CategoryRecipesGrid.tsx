@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import type { AppDispatch, RootState } from "../../store/store";
 import { fetchRecipes } from "../../store/slices/recipesSlice";
 import RecipeCard from "../../shared/ui/recipe-card";
-import styles from "./category-recipes-grid.module.css";
+import styles from "./CategoryRecipesGrid.module.css";
 
 const PAGE_LIMIT = 9;
 const SKELETON_COUNT = PAGE_LIMIT;
@@ -26,9 +26,9 @@ interface CategoryRecipesGridProps {
 }
 
 export function CategoryRecipesGrid({
-                                        categoryId,
-                                        pagination,
-                                    }: CategoryRecipesGridProps): ReactElement {
+    categoryId,
+    pagination,
+}: CategoryRecipesGridProps): ReactElement {
     const dispatch = useDispatch<AppDispatch>();
     const [searchParams, setSearchParams] = useSearchParams();
 
