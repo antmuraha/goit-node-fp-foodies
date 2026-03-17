@@ -443,6 +443,26 @@ components:
           type: integer
           example: 20
 
+    FavoriteStatus:
+      type: object
+      properties:
+        recipeId:
+          type: integer
+          example: 42
+        isFavorite:
+          type: boolean
+          example: true
+
+    FollowStatus:
+      type: object
+      properties:
+        userId:
+          type: integer
+          example: 7
+        isFollowing:
+          type: boolean
+          example: false
+
     Error:
       type: object
       properties:
@@ -1021,6 +1041,40 @@ paths:
           $ref: '#/components/responses/ServerError'
 
   /api/recipes/{id}/favorite:
+    get:
+      tags: [Recipes]
+      summary: Get favorite status for a recipe
+      description: Checks whether the specified recipe is in the authenticated user's favorites.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Recipe ID (positive integer)
+      responses:
+        '200':
+          description: Favorite status for the specified recipe
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavoriteStatus'
+        '400':
+          description: Invalid recipe ID (not a positive integer)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: Invalid recipe id
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
     post:
       tags: [Recipes]
       summary: Add a recipe to favorites
@@ -1036,24 +1090,44 @@ paths:
             minimum: 1
           description: Recipe ID (positive integer)
       responses:
-        '200':
+        '201':
           description: Recipe added to favorites successfully
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  message:
+                  id:
+                    type: integer
+                    example: 1
+                  userId:
+                    type: integer
+                    example: 1
+                  recipeId:
+                    type: integer
+                    example: 42
+                  createdAt:
                     type: string
-                    example: Recipe added to favorites
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
         '400':
-          description: Invalid recipe ID (not a positive integer) or recipe already in favorites
+          description: Invalid recipe ID (not a positive integer)
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
               example:
                 message: Invalid recipe id
+        '409':
+          description: Recipe already in favorites
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: Recipe already in favorites
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
@@ -1076,16 +1150,8 @@ paths:
             minimum: 1
           description: Recipe ID (positive integer)
       responses:
-        '200':
-          description: Recipe removed from favorites successfully
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  message:
-                    type: string
-                    example: Recipe removed from favorites
+        '204':
+          description: Recipe removed from favorites successfully (no body)
         '400':
           description: Invalid recipe ID (not a positive integer)
           content:
@@ -1097,7 +1163,13 @@ paths:
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
-          $ref: '#/components/responses/NotFoundError'
+          description: Recipe is not in favorites
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: Favorite not found
         '500':
           $ref: '#/components/responses/ServerError'
 
@@ -1203,6 +1275,41 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+  /api/users/{id}/follow/status:
+    get:
+      tags: [Users]
+      summary: Get follow status for a user
+      description: Checks whether the authenticated user follows the target user.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Target user ID
+      responses:
+        '200':
+          description: Follow status for the target user
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FollowStatus'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '404':
+          description: Target user not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: User not found
+        '500':
+          $ref: '#/components/responses/ServerError'
+
   /api/users/{id}:
     get:
       tags: [Users]
@@ -1248,14 +1355,30 @@ paths:
             minimum: 1
           description: User ID to follow
       responses:
-        '200':
+        '201':
           description: User followed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Followed successfully
         '400':
           $ref: '#/components/responses/ValidationError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           $ref: '#/components/responses/NotFoundError'
+        '409':
+          description: User is already followed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: Already following this user
         '500':
           $ref: '#/components/responses/ServerError'
 
@@ -1276,11 +1399,25 @@ paths:
       responses:
         '200':
           description: User unfollowed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: Unfollowed successfully
         '400':
           $ref: '#/components/responses/ValidationError'
         '401':
           $ref: '#/components/responses/UnauthorizedError'
         '404':
-          $ref: '#/components/responses/NotFoundError'
+          description: Follow relation not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: Not following this user
         '500':
           $ref: '#/components/responses/ServerError'
