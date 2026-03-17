@@ -55,8 +55,7 @@ Apply clean code practices to improve readability, maintainability, and change s
 ## Optional Validation Snippets
 
 ```bash
-# Unused imports/variables often surfaced by lint or typecheck
-npm run lint
+# Unused imports/variables often surfaced by typecheck
 npm run typecheck
 
 # Heuristic: deeply nested blocks (quick scan)

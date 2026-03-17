@@ -208,6 +208,33 @@ describe("PATCH /api/users/avatar", () => {
     await db.User.destroy({
       where: {
         id: [user?.id].filter(Boolean),
+describe("GET /api/users/:id/follow/status", () => {
+  let follower;
+  let following;
+  let authHeader;
+
+  beforeEach(async () => {
+    const password = await bcrypt.hash("password123", 10);
+    follower = await db.User.create({
+      name: `Follower Status ${Date.now()}`,
+      email: `follower-status-${Date.now()}@example.com`,
+      password,
+      verify: true,
+    });
+    following = await db.User.create({
+      name: `Following Status ${Date.now()}`,
+      email: `following-status-${Date.now()}@example.com`,
+      password,
+      verify: true,
+    });
+    authHeader = await createAuthHeader(follower);
+  });
+
+  afterEach(async () => {
+    await db.Follow.destroy({ where: {} });
+    await db.User.destroy({
+      where: {
+        id: [follower?.id, following?.id].filter(Boolean),
       },
       force: true,
     });
@@ -255,6 +282,31 @@ describe("PATCH /api/users/avatar", () => {
     const res = await request(app).patch("/api/users/avatar").send({
       avatarURL: "https://example.com/avatar.png",
     });
+  it("returns isFollowing=false when follow relation does not exist", async () => {
+    const res = await request(app).get(`/api/users/${following.id}/follow/status`).set("Authorization", authHeader);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ userId: following.id, isFollowing: false });
+  });
+
+  it("returns isFollowing=true when follow relation exists", async () => {
+    await db.Follow.create({ followerId: follower.id, followingId: following.id });
+
+    const res = await request(app).get(`/api/users/${following.id}/follow/status`).set("Authorization", authHeader);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toEqual({ userId: following.id, isFollowing: true });
+  });
+
+  it("returns 404 for a non-existent target user", async () => {
+    const res = await request(app).get("/api/users/999999/follow/status").set("Authorization", authHeader);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toEqual({ message: "User not found" });
+  });
+
+  it("returns 401 without authentication", async () => {
+    const res = await request(app).get(`/api/users/${following.id}/follow/status`);
 
     expect(res.status).toBe(401);
     expect(res.body).toEqual({ message: "Not authorized" });

@@ -171,7 +171,7 @@ export const getOwnRecipes = async (userId, { limit, offset }) => {
     distinct: true,
     order: [["createdAt", "DESC"]],
   });
-  return { total: count, limit: safeLimit, offset: safeOffset, recipes: rows };
+  return { total: count, limit: safeLimit, offset: safeOffset, data: rows };
 };
 
 export const deleteRecipe = async (id, userId) => {
@@ -231,6 +231,11 @@ export const removeFavoriteService = async (userId, recipeId) => {
   await favorite.destroy();
 };
 
+export const getFavoriteStatusService = async (userId, recipeId) => {
+  const favorite = await Favorite.findOne({ where: { userId, recipeId } });
+  return { recipeId, isFavorite: Boolean(favorite) };
+};
+
 export const listFavoritesService = async (userId, { limit, offset }) => {
   const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
   const safeOffset = Math.max(Number(offset) || 0, 0);
@@ -259,6 +264,6 @@ export const listFavoritesService = async (userId, { limit, offset }) => {
     total: count,
     limit: safeLimit,
     offset: safeOffset,
-    recipes: rows.map((f) => f.Recipe),
+    data: rows.map((f) => f.Recipe),
   };
 };

@@ -1,9 +1,10 @@
 import type { ReactElement } from "react";
 import { useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { NavLink, useParams } from "react-router-dom";
 import { useDataRecipe } from "../../shared/hooks";
-import { RecipeIngredientDetails } from "../../entities/ingredient/types";
 import PopularRecipesList from "../../shared/ui/popular-recipes-list";
+import RecipeIngredientsPanel from "../../features/recipe/ui/RecipeIngredientsPanel";
+import RecipeInstructionsPanel from "../../features/recipe/ui/RecipeInstructionsPanel";
 
 export const RecipePage = (): ReactElement => {
   const { id } = useParams();
@@ -25,22 +26,12 @@ export const RecipePage = (): ReactElement => {
             <h2>{recipe.title}</h2>
             <img src={recipe.image ?? recipe.thumbnail ?? undefined} alt={recipe.title} width={300} />
             <p>{recipe.description ?? "No description yet"}</p>
-            {recipe.author && <p>Author: {recipe.author.name}</p>}
+            <NavLink to={`/user/${recipe.author.id}`}>Author: {recipe.author.name}</NavLink>
             <p>Cooking time: {recipe.cookingTime} minutes</p>
             <p>Category: {recipe.Category.name}</p>
-            <h3>Ingredients:</h3>
-            <ul>
-              {recipe.Ingredients.map((ingredient: RecipeIngredientDetails) => (
-                <li key={ingredient.id}>
-                  {ingredient.name} -{" "}
-                  {ingredient.image ? <img src={ingredient.image} alt={ingredient.name} width={50} /> : "No image"}
-                  <br />
-                  Quantity: {ingredient.RecipeIngredient.quantity} {ingredient.RecipeIngredient.unit ?? ""}
-                </li>
-              ))}
-            </ul>
-            <h3>Instructions:</h3>
-            <p>{recipe.instructions}</p>
+
+            <RecipeIngredientsPanel ingredients={recipe.Ingredients} />
+            <RecipeInstructionsPanel instructions={recipe.instructions} />
           </section>
         )}
       </main>

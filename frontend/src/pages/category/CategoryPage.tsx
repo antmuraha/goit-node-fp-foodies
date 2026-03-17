@@ -1,4 +1,4 @@
-import { ReactElement, useEffect } from "react";
+import { type ReactElement, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { useDataRecipes } from "../../shared/hooks";
 import RecipeCard from "../../shared/ui/recipe-card";
@@ -25,7 +25,19 @@ export const CategoryPage = (): ReactElement => {
         <section>
           {isLoading && <p>Loading category...</p>}
           {error && <p>Category error: {error}</p>}
-          {!isLoading && !error && recipes.map((recipe) => <RecipeCard key={recipe.id} {...recipe} />)}
+          {!isLoading &&
+            !error &&
+            recipes.map((recipe) => (
+              <RecipeCard
+                key={recipe.id}
+                id={recipe.id}
+                title={recipe.title}
+                description={recipe.description}
+                image={recipe.image}
+                thumbnail={recipe.thumbnail}
+                author={recipe.author}
+              />
+            ))}
         </section>
       </main>
     </>

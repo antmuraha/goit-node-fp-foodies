@@ -1,12 +1,12 @@
-import { AreaSummary } from "../area/types";
-import { CategorySummary } from "../category/model/types";
-import { RecipeIngredientDetails } from "../ingredient/types";
+import type { AreaSummary } from "../area/types";
+import type { CategorySummary } from "../category/model/types";
+import type { RecipeIngredientDetails } from "../ingredient/types";
 import type { UserSummary } from "../user";
 
 export type RecipeSummary = {
   id: number;
   title: string;
-  description: string | null;
+  description: string;
   instructions: string;
   cookingTime: number;
   thumbnail: string | null;
@@ -38,4 +38,12 @@ export type RecipeSearchParams = {
   search?: string;
   limit?: number;
   offset?: number;
+};
+
+export type FavoriteRecipe = {
+  id: number;
+  userId: number;
+  recipeId: number;
+  createdAt: string;
+  updatedAt: string;
 };

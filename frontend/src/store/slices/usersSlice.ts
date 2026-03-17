@@ -2,10 +2,13 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import type { UserSummary } from "../../entities/user";
 import { usersApi } from "../../api/endpoints/usersApi";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
+import type { RootState } from "../store";
+import { AUTH_REQUIRED_USER_REQUEST_ERROR } from "./constants";
+import { UserDetailsResponse } from "../../entities/user/model/types";
 
 type UsersState = {
   list: UserSummary[];
-  selectedUser: UserSummary | null;
+  selectedUser: UserDetailsResponse | null;
   listStatus: AsyncStatus;
   selectedUserStatus: AsyncStatus;
   listError: string | null;
@@ -29,11 +32,17 @@ const getErrorMessage = (error: unknown): string => {
   return "Unexpected users request error";
 };
 
-export const fetchUsers = createAsyncThunk<UserSummary[], void, { rejectValue: string }>(
+export const fetchUsers = createAsyncThunk<UserSummary[], void, { state: RootState; rejectValue: string }>(
   "users/fetchUsers",
   async (_, thunkApi) => {
     try {
-      const response = await usersApi.getUsers();
+      const token = thunkApi.getState().auth.token;
+
+      if (!token) {
+        return thunkApi.rejectWithValue(AUTH_REQUIRED_USER_REQUEST_ERROR);
+      }
+
+      const response = await usersApi.getUsers({ token });
       return response.users;
     } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
@@ -41,11 +50,17 @@ export const fetchUsers = createAsyncThunk<UserSummary[], void, { rejectValue: s
   },
 );
 
-export const fetchUserById = createAsyncThunk<UserSummary, number, { rejectValue: string }>(
+export const fetchUserById = createAsyncThunk<UserDetailsResponse, number, { state: RootState; rejectValue: string }>(
   "users/fetchUserById",
   async (id, thunkApi) => {
+    const token = thunkApi.getState().auth.token;
+
+    if (!token) {
+      return thunkApi.rejectWithValue(AUTH_REQUIRED_USER_REQUEST_ERROR);
+    }
+
     try {
-      return await usersApi.getUserById(id);
+      return await usersApi.getUserById(id, token);
     } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
     }
@@ -60,6 +75,18 @@ const usersSlice = createSlice({
       state.selectedUser = null;
       state.selectedUserError = null;
       state.selectedUserStatus = "idle";
+    },
+    adjustSelectedUserFollowersCount: (state, action: { payload: { userId: number | string; delta: number } }) => {
+      if (!state.selectedUser) {
+        return;
+      }
+
+      if (String(state.selectedUser.id) !== String(action.payload.userId)) {
+        return;
+      }
+
+      const nextCount = state.selectedUser.followersCount + action.payload.delta;
+      state.selectedUser.followersCount = Math.max(0, nextCount);
     },
   },
   extraReducers: (builder) => {
@@ -91,5 +118,5 @@ const usersSlice = createSlice({
   },
 });
 
-export const { clearSelectedUser } = usersSlice.actions;
+export const { clearSelectedUser, adjustSelectedUserFollowersCount } = usersSlice.actions;
 export const usersReducer = usersSlice.reducer;

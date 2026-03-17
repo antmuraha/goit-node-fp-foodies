@@ -3,6 +3,7 @@ import db from "../models/index.js";
 import HttpError from "../helpers/HttpError.js";
 import {
   addFollow,
+  getFollowStatus,
   getUserProfileWithMetrics,
   getFollowersList,
   getFollowingList,
@@ -66,9 +67,10 @@ export const followUser = async (req, res, next) => {
 
 export const getFollowers = async (req, res, next) => {
   try {
+    const userId = Number.parseInt(req.params.id, 10);
     const page = Math.max(1, Number.parseInt(req.query.page, 10) || 1);
     const limit = Math.min(Math.max(1, Number.parseInt(req.query.limit, 10) || 20), 100);
-    const result = await getFollowersList(req.user.id, { page, limit });
+    const result = await getFollowersList(userId, { page, limit });
     res.status(200).json(result);
   } catch (err) {
     next(err);
@@ -89,6 +91,17 @@ export const getFollowing = async (req, res, next) => {
     const page = Math.max(1, Number.parseInt(req.query.page, 10) || 1);
     const limit = Math.min(Math.max(1, Number.parseInt(req.query.limit, 10) || 20), 100);
     const result = await getFollowingList(req.user.id, { page, limit });
+    res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const getFollowStatusByUser = async (req, res, next) => {
+  try {
+    const followerId = req.user.id;
+    const followingId = Number.parseInt(req.params.id, 10);
+    const result = await getFollowStatus(followerId, followingId);
     res.status(200).json(result);
   } catch (err) {
     next(err);

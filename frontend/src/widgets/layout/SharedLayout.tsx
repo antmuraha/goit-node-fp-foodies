@@ -1,12 +1,13 @@
 import { useEffect, type ReactElement } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../shared/constants/routes";
+import { Footer } from "../footer/Footer";
 
 export const SharedLayout = (): ReactElement => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // @ts-ignore
+  // @ts-expect-error
   const handleSignInSuccess = () => {
     const returnTo = location.state?.returnTo ?? APP_ROUTES.HOME;
     navigate(returnTo, { replace: true });
@@ -25,6 +26,7 @@ export const SharedLayout = (): ReactElement => {
   return (
     <div className="page-shell">
       <Outlet />
+      <Footer />
     </div>
   );
 };

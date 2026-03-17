@@ -8,13 +8,13 @@ import {
   addFavoriteService,
   removeFavoriteService,
   listFavoritesService,
+  getFavoriteStatusService,
 } from "../services/recipesServices.js";
 
 export const getRecipes = async (req, res, next) => {
   try {
     const { categoryId, ingredientId, areaId, search, limit, offset } = req.query;
     const result = await searchRecipes({ categoryId, ingredientId, areaId, search, limit, offset });
-    res.set("Cache-Control", "public, max-age=300, stale-while-revalidate=600");
     res.json(result);
   } catch (err) {
     next(err);
@@ -48,7 +48,6 @@ export const getRecipeById = async (req, res, next) => {
     if (!recipe) {
       return res.status(404).json({ message: "Recipe not found" });
     }
-    res.set("Cache-Control", "public, max-age=600, stale-while-revalidate=1800");
     res.json(recipe);
   } catch (err) {
     next(err);
@@ -66,10 +65,9 @@ export const createRecipe = async (req, res, next) => {
 
 export const getOwnRecipes = async (req, res, next) => {
   try {
-    const userId = req.user.id;
+    const userId = Number.parseInt(req.params.id, 10);
     const { limit, offset } = req.query;
     const recipesList = await getOwnRecipesService(userId, { limit, offset });
-    res.set("Cache-Control", "private, no-store");
     res.status(200).json(recipesList);
   } catch (err) {
     next(err);
@@ -122,6 +120,21 @@ export const removeFavorite = async (req, res, next) => {
   }
 };
 
+export const getFavoriteStatus = async (req, res, next) => {
+  try {
+    const recipeId = Number(req.params.id);
+
+    if (!Number.isInteger(recipeId) || recipeId <= 0) {
+      return res.status(400).json({ message: "Invalid recipe id" });
+    }
+
+    const result = await getFavoriteStatusService(req.user.id, recipeId);
+    res.status(200).json(result);
+  } catch (err) {
+    next(err);
+  }
+};
+
 export const listFavorites = async (req, res, next) => {
   try {
     const { limit, offset } = req.query;
@@ -130,8 +143,6 @@ export const listFavorites = async (req, res, next) => {
       limit,
       offset,
     });
-
-    res.set("Cache-Control", "private, no-store");
     res.status(200).json(result);
   } catch (err) {
     next(err);
