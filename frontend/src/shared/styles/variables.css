@@ -161,6 +161,14 @@
   --fd-form-field-bg: transparent;
   --fd-form-field-border: var(--fd-border-default);
   --fd-form-support-text: var(--fd-text-muted);
+
+  /* Container tokens (FE-SHARED-04) */
+  --fd-container-max-width: 1280px;
+  --fd-container-max-width-narrow: 768px;
+
+  --fd-container-px-mobile: var(--fd-space-16);   /* 16px */
+  --fd-container-px-tablet: 32px;                 /* no --fd-space-32 token exists */
+  --fd-container-px-desktop: var(--fd-space-80);  /* 80px */
 }
 
 [data-theme="dark"] {

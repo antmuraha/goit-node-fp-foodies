@@ -14,3 +14,4 @@ export const HomePage = (): ReactElement => {
     </main>
   );
 };
+
