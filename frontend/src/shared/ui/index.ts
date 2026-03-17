@@ -9,4 +9,3 @@ export { Modal } from "./modal";
 export { ImageCategory } from "./image-category";
 export { HeroSection } from "./hero-section";
 export { Container } from "./container";
-export { CategoryCard } from "./category-card/CategoryCard";
