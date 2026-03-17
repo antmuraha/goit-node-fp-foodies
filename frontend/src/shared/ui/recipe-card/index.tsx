@@ -3,6 +3,7 @@ import styles from "./RecipeCard.module.css";
 import { Button } from "../button/Button";
 import defaultAvatar from "../../../assets/images/defaultAvatar.svg";
 import { NavLink } from "react-router-dom";
+import { Icon } from "../../../shared/components/Icon/index";
 
 interface Author {
   id: number;
@@ -68,10 +69,7 @@ const RecipeCard = ({
                 onClick={handleDetailsClick}
                 aria-label="View details"
               >
-                {/* TODO: Замінити на іконку */}
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect width="20" height="20" fill="#E2E2E2" />
-                </svg>
+                <Icon name="arrow-up-right" color="text-primary" size={18} />
               </Button>
               <Button
                 variant="secondary"
@@ -80,10 +78,7 @@ const RecipeCard = ({
                 onClick={handleActionClick}
                 aria-label={actionIcon === "trash" ? "Delete" : "Favorite"}
               >
-                {/* TODO: Замінити на іконку */}
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect width="20" height="20" fill="#E2E2E2" />
-                </svg>
+                <Icon name={actionIcon} color="text-primary" size={18} />
               </Button>
             </div>
           )}
@@ -107,16 +102,10 @@ const RecipeCard = ({
 
             <div className={styles.actions}>
               <Button variant="secondary" isIconOnly className={styles.iconBtn} onClick={handleActionClick}>
-                {/* TODO: Замінити на іконку */}
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect width="20" height="20" fill="#E2E2E2" />
-                </svg>
+                <Icon name="heart" color="text-primary" size={18} />
               </Button>
               <Button variant="secondary" isIconOnly className={styles.iconBtn} onClick={handleDetailsClick}>
-                {/* TODO: Замінити на іконку */}
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect width="20" height="20" fill="#E2E2E2" />
-                </svg>
+                <Icon name="arrow-up-right" color="text-primary" size={18} />
               </Button>
             </div>
           </div>
