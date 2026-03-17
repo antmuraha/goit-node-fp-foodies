@@ -3,6 +3,7 @@ import styles from "./RecipeCard.module.css";
 import { Button } from "../button/Button";
 import defaultAvatar from "../../../assets/images/defaultAvatar.svg";
 import { NavLink } from "react-router-dom";
+import { Icon } from "../../../shared/components/Icon/index";
 import { useUserFavorites } from "../../helpers/useUserFavorites";
 
 interface Author {
@@ -18,10 +19,8 @@ interface RecipeCardProps {
   image: string | null;
   thumbnail: string | null;
   author: Author;
-  // isFavorite?: boolean;
   variant?: "grid" | "list";
   actionIcon?: "heart" | "trash";
-  // onFavoriteClick?: (id: string | number) => void;
   onAuthorClick?: (authorId: string | number) => void;
   onDetailsClick?: (id: string | number) => void;
 }
@@ -32,10 +31,8 @@ const RecipeCard = ({
   description,
   image,
   author,
-  // isFavorite = false,
   variant = "grid",
   actionIcon = "heart",
-  // onFavoriteClick,
   onAuthorClick,
   onDetailsClick,
 }: RecipeCardProps): ReactElement => {
@@ -74,17 +71,9 @@ const RecipeCard = ({
                 onClick={handleDetailsClick}
                 aria-label="View details"
               >
-                {/* TODO: Замінити на іконку */}
-                {/* <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect width="20" height="20" fill="#E2E2E2" />
-                </svg> */}
-                {/* TODO: Example */}
-                {isFavorite(id) ? (
-                  <span className={styles.favoriteIndicator}>♥</span>
-                ) : (
-                  <span className={styles.favoriteIndicator}>♡</span>
-                )}
+                <Icon name="arrow-up-right" color="text-primary" size={18} />
               </Button>
+
               <Button
                 variant="secondary"
                 isIconOnly
@@ -92,10 +81,11 @@ const RecipeCard = ({
                 onClick={handleActionClick}
                 aria-label={actionIcon === "trash" ? "Delete" : "Favorite"}
               >
-                {/* TODO: Замінити на іконку */}
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect width="20" height="20" fill="#E2E2E2" />
-                </svg>
+                <Icon
+                  name={actionIcon}
+                  color={actionIcon === "heart" && isFavorite(id) ? "color-danger" : "text-primary"}
+                  size={18}
+                />
               </Button>
             </div>
           )}
@@ -118,23 +108,24 @@ const RecipeCard = ({
             </button>
 
             <div className={styles.actions}>
-              <Button variant="secondary" isIconOnly className={styles.iconBtn} onClick={handleActionClick}>
-                {/* TODO: Замінити на іконку */}
-                {/* <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect width="20" height="20" fill="#E2E2E2" />
-                </svg> */}
-                {/* TODO: Example */}
-                {isFavorite(id) ? (
-                  <span className={styles.favoriteIndicator}>♥</span>
-                ) : (
-                  <span className={styles.favoriteIndicator}>♡</span>
-                )}
+              <Button
+                variant="secondary"
+                isIconOnly
+                className={styles.iconBtn}
+                onClick={handleActionClick}
+                aria-label="Favorite"
+              >
+                <Icon name="heart" color={isFavorite(id) ? "color-danger" : "text-primary"} size={18} />
               </Button>
-              <Button variant="secondary" isIconOnly className={styles.iconBtn} onClick={handleDetailsClick}>
-                {/* TODO: Замінити на іконку */}
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <rect width="20" height="20" fill="#E2E2E2" />
-                </svg>
+
+              <Button
+                variant="secondary"
+                isIconOnly
+                className={styles.iconBtn}
+                onClick={handleDetailsClick}
+                aria-label="View details"
+              >
+                <Icon name="arrow-up-right" color="text-primary" size={18} />
               </Button>
             </div>
           </div>
