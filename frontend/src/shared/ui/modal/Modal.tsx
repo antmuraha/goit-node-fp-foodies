@@ -1,6 +1,7 @@
 import type { ReactElement, ReactNode } from "react";
 import { useEffect, useRef, useId, useCallback } from "react";
 import { createPortal } from "react-dom";
+import { Icon } from "../../components/Icon";
 import styles from "./Modal.module.css";
 
 type ModalProps = {
@@ -92,7 +93,7 @@ export const Modal = ({
           </h2>
           {showCloseButton && (
             <button type="button" className={styles.closeButton} onClick={handleClose} aria-label="Close dialog">
-              ×
+              <Icon name="close" color="text-primary" size={24} />
             </button>
           )}
         </div>

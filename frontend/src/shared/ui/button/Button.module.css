@@ -38,7 +38,7 @@
 }
 
 .medium {
-  min-height: var(--fd-button-height-medium);
+  min-height: var(--fd-button-height);
   padding: 0 var(--fd-button-space-medium);
   font-size: var(--fd-button-text-size-large);
   line-height: var(--fd-line-height-24);
@@ -68,7 +68,7 @@
 }
 
 .primary.large {
-  background-color: var(--fd-button-large-default-bg);
+  background-color: var(--fd-button-primary-bg);
   color: var(--fd-color-white);
 }
 

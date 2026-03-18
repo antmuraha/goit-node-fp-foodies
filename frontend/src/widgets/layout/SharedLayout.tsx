@@ -1,32 +1,41 @@
-import { useEffect, type ReactElement } from "react";
+import { useState, useEffect, type ReactElement } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../shared/constants/routes";
+import { Modal } from "../../shared/ui";
+import { SignInForm } from "../../features/auth";
 import { Footer } from "../footer/Footer";
 
 export const SharedLayout = (): ReactElement => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // @ts-expect-error
-  const handleSignInSuccess = () => {
-    const returnTo = location.state?.returnTo ?? APP_ROUTES.HOME;
-    navigate(returnTo, { replace: true });
-    // closeSignInModal();
-  };
+  const [isSignInOpen, setIsSignInOpen] = useState(false);
+  const [returnTo, setReturnTo] = useState<string>(APP_ROUTES.HOME);
 
   useEffect(() => {
     if (location.state?.openSignIn) {
-      alert("Open sign-in modal"); // TODO - replace with actual modal logic
-      // openSignInModal();
-      // clear the state so back-navigation doesn't re-trigger it
+      setReturnTo(location.state.returnTo ?? location.pathname);
+      setIsSignInOpen(true);
       navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [location.state]);
+  }, [location.state?.openSignIn]);
+
+  const handleClose = (): void => {
+    setIsSignInOpen(false);
+  };
+
+  const handleSuccess = (): void => {
+    setIsSignInOpen(false);
+    navigate(returnTo, { replace: true });
+  };
 
   return (
     <div className="page-shell">
       <Outlet />
       <Footer />
+      <Modal isOpen={isSignInOpen} title="Sign in" onClose={handleClose}>
+        <SignInForm onSuccess={handleSuccess} />
+      </Modal>
     </div>
   );
 };
