@@ -184,7 +184,9 @@ export const RecipeEditorForm = ({
           hasError={Boolean(formik.touched.image && formik.errors.image)}
           disabled={isSubmitting}
         />
-        {formik.touched.image && formik.errors.image && <FormErrorMessage>{formik.errors.image}</FormErrorMessage>}
+        {formik.touched.image && formik.errors.image && (
+          <FormErrorMessage>{formik.errors.image}</FormErrorMessage>
+        )}
       </div>
       <div className={styles.grid}>
         <div className={styles.group}>
@@ -201,7 +203,9 @@ export const RecipeEditorForm = ({
             hasError={Boolean(formik.touched.name && formik.errors.name)}
             disabled={isSubmitting}
           />
-          {formik.touched.name && formik.errors.name && <FormErrorMessage>{formik.errors.name}</FormErrorMessage>}
+          {formik.touched.name && formik.errors.name && (
+            <FormErrorMessage>{formik.errors.name}</FormErrorMessage>
+          )}
         </div>
 
         <div className={styles.group}>
@@ -214,10 +218,13 @@ export const RecipeEditorForm = ({
             value={formik.values.description}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            placeholder="Describe this recipe"
-            hasError={Boolean(formik.touched.description && formik.errors.description)}
+            placeholder="Enter a description of the dish"
+            hasError={Boolean(
+              formik.touched.description && formik.errors.description,
+            )}
             disabled={isSubmitting}
             rows={4}
+            maxLength={200}
           />
           {formik.touched.description && formik.errors.description && (
             <FormErrorMessage>{formik.errors.description}</FormErrorMessage>
@@ -232,7 +239,9 @@ export const RecipeEditorForm = ({
             id="recipe-category"
             placeholder="Select a category"
             value={formik.values.categoryId}
-            hasError={Boolean(formik.touched.categoryId && formik.errors.categoryId)}
+            hasError={Boolean(
+              formik.touched.categoryId && formik.errors.categoryId,
+            )}
             onChange={(event) => {
               formik.setFieldValue("categoryId", event.target.value);
               void formik.setFieldTouched("categoryId", true);
@@ -263,7 +272,9 @@ export const RecipeEditorForm = ({
             value={String(formik.values.cookingTime)}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            hasError={Boolean(formik.touched.cookingTime && formik.errors.cookingTime)}
+            hasError={Boolean(
+              formik.touched.cookingTime && formik.errors.cookingTime,
+            )}
             disabled={isSubmitting}
             min={1}
             max={600}
@@ -281,10 +292,15 @@ export const RecipeEditorForm = ({
             id="area-pending"
             placeholder="Select area"
             value={formik.values.areas[0] ? String(formik.values.areas[0]) : ""}
-            hasError={Boolean(formik.touched.areas && typeof formik.errors.areas === "string")}
+            hasError={Boolean(
+              formik.touched.areas && typeof formik.errors.areas === "string",
+            )}
             onChange={(event) => {
               const nextAreaId = Number(event.target.value);
-              const nextAreas = Number.isFinite(nextAreaId) && nextAreaId > 0 ? [nextAreaId] : [];
+              const nextAreas =
+                Number.isFinite(nextAreaId) && nextAreaId > 0
+                  ? [nextAreaId]
+                  : [];
               formik.setFieldValue("areas", nextAreas, true);
               void formik.setFieldTouched("areas", true);
             }}
@@ -312,10 +328,14 @@ export const RecipeEditorForm = ({
                 placeholder="Select ingredient"
                 value={"" + formik.values.pendingIngredient.ingredientId}
                 hasError={Boolean(
-                  getPendingIngredientTouched("ingredientId") && getPendingIngredientError("ingredientId"),
+                  getPendingIngredientTouched("ingredientId") &&
+                  getPendingIngredientError("ingredientId"),
                 )}
                 onChange={(event) => {
-                  handlePendingIngredientChange("ingredientId", event.target.value);
+                  handlePendingIngredientChange(
+                    "ingredientId",
+                    event.target.value,
+                  );
                 }}
                 disabled={isSubmitting || isCatalogLoading}
               >
@@ -325,9 +345,12 @@ export const RecipeEditorForm = ({
                   </option>
                 ))}
               </Select>
-              {getPendingIngredientTouched("ingredientId") && getPendingIngredientError("ingredientId") && (
-                <FormErrorMessage>{getPendingIngredientError("ingredientId")}</FormErrorMessage>
-              )}
+              {getPendingIngredientTouched("ingredientId") &&
+                getPendingIngredientError("ingredientId") && (
+                  <FormErrorMessage>
+                    {getPendingIngredientError("ingredientId")}
+                  </FormErrorMessage>
+                )}
             </div>
 
             <div>
@@ -338,31 +361,51 @@ export const RecipeEditorForm = ({
                   handlePendingIngredientChange("measure", event.target.value);
                 }}
                 onBlur={() => {
-                  void formik.setFieldTouched("pendingIngredient.measure", true, false);
+                  void formik.setFieldTouched(
+                    "pendingIngredient.measure",
+                    true,
+                    false,
+                  );
                 }}
                 placeholder="Quantity (e.g. 200g, 1 sprig)"
-                hasError={Boolean(getPendingIngredientTouched("measure") && getPendingIngredientError("measure"))}
+                hasError={Boolean(
+                  getPendingIngredientTouched("measure") &&
+                  getPendingIngredientError("measure"),
+                )}
                 disabled={isSubmitting}
               />
-              {getPendingIngredientTouched("measure") && getPendingIngredientError("measure") && (
-                <FormErrorMessage>{getPendingIngredientError("measure")}</FormErrorMessage>
-              )}
+              {getPendingIngredientTouched("measure") &&
+                getPendingIngredientError("measure") && (
+                  <FormErrorMessage>
+                    {getPendingIngredientError("measure")}
+                  </FormErrorMessage>
+                )}
             </div>
           </div>
 
-          <Button variant="ghost" onClick={handleAddIngredient} disabled={isSubmitting || isCatalogLoading}>
+          <Button
+            variant="ghost"
+            onClick={handleAddIngredient}
+            disabled={isSubmitting || isCatalogLoading}
+          >
             Add ingredient
           </Button>
         </div>
 
         <div className={styles.ingredientTiles}>
           {formik.values.ingredients.map((ingredientItem, index) => (
-            <article key={`ingredient-tile-${index}`} className={styles.ingredientTile}>
+            <article
+              key={`ingredient-tile-${index}`}
+              className={styles.ingredientTile}
+            >
               <div>
                 <p className={styles.ingredientTileName}>
-                  {ingredientOptionMap[ingredientItem.ingredientId] ?? "Unknown ingredient"}
+                  {ingredientOptionMap[ingredientItem.ingredientId] ??
+                    "Unknown ingredient"}
                 </p>
-                <p className={styles.ingredientTileMeasure}>{ingredientItem.measure}</p>
+                <p className={styles.ingredientTileMeasure}>
+                  {ingredientItem.measure}
+                </p>
               </div>
               <Button
                 variant="secondary"
@@ -391,24 +434,33 @@ export const RecipeEditorForm = ({
           value={formik.values.instructions}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          placeholder="Provide the cooking instructions"
-          hasError={Boolean(formik.touched.instructions && formik.errors.instructions)}
+          placeholder="Enter recipe"
+          hasError={Boolean(
+            formik.touched.instructions && formik.errors.instructions,
+          )}
           disabled={isSubmitting}
           rows={6}
+          maxLength={1000}
         />
         {formik.touched.instructions && formik.errors.instructions && (
           <FormErrorMessage>{formik.errors.instructions}</FormErrorMessage>
         )}
       </div>
 
-      {submitError && <FormErrorMessage variant="form">{submitError}</FormErrorMessage>}
+      {submitError && (
+        <FormErrorMessage variant="form">{submitError}</FormErrorMessage>
+      )}
 
       <div className={styles.actions}>
         <Button type="submit" isLoading={isSubmitting}>
           {isEdit ? "Update recipe" : "Publish recipe"}
         </Button>
         {onCancel && (
-          <Button variant="secondary" onClick={onCancel} disabled={isSubmitting}>
+          <Button
+            variant="secondary"
+            onClick={onCancel}
+            disabled={isSubmitting}
+          >
             Cancel
           </Button>
         )}
