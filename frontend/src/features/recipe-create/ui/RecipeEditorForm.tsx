@@ -214,10 +214,11 @@ export const RecipeEditorForm = ({
             value={formik.values.description}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            placeholder="Describe this recipe"
+            placeholder="Enter a description of the dish"
             hasError={Boolean(formik.touched.description && formik.errors.description)}
             disabled={isSubmitting}
             rows={4}
+            maxLength={200}
           />
           {formik.touched.description && formik.errors.description && (
             <FormErrorMessage>{formik.errors.description}</FormErrorMessage>
@@ -391,10 +392,11 @@ export const RecipeEditorForm = ({
           value={formik.values.instructions}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          placeholder="Provide the cooking instructions"
+          placeholder="Enter recipe"
           hasError={Boolean(formik.touched.instructions && formik.errors.instructions)}
           disabled={isSubmitting}
           rows={6}
+          maxLength={1000}
         />
         {formik.touched.instructions && formik.errors.instructions && (
           <FormErrorMessage>{formik.errors.instructions}</FormErrorMessage>
