@@ -10,4 +10,5 @@ export const FOLLOW_NOTIFICATIONS = {
 export const FAVORITE_NOTIFICATIONS = {
   ADD_ROLLBACK: "Unable to add recipe to favorites. Changes were reverted.",
   REMOVE_ROLLBACK: "Unable to remove recipe from favorites. Changes were reverted.",
+  NOT_AUTHORIZED: "You must be logged in to manage your favorites.",
 } as const;
