@@ -3,7 +3,6 @@ import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth, useDataUser } from "../../shared/hooks";
 import UserInfo from "../../shared/components/UserInfo";
-import TabsList from "../../shared/components/TabsList";
 import { TabsListTab, useTabsList } from "../../shared/components/TabsList/useTabsList";
 import MyFavoritesList from "../../shared/components/MyFavoritesList";
 import FollowingList from "../../shared/components/FollowingList";
@@ -64,7 +63,6 @@ export const UserPage = (): ReactNode => {
           favoritesCount={currentUser.favoritesCount}
           followingCount={currentUser.followingCount}
         />
-        {/* <TabsList isOwnProfile={isOwnProfile} /> */}
         <ProfileTabsNavigation isOwnProfile={isOwnProfile} />
         {content}
       </aside>
