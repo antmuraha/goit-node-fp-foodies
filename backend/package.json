@@ -28,7 +28,6 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "gravatar": "^1.8.2",
-    "jimp": "^1.6.0",
     "joi": "^18.0.2",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",

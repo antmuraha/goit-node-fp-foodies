@@ -1,5 +1,5 @@
-import HttpError from '../helpers/HttpError.js';
-import db from '../models/index.js';
+import HttpError from "../helpers/HttpError.js";
+import db from "../models/index.js";
 
 export const getFollowersList = async (userId, { page, limit }) => {
   const offset = (page - 1) * limit;
@@ -8,11 +8,11 @@ export const getFollowersList = async (userId, { page, limit }) => {
     include: [
       {
         model: db.User,
-        as: 'follower',
-        attributes: ['id', 'name', 'email', 'avatarURL'],
+        as: "follower",
+        attributes: ["id", "name", "email", "avatar"],
       },
     ],
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
     limit,
     offset,
   });
@@ -27,13 +27,13 @@ export const getFollowersList = async (userId, { page, limit }) => {
  */
 export const addFollow = async (followerId, followingId) => {
   if (followerId === followingId) {
-    throw HttpError(400, 'Cannot follow yourself');
+    throw HttpError(400, "Cannot follow yourself");
   }
 
   const targetUser = await db.User.findByPk(followingId);
 
   if (!targetUser) {
-    throw HttpError(404, 'User not found');
+    throw HttpError(404, "User not found");
   }
 
   const [, created] = await db.Follow.findOrCreate({
@@ -42,10 +42,10 @@ export const addFollow = async (followerId, followingId) => {
   });
 
   if (!created) {
-    throw HttpError(409, 'Already following this user');
+    throw HttpError(409, "Already following this user");
   }
 
-  return { message: 'Followed successfully' };
+  return { message: "Followed successfully" };
 };
 
 /**
@@ -60,10 +60,10 @@ export const removeFollow = async (followerId, followingId) => {
   });
 
   if (deleted === 0) {
-    throw HttpError(404, 'Not following this user');
+    throw HttpError(404, "Not following this user");
   }
 
-  return { message: 'Unfollowed successfully' };
+  return { message: "Unfollowed successfully" };
 };
 
 export const getFollowingList = async (userId, { page, limit }) => {
@@ -73,11 +73,11 @@ export const getFollowingList = async (userId, { page, limit }) => {
     include: [
       {
         model: db.User,
-        as: 'following',
-        attributes: ['id', 'name', 'email', 'avatarURL'],
+        as: "following",
+        attributes: ["id", "name", "email", "avatar"],
       },
     ],
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
     limit,
     offset,
   });
@@ -92,7 +92,7 @@ export const getFollowStatus = async (followerId, followingId) => {
   const targetUser = await db.User.findByPk(followingId);
 
   if (!targetUser) {
-    throw HttpError(404, 'User not found');
+    throw HttpError(404, "User not found");
   }
 
   const follow = await db.Follow.findOne({
@@ -107,11 +107,11 @@ export const getFollowStatus = async (followerId, followingId) => {
 
 export const getOtherUserProfile = async (targetId) => {
   const user = await db.User.findByPk(targetId, {
-    attributes: ['id', 'name', 'email', 'avatarURL', 'createdAt'],
+    attributes: ["id", "name", "email", "avatar", "createdAt"],
   });
 
   if (!user) {
-    throw { status: 404, message: 'User not found' };
+    throw { status: 404, message: "User not found" };
   }
 
   const [recipesCreated, followersCount] = await Promise.all([
@@ -119,14 +119,13 @@ export const getOtherUserProfile = async (targetId) => {
     db.Follow.count({ where: { followingId: targetId } }),
   ]);
 
-  const { id, name, email, avatarURL, createdAt } = user.toJSON();
+  const { id, name, email, avatar, createdAt } = user.toJSON();
 
   return {
     id,
     name,
-    avatarURL,
-    email,
     avatar,
+    email,
     createdAt,
     recipesCreated,
     followersCount,
@@ -135,20 +134,19 @@ export const getOtherUserProfile = async (targetId) => {
 
 export const getUserProfileWithMetrics = async (userId) => {
   const user = await db.User.findByPk(userId, {
-    attributes: ['id', 'name', 'email', 'avatarURL'],
+    attributes: ["id", "name", "email", "avatar"],
   });
 
   if (!user) {
-    throw { status: 404, message: 'User not found' };
+    throw { status: 404, message: "User not found" };
   }
 
-  const [recipesCreated, favoritesCount, followersCount, followingCount] =
-    await Promise.all([
-      db.Recipe.count({ where: { userId } }),
-      db.Favorite.count({ where: { userId } }),
-      db.Follow.count({ where: { followingId: userId } }),
-      db.Follow.count({ where: { followerId: userId } }),
-    ]);
+  const [recipesCreated, favoritesCount, followersCount, followingCount] = await Promise.all([
+    db.Recipe.count({ where: { userId } }),
+    db.Favorite.count({ where: { userId } }),
+    db.Follow.count({ where: { followingId: userId } }),
+    db.Follow.count({ where: { followerId: userId } }),
+  ]);
 
   return {
     ...user.toJSON(),

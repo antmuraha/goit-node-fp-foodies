@@ -20,7 +20,7 @@ export const register = async ({ name, email, password }) => {
     id: user.id,
     name: user.name,
     email: user.email,
-    avatarURL: user.avatarURL,
+    avatar: user.avatar,
   };
 };
 
@@ -48,7 +48,7 @@ export const login = async ({ email, password }) => {
       id: user.id,
       name: user.name,
       email: user.email,
-      avatarURL: user.avatarURL,
+      avatar: user.avatar,
     },
   };
 };

@@ -1,6 +1,5 @@
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { Jimp } from "jimp";
 import { promises as fs } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -11,12 +10,10 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const AVATARS_DIR = path.join(__dirname, "../public/avatars");
 
-let TEST_PNG_BUFFER;
-
-beforeAll(async () => {
-  const testImage = new Jimp({ width: 4, height: 4, color: 0xffffffff });
-  TEST_PNG_BUFFER = await testImage.getBuffer("image/png");
-});
+const TEST_PNG_BUFFER = Buffer.from(
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR4nGNgYAAAAAMAASsJTYQAAAAASUVORK5CYII=",
+  "base64",
+);
 
 const createAuthToken = async (user) => {
   const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
@@ -208,6 +205,78 @@ describe("PATCH /api/users/avatar", () => {
     await db.User.destroy({
       where: {
         id: [user?.id].filter(Boolean),
+      },
+      force: true,
+    });
+  });
+
+  it("uploads avatar via multipart/form-data and returns 200", async () => {
+    const res = await request(app)
+      .patch("/api/users/avatar")
+      .set("Authorization", authHeader)
+      .attach("avatar", TEST_PNG_BUFFER, "avatar.png");
+
+    expect(res.status).toBe(200);
+    expect(res.body.user).toHaveProperty("avatar");
+    expect(res.body.user.avatar).toBe(`/avatars/${user.id}.png`);
+
+    const avatarFileExists = await fs
+      .access(path.join(AVATARS_DIR, `${user.id}.png`))
+      .then(() => true)
+      .catch(() => false);
+
+    expect(avatarFileExists).toBe(true);
+  });
+
+  it("prioritizes file upload when both file and avatar are provided", async () => {
+    const res = await request(app)
+      .patch("/api/users/avatar")
+      .set("Authorization", authHeader)
+      .field("avatar", "https://example.com/should-not-be-used.png")
+      .attach("avatar", TEST_PNG_BUFFER, "avatar.png");
+
+    expect(res.status).toBe(200);
+    expect(res.body.user).toHaveProperty("avatar", `/avatars/${user.id}.png`);
+  });
+
+  it("updates avatar via JSON and returns 200", async () => {
+    const avatar = "https://example.com/avatar.png";
+
+    const res = await request(app).patch("/api/users/avatar").set("Authorization", authHeader).send({ avatar });
+
+    expect(res.status).toBe(200);
+    expect(res.body.user).toHaveProperty("avatar", avatar);
+  });
+
+  it("returns 401 without authentication", async () => {
+    const res = await request(app).patch("/api/users/avatar").send({
+      avatar: "https://example.com/avatar.png",
+    });
+
+    expect(res.status).toBe(401);
+    expect(res.body).toEqual({ message: "Not authorized" });
+  });
+
+  it("accepts authentication via token cookie", async () => {
+    const avatar = "https://example.com/avatar-cookie.png";
+
+    const res = await request(app).patch("/api/users/avatar").set("Cookie", authCookie).send({ avatar });
+
+    expect(res.status).toBe(200);
+    expect(res.body.user).toHaveProperty("avatar", avatar);
+  });
+
+  it("returns 400 for invalid avatar", async () => {
+    const res = await request(app)
+      .patch("/api/users/avatar")
+      .set("Authorization", authHeader)
+      .send({ avatar: "not-a-url" });
+
+    expect(res.status).toBe(400);
+    expect(res.body).toEqual({ message: "Avatar must be a valid URL" });
+  });
+});
+
 describe("GET /api/users/:id/follow/status", () => {
   let follower;
   let following;
@@ -227,7 +296,8 @@ describe("GET /api/users/:id/follow/status", () => {
       password,
       verify: true,
     });
-    authHeader = await createAuthHeader(follower);
+    const token = await createAuthToken(follower);
+    authHeader = createAuthHeader(token);
   });
 
   afterEach(async () => {
@@ -240,48 +310,6 @@ describe("GET /api/users/:id/follow/status", () => {
     });
   });
 
-  it("uploads avatar via multipart/form-data and returns 200", async () => {
-    const res = await request(app)
-      .patch("/api/users/avatar")
-      .set("Authorization", authHeader)
-      .attach("avatar", TEST_PNG_BUFFER, "avatar.png");
-
-    expect(res.status).toBe(200);
-    expect(res.body.user).toHaveProperty("avatarURL");
-    expect(res.body.user.avatarURL).toBe(`/avatars/${user.id}.png`);
-
-    const avatarFileExists = await fs
-      .access(path.join(AVATARS_DIR, `${user.id}.png`))
-      .then(() => true)
-      .catch(() => false);
-
-    expect(avatarFileExists).toBe(true);
-  });
-
-  it("prioritizes file upload when both file and avatarURL are provided", async () => {
-    const res = await request(app)
-      .patch("/api/users/avatar")
-      .set("Authorization", authHeader)
-      .field("avatarURL", "https://example.com/should-not-be-used.png")
-      .attach("avatar", TEST_PNG_BUFFER, "avatar.png");
-
-    expect(res.status).toBe(200);
-    expect(res.body.user).toHaveProperty("avatarURL", `/avatars/${user.id}.png`);
-  });
-
-  it("updates avatarURL via JSON and returns 200", async () => {
-    const avatarURL = "https://example.com/avatar.png";
-
-    const res = await request(app).patch("/api/users/avatar").set("Authorization", authHeader).send({ avatarURL });
-
-    expect(res.status).toBe(200);
-    expect(res.body.user).toHaveProperty("avatarURL", avatarURL);
-  });
-
-  it("returns 401 without authentication", async () => {
-    const res = await request(app).patch("/api/users/avatar").send({
-      avatarURL: "https://example.com/avatar.png",
-    });
   it("returns isFollowing=false when follow relation does not exist", async () => {
     const res = await request(app).get(`/api/users/${following.id}/follow/status`).set("Authorization", authHeader);
 
@@ -290,7 +318,10 @@ describe("GET /api/users/:id/follow/status", () => {
   });
 
   it("returns isFollowing=true when follow relation exists", async () => {
-    await db.Follow.create({ followerId: follower.id, followingId: following.id });
+    await db.Follow.create({
+      followerId: follower.id,
+      followingId: following.id,
+    });
 
     const res = await request(app).get(`/api/users/${following.id}/follow/status`).set("Authorization", authHeader);
 
@@ -310,25 +341,6 @@ describe("GET /api/users/:id/follow/status", () => {
 
     expect(res.status).toBe(401);
     expect(res.body).toEqual({ message: "Not authorized" });
-  });
-
-  it("accepts authentication via token cookie", async () => {
-    const avatarURL = "https://example.com/avatar-cookie.png";
-
-    const res = await request(app).patch("/api/users/avatar").set("Cookie", authCookie).send({ avatarURL });
-
-    expect(res.status).toBe(200);
-    expect(res.body.user).toHaveProperty("avatarURL", avatarURL);
-  });
-
-  it("returns 400 for invalid avatarURL", async () => {
-    const res = await request(app)
-      .patch("/api/users/avatar")
-      .set("Authorization", authHeader)
-      .send({ avatarURL: "not-a-url" });
-
-    expect(res.status).toBe(400);
-    expect(res.body).toEqual({ message: "Avatar must be a valid URL" });
   });
 });
 

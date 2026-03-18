@@ -1,16 +1,7 @@
-import { Op } from 'sequelize';
-import db from '../models/index.js';
+import { Op } from "sequelize";
+import db from "../models/index.js";
 
-const {
-  Recipe,
-  Category,
-  User,
-  Ingredient,
-  Area,
-  RecipeIngredient,
-  RecipeArea,
-  Favorite,
-} = db;
+const { Recipe, Category, User, Ingredient, Area, RecipeIngredient, RecipeArea, Favorite } = db;
 
 const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
@@ -19,7 +10,7 @@ const { fn, col, literal } = db.Sequelize;
 const toRecipeModelPayload = (data = {}) => {
   const payload = { ...data };
 
-  if (typeof payload.name === 'string') {
+  if (typeof payload.name === "string") {
     payload.title = payload.name;
   }
 
@@ -30,9 +21,8 @@ const toRecipeModelPayload = (data = {}) => {
 };
 
 const toIngredientMeasure = (quantity, unit) => {
-  const safeQuantity =
-    quantity === null || quantity === undefined ? '' : String(quantity).trim();
-  const safeUnit = typeof unit === 'string' ? unit.trim() : '';
+  const safeQuantity = quantity === null || quantity === undefined ? "" : String(quantity).trim();
+  const safeUnit = typeof unit === "string" ? unit.trim() : "";
 
   if (!safeUnit) {
     return safeQuantity;
@@ -42,22 +32,22 @@ const toIngredientMeasure = (quantity, unit) => {
     return safeUnit;
   }
 
-  const separator = safeUnit.length > 2 ? ' ' : '';
+  const separator = safeUnit.length > 2 ? " " : "";
   return `${safeQuantity}${separator}${safeUnit}`;
 };
 
 const parseIngredientMeasure = (ingredient) => {
   const measureSource =
-    typeof ingredient.measure === 'string'
+    typeof ingredient.measure === "string"
       ? ingredient.measure
-      : typeof ingredient.quantity === 'string'
+      : typeof ingredient.quantity === "string"
         ? ingredient.quantity
-        : String(ingredient.quantity ?? '');
+        : String(ingredient.quantity ?? "");
 
   const measure = measureSource.trim();
 
   if (!measure) {
-    return { quantity: '', unit: null };
+    return { quantity: "", unit: null };
   }
 
   const match = measure.match(/^(\d+(?:[.,]\d+)?)\s*(.*)$/);
@@ -67,7 +57,7 @@ const parseIngredientMeasure = (ingredient) => {
   }
 
   const [, quantityRaw, unitRaw] = match;
-  const quantity = quantityRaw.replace(',', '.');
+  const quantity = quantityRaw.replace(",", ".");
   const unit = unitRaw?.trim() ? unitRaw.trim() : null;
 
   return { quantity, unit };
@@ -82,10 +72,7 @@ const normalizeRecipeDetail = (recipeInstance) => {
   const ingredients = Array.isArray(recipe.Ingredients)
     ? recipe.Ingredients.map((ingredient) => ({
         id: ingredient.id,
-        measure: toIngredientMeasure(
-          ingredient.RecipeIngredient?.quantity,
-          ingredient.RecipeIngredient?.unit,
-        ),
+        measure: toIngredientMeasure(ingredient.RecipeIngredient?.quantity, ingredient.RecipeIngredient?.unit),
         name: ingredient.name,
         image: ingredient.image,
       }))
@@ -99,18 +86,8 @@ const normalizeRecipeDetail = (recipeInstance) => {
   };
 };
 
-export const searchRecipes = async ({
-  categoryId,
-  ingredientId,
-  areaId,
-  search,
-  limit,
-  offset,
-}) => {
-  const safeLimit = Math.min(
-    Math.max(Number(limit) || DEFAULT_LIMIT, 1),
-    MAX_LIMIT,
-  );
+export const searchRecipes = async ({ categoryId, ingredientId, areaId, search, limit, offset }) => {
+  const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
   const safeOffset = Math.max(Number(offset) || 0, 0);
 
   const where = {};
@@ -118,8 +95,8 @@ export const searchRecipes = async ({
   if (search) where.title = { [Op.iLike]: `%${search}%` };
 
   const include = [
-    { model: Category, as: 'category', attributes: ['id', 'name', 'image'] },
-    { model: User, as: 'author', attributes: ['id', 'name', 'avatar'] },
+    { model: Category, as: "category", attributes: ["id", "name", "image"] },
+    { model: User, as: "author", attributes: ["id", "name", "avatar"] },
   ];
 
   if (ingredientId) {
@@ -135,7 +112,7 @@ export const searchRecipes = async ({
   if (areaId) {
     include.push({
       model: Area,
-      as: 'areas',
+      as: "areas",
       through: { attributes: [] },
       where: { id: Number(areaId) },
       required: true,
@@ -149,17 +126,14 @@ export const searchRecipes = async ({
     limit: safeLimit,
     offset: safeOffset,
     distinct: true,
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
   });
 
   return { total: count, limit: safeLimit, offset: safeOffset, data: rows };
 };
 
 export const getPopularRecipesService = async ({ limit, offset }) => {
-  const safeLimit = Math.min(
-    Math.max(Number(limit) || DEFAULT_LIMIT, 1),
-    MAX_LIMIT,
-  );
+  const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
   const safeOffset = Math.max(Number(offset) || 0, 0);
   /*
 TODO: Temporary commented for testing without favorites.
@@ -188,8 +162,8 @@ TODO: Temporary commented for testing without favorites.
 
   // TODO: START TEMPORARY BLOCK
   const include = [
-    { model: Category, as: 'category', attributes: ['id', 'name', 'image'] },
-    { model: User, as: 'author', attributes: ['id', 'name', 'avatar'] },
+    { model: Category, as: "category", attributes: ["id", "name", "image"] },
+    { model: User, as: "author", attributes: ["id", "name", "avatar"] },
   ];
 
   const { count, rows } = await Recipe.findAndCountAll({
@@ -197,7 +171,7 @@ TODO: Temporary commented for testing without favorites.
     limit: safeLimit,
     offset: safeOffset,
     distinct: true,
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
   });
 
   return rows;
@@ -211,18 +185,18 @@ export const getRecipeById = async (id, options = {}) => {
 
   const recipe = await Recipe.findByPk(id, {
     include: [
-      { model: Category, as: 'category', attributes: ['id', 'name', 'image'] },
-      { model: User, as: 'author', attributes: ['id', 'name', 'avatar'] },
+      { model: Category, as: "category", attributes: ["id", "name", "image"] },
+      { model: User, as: "author", attributes: ["id", "name", "avatar"] },
       {
         model: Ingredient,
-        through: { attributes: ['quantity', 'unit'] },
-        attributes: ['id', 'name', 'image'],
+        through: { attributes: ["quantity", "unit"] },
+        attributes: ["id", "name", "image"],
       },
       {
         model: Area,
-        as: 'areas',
+        as: "areas",
         through: { attributes: [] },
-        attributes: ['id', 'name'],
+        attributes: ["id", "name"],
       },
     ],
     transaction,
@@ -277,13 +251,13 @@ export const updateRecipe = async (id, userId, data) => {
     const recipe = await Recipe.findByPk(id, { transaction: t });
 
     if (!recipe) {
-      const err = new Error('Recipe not found');
+      const err = new Error("Recipe not found");
       err.status = 404;
       throw err;
     }
 
     if (recipe.userId !== userId) {
-      const err = new Error('Not authorized');
+      const err = new Error("Not authorized");
       err.status = 403;
       throw err;
     }
@@ -329,22 +303,19 @@ export const updateRecipe = async (id, userId, data) => {
 };
 
 export const getOwnRecipes = async (userId, { limit, offset }) => {
-  const safeLimit = Math.min(
-    Math.max(Number(limit) || DEFAULT_LIMIT, 1),
-    MAX_LIMIT,
-  );
+  const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
   const safeOffset = Math.max(Number(offset) || 0, 0);
 
   const { count, rows } = await Recipe.findAndCountAll({
     where: { userId },
     include: [
-      { model: Category, as: 'category', attributes: ['id', 'name', 'image'] },
-      { model: User, as: 'author', attributes: ['id', 'name', 'avatar'] },
+      { model: Category, as: "category", attributes: ["id", "name", "image"] },
+      { model: User, as: "author", attributes: ["id", "name", "avatar"] },
     ],
     limit: safeLimit,
     offset: safeOffset,
     distinct: true,
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
   });
   return { total: count, limit: safeLimit, offset: safeOffset, data: rows };
 };
@@ -353,13 +324,13 @@ export const deleteRecipe = async (id, userId) => {
   const recipe = await Recipe.findByPk(id);
 
   if (!recipe) {
-    const err = new Error('Recipe not found');
+    const err = new Error("Recipe not found");
     err.status = 404;
     throw err;
   }
 
   if (recipe.userId !== userId) {
-    const err = new Error('Not authorized');
+    const err = new Error("Not authorized");
     err.status = 403;
     throw err;
   }
@@ -371,7 +342,7 @@ export const addFavoriteService = async (userId, recipeId) => {
   const recipe = await Recipe.findByPk(recipeId);
 
   if (!recipe) {
-    const err = new Error('Recipe not found');
+    const err = new Error("Recipe not found");
     err.status = 404;
     throw err;
   }
@@ -381,7 +352,7 @@ export const addFavoriteService = async (userId, recipeId) => {
   });
 
   if (existing) {
-    const err = new Error('Recipe already in favorites');
+    const err = new Error("Recipe already in favorites");
     err.status = 409;
     throw err;
   }
@@ -398,7 +369,7 @@ export const removeFavoriteService = async (userId, recipeId) => {
   });
 
   if (!favorite) {
-    const err = new Error('Favorite not found');
+    const err = new Error("Favorite not found");
     err.status = 404;
     throw err;
   }
@@ -412,10 +383,7 @@ export const getFavoriteStatusService = async (userId, recipeId) => {
 };
 
 export const listFavoritesService = async (userId, { limit, offset }) => {
-  const safeLimit = Math.min(
-    Math.max(Number(limit) || DEFAULT_LIMIT, 1),
-    MAX_LIMIT,
-  );
+  const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
   const safeOffset = Math.max(Number(offset) || 0, 0);
 
   const { count, rows } = await Favorite.findAndCountAll({
@@ -426,16 +394,16 @@ export const listFavoritesService = async (userId, { limit, offset }) => {
         include: [
           {
             model: Category,
-            as: 'category',
-            attributes: ['id', 'name', 'image'],
+            as: "category",
+            attributes: ["id", "name", "image"],
           },
-          { model: User, as: 'author', attributes: ['id', 'name', 'avatar'] },
+          { model: User, as: "author", attributes: ["id", "name", "avatar"] },
         ],
       },
     ],
     limit: safeLimit,
     offset: safeOffset,
-    order: [['createdAt', 'DESC']],
+    order: [["createdAt", "DESC"]],
   });
 
   return {
