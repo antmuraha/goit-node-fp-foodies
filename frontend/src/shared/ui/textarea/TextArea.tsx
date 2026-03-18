@@ -44,12 +44,7 @@ export const TextArea = ({
 
   const fieldClasses = [styles.field, hasError ? styles.error : ""].filter(Boolean).join(" ");
 
-  const textareaClasses = [
-    styles.textarea,
-    disabled ? styles.disabled : "",
-    readOnly ? styles.readOnly : "",
-    className,
-  ]
+  const textareaClasses = [styles.textarea, disabled ? styles.disabled : "", readOnly ? styles.readOnly : "", className]
     .filter(Boolean)
     .join(" ");
 
@@ -77,9 +72,7 @@ export const TextArea = ({
         {maxLength !== undefined && (
           <div className={styles.counterRow}>
             <span className={styles.counter} aria-live="polite" aria-atomic="true">
-              <span className={charCount > 0 ? styles.counterActive : styles.counterMuted}>
-                {charCount}
-              </span>
+              <span className={charCount > 0 ? styles.counterActive : styles.counterMuted}>{charCount}</span>
               <span className={styles.counterMuted}>/{maxLength}</span>
             </span>
           </div>
