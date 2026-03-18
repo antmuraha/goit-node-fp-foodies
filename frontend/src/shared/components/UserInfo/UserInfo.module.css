@@ -143,56 +143,56 @@
 }
 
 @media (min-width: 768px) {
-.wrapper {
-  max-width: 394px;
-  margin: 0 auto;
-}
+  .wrapper {
+    max-width: 394px;
+    margin: 0 auto;
+  }
 
-.card {
-  padding: 39px 0px;
-  border: 1px solid var(--fd-color-main);
-}
+  .card {
+    padding: 39px 0px;
+    border: 1px solid var(--fd-color-main);
+  }
 
-.avatarContainer {
-  width: 120px;
-  height: 120px;
-}
+  .avatarContainer {
+    width: 120px;
+    height: 120px;
+  }
 
-.avatarFallback {
-  font-size: 96px;
-}
+  .avatarFallback {
+    font-size: 96px;
+  }
 
-.uploadBtn {
-  width: 38px;
-  height: 38px;
-}
+  .uploadBtn {
+    width: 38px;
+    height: 38px;
+  }
 
-.iconWrapper {
-  width: 18px;
-  height: 18px;
-}
+  .iconWrapper {
+    width: 18px;
+    height: 18px;
+  }
 
-.userName {
-  font-size: var(--fd-font-size-20);
-  margin: 20px 0;
-}
+  .userName {
+    font-size: var(--fd-font-size-20);
+    margin: 20px 0;
+  }
 
-.label {
-  font-size: var(--fd-font-size-14);
-  line-height: var(--fd-line-height-20);
-}
+  .label {
+    font-size: var(--fd-font-size-14);
+    line-height: var(--fd-line-height-20);
+  }
 
-.value {
-  font-size: var(--fd-font-size-16);
-  line-height: var(--fd-line-height-24);
-}
-.actionButton {
-  padding: 16px;
-}
+  .value {
+    font-size: var(--fd-font-size-16);
+    line-height: var(--fd-line-height-24);
+  }
+  .actionButton {
+    padding: 16px;
+  }
 }
 
 @media (min-width: 1280px) {
-.card {
-  border: 1px solid var(--fd-color-muted);
-}
+  .card {
+    border: 1px solid var(--fd-color-muted);
+  }
 }

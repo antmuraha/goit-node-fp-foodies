@@ -45,8 +45,9 @@ const UserInfo = (props: UserInfoProps) => {
                 alert("add this functional");
               }}
             >
-              <div className={styles.iconWrapper}><Icon name="close" color="action-secondary-bg" size={24} /></div>
-              
+              <div className={styles.iconWrapper}>
+                <Icon name="close" color="action-secondary-bg" size={24} />
+              </div>
             </button>
           )}
         </div>
