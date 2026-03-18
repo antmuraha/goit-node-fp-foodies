@@ -87,7 +87,7 @@ export const SignUpForm = ({ onSuccess, onSignIn }: SignUpFormProps): ReactEleme
               aria-label={showPassword ? "Hide password" : "Show password"}
               tabIndex={-1}
             >
-              <Icon name={showPassword ? "eye-off" : "eye"} color="text-muted" size={20} />
+              <Icon name={showPassword ? "eye-off" : "eye"} color="text-primary" size={20} />
             </button>
           </div>
           {passwordError && <FormErrorMessage id="signup-password-error">{passwordError}</FormErrorMessage>}

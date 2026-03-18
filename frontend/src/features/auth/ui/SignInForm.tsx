@@ -70,7 +70,7 @@ export const SignInForm = ({ onSuccess, onCreateAccount }: SignInFormProps): Rea
               aria-label={showPassword ? "Hide password" : "Show password"}
               tabIndex={-1}
             >
-              <Icon name={showPassword ? "eye-off" : "eye"} color="text-muted" size={20} />
+              <Icon name={showPassword ? "eye-off" : "eye"} color="text-primary" size={20} />
             </button>
           </div>
           {passwordError && <FormErrorMessage id="signin-password-error">{passwordError}</FormErrorMessage>}

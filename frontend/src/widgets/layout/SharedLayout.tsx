@@ -1,7 +1,9 @@
 import { useState, useEffect, type ReactElement } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../shared/constants/routes";
-import { Modal } from "../../shared/ui";
+import { AUTH_NOTIFICATIONS } from "../../shared/constants/notifications";
+import { notificationService } from "../../shared/services/notifications";
+import { Modal, Toaster } from "../../shared/ui";
 import { SignInForm, SignUpForm } from "../../features/auth";
 import { Footer } from "../footer/Footer";
 
@@ -25,9 +27,15 @@ export const SharedLayout = (): ReactElement => {
     }
   }, [location.state?.openSignIn, location.state?.openSignUp]);
 
-  const handleAuthSuccess = (): void => {
+  const handleSignInSuccess = (): void => {
     setIsSignInOpen(false);
+    notificationService.success(AUTH_NOTIFICATIONS.SIGN_IN_SUCCESS);
+    navigate(returnTo, { replace: true });
+  };
+
+  const handleSignUpSuccess = (): void => {
     setIsSignUpOpen(false);
+    notificationService.success(AUTH_NOTIFICATIONS.SIGN_UP_SUCCESS);
     navigate(returnTo, { replace: true });
   };
 
@@ -46,11 +54,12 @@ export const SharedLayout = (): ReactElement => {
       <Outlet />
       <Footer />
       <Modal isOpen={isSignInOpen} title="Sign in" onClose={() => setIsSignInOpen(false)}>
-        <SignInForm onSuccess={handleAuthSuccess} onCreateAccount={switchToSignUp} />
+        <SignInForm onSuccess={handleSignInSuccess} onCreateAccount={switchToSignUp} />
       </Modal>
       <Modal isOpen={isSignUpOpen} title="Sign up" onClose={() => setIsSignUpOpen(false)}>
-        <SignUpForm onSuccess={handleAuthSuccess} onSignIn={switchToSignIn} />
+        <SignUpForm onSuccess={handleSignUpSuccess} onSignIn={switchToSignIn} />
       </Modal>
+      <Toaster />
     </div>
   );
 };
