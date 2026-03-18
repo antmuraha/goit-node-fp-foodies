@@ -26,7 +26,6 @@ interface CategoryRecipesGridProps {
 }
 
 export function CategoryRecipesGrid({ categoryId, pagination }: CategoryRecipesGridProps): ReactElement {
-  
   /*
     TODO: critical
     DO NOT USE direct access and fetching from the page in components
