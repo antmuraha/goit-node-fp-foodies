@@ -1,11 +1,6 @@
 import HttpError from "../helpers/HttpError.js";
 import db from "../models/index.js";
 
-const maskEmail = (email) => {
-  const [local, domain] = email.split("@");
-  return `${local[0]}***@${domain}`;
-};
-
 export const getFollowersList = async (userId, { page, limit }) => {
   const offset = (page - 1) * limit;
   const { count, rows } = await db.Follow.findAndCountAll({
@@ -117,7 +112,7 @@ export const getOtherUserProfile = async (targetId) => {
   return {
     id,
     name,
-    email: maskEmail(email),
+    email,
     avatar,
     createdAt,
     recipesCreated,
