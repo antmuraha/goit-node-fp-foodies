@@ -4,7 +4,7 @@ import { APP_ROUTES } from "../../shared/constants/routes";
 import { AUTH_NOTIFICATIONS } from "../../shared/constants/notifications";
 import { notificationService } from "../../shared/services/notifications";
 import { Modal, Toaster } from "../../shared/ui";
-import { SignInForm, SignUpForm } from "../../features/auth";
+import { SignInForm, SignUpForm, LogOutModal } from "../../features/auth";
 import { Footer } from "../footer/Footer";
 
 export const SharedLayout = (): ReactElement => {
@@ -13,6 +13,7 @@ export const SharedLayout = (): ReactElement => {
 
   const [isSignInOpen, setIsSignInOpen] = useState(false);
   const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [isLogOutOpen, setIsLogOutOpen] = useState(false);
   const [returnTo, setReturnTo] = useState<string>(APP_ROUTES.HOME);
 
   useEffect(() => {
@@ -24,8 +25,11 @@ export const SharedLayout = (): ReactElement => {
       setReturnTo(location.state.returnTo ?? location.pathname);
       setIsSignUpOpen(true);
       navigate(location.pathname, { replace: true, state: {} });
+    } else if (location.state?.openLogOut) {
+      setIsLogOutOpen(true);
+      navigate(location.pathname, { replace: true, state: {} });
     }
-  }, [location.state?.openSignIn, location.state?.openSignUp]);
+  }, [location.state?.openSignIn, location.state?.openSignUp, location.state?.openLogOut]);
 
   const handleSignInSuccess = (): void => {
     setIsSignInOpen(false);
@@ -59,6 +63,7 @@ export const SharedLayout = (): ReactElement => {
       <Modal isOpen={isSignUpOpen} title="Sign up" onClose={() => setIsSignUpOpen(false)}>
         <SignUpForm onSuccess={handleSignUpSuccess} onSignIn={switchToSignIn} />
       </Modal>
+      <LogOutModal isOpen={isLogOutOpen} onClose={() => setIsLogOutOpen(false)} />
       <Toaster />
     </div>
   );

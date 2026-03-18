@@ -79,6 +79,21 @@ export const register = createAsyncThunk<
   }
 });
 
+export const logout = createAsyncThunk<void, void, { state: { auth: AuthState }; rejectValue: string }>(
+  "auth/logout",
+  async (_, thunkApi) => {
+    const token = thunkApi.getState().auth.token;
+    if (token) {
+      try {
+        await authApi.logout(token);
+      } catch {
+        // proceed with local cleanup even if server logout fails
+      }
+    }
+    thunkApi.dispatch(clearAuthSession());
+  },
+);
+
 export const fetchProfile = createAsyncThunk<MeProfile, void, { state: { auth: AuthState }; rejectValue: string }>(
   "auth/fetchProfile",
   async (_, thunkApi) => {

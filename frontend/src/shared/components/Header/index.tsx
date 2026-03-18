@@ -5,7 +5,7 @@ import styles from "./styles.module.css";
 
 const Header = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, signOut } = useAuth();
+  const { isAuthenticated } = useAuth();
 
   return (
     <header className={styles.header}>
@@ -14,7 +14,7 @@ const Header = () => {
       <NavLink to={APP_ROUTES.RECIPE_ADD}>Add Recipe</NavLink>
       <section>
         {isAuthenticated ? (
-          <button onClick={signOut}>LOG OUT</button>
+          <button onClick={() => navigate(".", { state: { openLogOut: true } })}>LOG OUT</button>
         ) : (
           <>
             <button onClick={() => navigate(".", { state: { openSignIn: true } })}>SIGN IN</button>
