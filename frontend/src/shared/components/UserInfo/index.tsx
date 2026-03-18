@@ -4,6 +4,7 @@ import { useUserFollowing } from "../../helpers/useUserFollowing";
 import { Button } from "../../ui";
 import { useAuth } from "../../hooks/useAuth";
 import { Icon } from "../../../shared/components/Icon";
+import defaultAvatar from "../../../assets/images/defaultAvatar.svg";
 import styles from "./UserInfo.module.css";
 
 type UserInfoProps = {
@@ -30,11 +31,7 @@ const UserInfo = (props: UserInfoProps) => {
     <div className={styles.wrapper}>
       <div className={styles.card}>
         <div className={styles.avatarContainer}>
-          {user.avatar ? (
-            <img src={user.avatar} alt={user.name} className={styles.avatar} />
-          ) : (
-            <div className={styles.avatarFallback}>{user.name?.[0]?.toUpperCase() || "U"}</div>
-          )}
+          <img src={user.avatar || defaultAvatar} alt={user.name} className={styles.avatar} />
 
           {isOwnProfile && (
             <button

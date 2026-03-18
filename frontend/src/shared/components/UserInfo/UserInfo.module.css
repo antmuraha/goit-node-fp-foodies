@@ -26,6 +26,7 @@
   height: 100%;
   border-radius: 100px;
   object-fit: cover;
+  background-color: var(--fd-color-muted);
 }
 
 .avatarFallback {
