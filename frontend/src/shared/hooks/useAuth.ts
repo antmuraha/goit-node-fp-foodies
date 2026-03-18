@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "./reduxHooks";
 import {
   login,
   register,
-  clearAuthSession,
+  logout,
   type LoginCredentials,
   type RegisterCredentials,
 } from "../../store/slices/authSlice";
@@ -28,7 +28,7 @@ type UseAuthReturn = {
   registerError: string | null;
   signIn: (credentials: LoginCredentials) => Promise<boolean>;
   signUp: (credentials: RegisterCredentials) => Promise<boolean>;
-  signOut: () => void;
+  signOut: () => Promise<void>;
 };
 
 export const useAuth = (): UseAuthReturn => {
@@ -58,8 +58,8 @@ export const useAuth = (): UseAuthReturn => {
     [dispatch],
   );
 
-  const signOut = useCallback(() => {
-    dispatch(clearAuthSession());
+  const signOut = useCallback(async (): Promise<void> => {
+    await dispatch(logout());
   }, [dispatch]);
 
   return {
