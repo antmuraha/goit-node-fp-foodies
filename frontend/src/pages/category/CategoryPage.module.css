@@ -1,0 +1,49 @@
+/* Mobile: filters on top, grid below */
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  padding: 32px 16px;
+}
+
+.aside {
+  width: 100%;
+}
+
+.section {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Tablet: filters still on top (horizontal row handled by panel itself) */
+@media (min-width: 768px) {
+  .main {
+    padding: 40px 32px;
+  }
+}
+
+/* Desktop: sidebar layout — filters left, grid right */
+@media (min-width: 1440px) {
+  .main {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+    padding: 40px 80px;
+    /* Figma: content zone 1280px (1440 - 80*2), centered on wider screens */
+    max-width: 1440px;
+    margin: 0 auto;
+    box-sizing: border-box;
+  }
+
+  .aside {
+    width: 330px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 32px;
+  }
+
+  /* Grid section: 1280 - 330(aside) - 40(gap) = 910px — matches Figma exactly */
+  .section {
+    max-width: 910px;
+  }
+}
