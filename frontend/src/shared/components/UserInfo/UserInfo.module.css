@@ -1,0 +1,141 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; 
+  width: 100%;
+  max-width: 343px; 
+  margin: 0 auto;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 29px 0px;
+  border: 1px solid var(--fd-color-muted); 
+  border-radius: var(--fd-radius-pill); 
+}
+
+.avatarContainer {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
+  object-fit: cover; 
+}
+
+.avatarFallback {
+  width: 100%;
+  height: 100%;
+  border-radius: 100px;
+  background-color: var(--fd-color-surface-soft);
+  color: var(--fd-color-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 64px;
+  font-weight: 400;
+}
+
+
+.uploadBtn {
+  position: absolute;
+  bottom: -10px; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 30px;
+  border: none;
+  background-color: var(--fd-color-main);
+  color: var(--fd-color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 0;
+  transition: background-color 0.2s ease;
+}
+
+.uploadBtn:hover {
+  background-color: var(--fd-color-main-alt);
+}
+
+.userName {
+  font-size: var(--fd-font-size-18);
+  font-weight: var(--fd-font-weight-extrabold);
+  line-height: var(--fd-line-height-24);
+  color: var(--fd-text-primary);
+  text-transform: uppercase;
+  margin: 16px 0;
+  text-align: center;
+}
+
+/* Список параметрів (Email, Followers...) */
+.statsList {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto; 
+  width: fit-content; 
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.statsList li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -2%;
+}
+
+.label {
+  color: var(--fd-color-muted); 
+  font-weight: var(--fd-font-weight-medium);
+  font-size: var(--fd-font-size-12);
+  line-height: var(--fd-line-height-18);
+}
+
+.value {
+  color: var(--fd-color-main-alt);
+  font-weight: 700;
+  font-size: var(--fd-font-size-14);
+  line-height: var(--fd-line-height-20);
+}
+
+.actions {
+  width: 100%;
+}
+
+.actionButton {
+  width: 100%;
+  padding: 14px;
+  border-radius: 30px; 
+  background-color: #1a1a1a;
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionButton:hover:not(:disabled) {
+  background-color: #000000;
+}
+
+.actionButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
