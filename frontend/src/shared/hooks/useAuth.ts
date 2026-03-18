@@ -1,12 +1,6 @@
 import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
-import {
-  login,
-  register,
-  logout,
-  type LoginCredentials,
-  type RegisterCredentials,
-} from "../../store/slices/authSlice";
+import { login, register, logout, type LoginCredentials, type RegisterCredentials } from "../../store/slices/authSlice";
 import {
   selectIsAuthenticated,
   selectCurrentUser,

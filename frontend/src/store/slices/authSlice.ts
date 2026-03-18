@@ -205,5 +205,6 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAuthSession, rehydrateSession, clearAuthSession, adjustFollowingCount, adjustFavoritesCount } = authSlice.actions;
+export const { setAuthSession, rehydrateSession, clearAuthSession, adjustFollowingCount, adjustFavoritesCount } =
+  authSlice.actions;
 export const authReducer = authSlice.reducer;
