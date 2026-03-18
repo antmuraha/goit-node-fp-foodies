@@ -1,6 +1,12 @@
 import { useCallback } from "react";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
-import { login, register, clearAuthSession, type LoginCredentials, type RegisterCredentials } from "../../store/slices/authSlice";
+import {
+  login,
+  register,
+  clearAuthSession,
+  type LoginCredentials,
+  type RegisterCredentials,
+} from "../../store/slices/authSlice";
 import {
   selectIsAuthenticated,
   selectCurrentUser,
@@ -56,5 +62,16 @@ export const useAuth = (): UseAuthReturn => {
     dispatch(clearAuthSession());
   }, [dispatch]);
 
-  return { isAuthenticated, currentUser, isProfileLoading, isSigningIn, loginError, isRegistering, registerError, signIn, signUp, signOut };
+  return {
+    isAuthenticated,
+    currentUser,
+    isProfileLoading,
+    isSigningIn,
+    loginError,
+    isRegistering,
+    registerError,
+    signIn,
+    signUp,
+    signOut,
+  };
 };
