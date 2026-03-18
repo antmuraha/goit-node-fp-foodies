@@ -1,15 +1,90 @@
 .form {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--fd-space-32);
+  width: 100%;
 }
 
-.field {
+.fields {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--fd-space-14);
 }
 
-.label {
-  font-size: 14px;
+.fieldGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-4);
+}
+
+.passwordWrapper {
+  position: relative;
+}
+
+/* Add right padding to make room for the eye toggle button */
+.passwordInput {
+  padding-right: 48px;
+}
+
+.togglePasswordBtn {
+  position: absolute;
+  top: calc(var(--fd-control-height-lg) / 2);
+  right: var(--fd-space-14);
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--fd-text-primary);
+  transition: opacity 0.15s ease;
+}
+
+.togglePasswordBtn:hover {
+  opacity: 0.6;
+}
+
+.btns {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-16);
+  align-items: center;
+}
+
+.switchText {
+  font-size: var(--fd-font-size-12);
+  line-height: var(--fd-line-height-18);
+  color: var(--fd-text-muted);
+  letter-spacing: var(--fd-letter-spacing-tight);
+  margin: 0;
+}
+
+.switchLink {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  color: var(--fd-text-primary);
+  text-decoration: none;
+}
+
+.switchLink:hover {
+  text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+  .btns {
+    gap: var(--fd-space-20);
+  }
+
+  .switchText {
+    font-size: var(--fd-font-size-14);
+  }
 }

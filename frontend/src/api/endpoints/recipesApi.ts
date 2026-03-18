@@ -2,10 +2,12 @@ import { apiClient } from "../client";
 import { API_ROUTES } from "../../shared/constants/apiRoutes";
 import { getAuthHeaders } from "./helpers";
 import type {
+  CreateRecipePayload,
   FavoriteRecipe,
   RecipeDetails,
   RecipeListResponse,
   RecipeSearchParams,
+  UpdateRecipePayload,
 } from "../../entities/recipe/types";
 
 type RecipeListQuery = Pick<RecipeSearchParams, "limit" | "offset">;
@@ -37,5 +39,15 @@ export const recipesApi = {
   getFavoriteStatus: (token: string, recipeId: number | string): Promise<{ recipeId: number; isFavorite: boolean }> =>
     apiClient.get<{ recipeId: number; isFavorite: boolean }>(API_ROUTES.RECIPES.FAVORITE_BY_ID(recipeId), {
       headers: getAuthHeaders(token),
+    }),
+  createRecipe: (token: string, payload: CreateRecipePayload): Promise<RecipeDetails> =>
+    apiClient.post<RecipeDetails, CreateRecipePayload>(API_ROUTES.RECIPES.ROOT, {
+      headers: getAuthHeaders(token),
+      body: payload,
+    }),
+  updateRecipe: (token: string, recipeId: number, payload: UpdateRecipePayload): Promise<RecipeDetails> =>
+    apiClient.put<RecipeDetails, UpdateRecipePayload>(API_ROUTES.RECIPES.BY_ID(recipeId), {
+      headers: getAuthHeaders(token),
+      body: payload,
     }),
 };

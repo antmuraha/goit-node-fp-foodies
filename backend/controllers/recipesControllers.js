@@ -2,6 +2,7 @@ import {
   searchRecipes,
   getRecipeById as findRecipeById,
   createRecipe as createRecipeService,
+  updateRecipe as updateRecipeService,
   deleteRecipe as deleteRecipeService,
   getOwnRecipes as getOwnRecipesService,
   getPopularRecipesService,
@@ -69,6 +70,21 @@ export const getOwnRecipes = async (req, res, next) => {
     const { limit, offset } = req.query;
     const recipesList = await getOwnRecipesService(userId, { limit, offset });
     res.status(200).json(recipesList);
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const updateRecipe = async (req, res, next) => {
+  try {
+    const id = Number(req.params.id);
+
+    if (!Number.isInteger(id) || id <= 0) {
+      return res.status(400).json({ message: "Invalid recipe id" });
+    }
+
+    const recipe = await updateRecipeService(id, req.user.id, req.body);
+    res.status(200).json(recipe);
   } catch (err) {
     next(err);
   }

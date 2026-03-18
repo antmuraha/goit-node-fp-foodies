@@ -4,11 +4,9 @@ export type IngredientSummary = {
   image: string | null;
 };
 
-export type RecipeIngredient = {
-  quantity: string;
-  unit: string | null;
-};
-
-export type RecipeIngredientDetails = IngredientSummary & {
-  RecipeIngredient: RecipeIngredient;
+export type RecipeIngredientItem = {
+  id: number;
+  measure: string;
+  name: string;
+  image: string | null;
 };

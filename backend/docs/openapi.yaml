@@ -272,30 +272,22 @@ components:
 
     RecipeIngredientLink:
       type: object
-      description: Ingredient with its quantity in this specific recipe
+      description: Ingredient with its display measure in this specific recipe
       properties:
         id:
           type: integer
           example: 10
+        measure:
+          type: string
+          description: Human-readable quantity and unit (e.g. `175g`)
+          example: 175g
         name:
           type: string
-          example: Tomato
+          example: Thyme
         image:
           type: string
           nullable: true
-          example: https://example.com/images/tomato.jpg
-        RecipeIngredient:
-          type: object
-          description: Join-table data (quantity and optional unit)
-          properties:
-            quantity:
-              type: string
-              nullable: true
-              example: 200g
-            unit:
-              type: string
-              nullable: true
-              example: grams
+          example: https://example.com/images/thyme.jpg
 
     RecipeDetail:
       allOf:
@@ -303,11 +295,11 @@ components:
         - type: object
           description: Full recipe details including ingredient list and cuisine areas
           properties:
-            Ingredients:
+            ingredients:
               type: array
               items:
                 $ref: '#/components/schemas/RecipeIngredientLink'
-            Areas:
+            areas:
               type: array
               items:
                 $ref: '#/components/schemas/Area'
@@ -321,6 +313,7 @@ components:
         - servings
         - categoryId
         - ingredients
+        - areas
       properties:
         name:
           type: string
@@ -360,23 +353,106 @@ components:
             type: object
             required:
               - ingredientId
-              - quantity
+              - measure
             properties:
               ingredientId:
                 type: integer
                 minimum: 1
                 example: 10
-              quantity:
+              measure:
                 type: string
                 minLength: 1
                 maxLength: 100
-                example: 200g
+                example: 175g
+              quantity:
+                type: string
+                nullable: true
+                deprecated: true
+                description: Legacy field retained for backward compatibility.
+              unit:
+                type: string
+                nullable: true
+                description: Optional unit hint for normalized parsing.
+                example: g
         areas:
           type: array
+          minItems: 1
+          maxItems: 1
           items:
             type: integer
             minimum: 1
           example: [3]
+
+    UpdateRecipeBody:
+      type: object
+      minProperties: 1
+      properties:
+        name:
+          type: string
+          minLength: 3
+          maxLength: 200
+          example: Updated Spaghetti Carbonara
+        description:
+          type: string
+          maxLength: 500
+          example: Updated classic Italian pasta dish
+        instructions:
+          type: string
+          minLength: 10
+          example: Updated instructions...
+        image:
+          type: string
+          format: uri
+          example: https://example.com/images/carbonara-updated.jpg
+        cookingTime:
+          type: integer
+          minimum: 1
+          maximum: 600
+          example: 35
+        servings:
+          type: integer
+          minimum: 1
+          maximum: 50
+          example: 4
+        categoryId:
+          type: integer
+          minimum: 1
+          example: 3
+        ingredients:
+          type: array
+          items:
+            type: object
+            required:
+              - ingredientId
+              - measure
+            properties:
+              ingredientId:
+                type: integer
+                minimum: 1
+                example: 10
+              measure:
+                type: string
+                minLength: 1
+                maxLength: 100
+                example: 250g
+              quantity:
+                type: string
+                nullable: true
+                deprecated: true
+                description: Legacy field retained for backward compatibility.
+              unit:
+                type: string
+                nullable: true
+                description: Optional unit hint for normalized parsing.
+                example: g
+        areas:
+          type: array
+          minItems: 1
+          maxItems: 1
+          items:
+            type: integer
+            minimum: 1
+          example: [5]
 
     PaginatedTestimonials:
       type: object
@@ -988,6 +1064,46 @@ paths:
                 $ref: '#/components/schemas/Error'
               example:
                 message: Invalid recipe id
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    put:
+      tags: [Recipes]
+      summary: Update a recipe
+      description: |
+        Updates a recipe owned by the authenticated user.
+        If `ingredients` or `areas` are provided, linked relations are replaced with the submitted arrays.
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Recipe ID (positive integer)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRecipeBody'
+      responses:
+        '200':
+          description: Recipe updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecipeDetail'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
         '404':
           $ref: '#/components/responses/NotFoundError'
         '500':
