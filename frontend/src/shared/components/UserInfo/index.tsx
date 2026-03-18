@@ -3,6 +3,7 @@ import { UserDetailsResponse } from "../../../entities/user/model/types";
 import { useUserFollowing } from "../../helpers/useUserFollowing";
 import { Button } from "../../ui";
 import { useAuth } from "../../hooks/useAuth";
+import { Icon } from "../../../shared/components/Icon";
 import styles from "./UserInfo.module.css";
 
 type UserInfoProps = {
@@ -44,7 +45,8 @@ const UserInfo = (props: UserInfoProps) => {
                 alert("add this functional");
               }}
             >
-              ?
+              <div className={styles.iconWrapper}><Icon name="close" color="action-secondary-bg" size={24} /></div>
+              
             </button>
           )}
         </div>
@@ -53,29 +55,29 @@ const UserInfo = (props: UserInfoProps) => {
 
         <ul className={styles.statsList}>
           <li>
-            <span className={styles.label}>Email: </span>
+            <span className={styles.label}>Email:</span>
             <span className={styles.value}>{user.email}</span>
           </li>
           <li>
-            <span className={styles.label}>Added recipes: </span>
+            <span className={styles.label}>Added recipes:</span>
             <span className={styles.value}>{user.recipesCreated}</span>
           </li>
 
           {isOwnProfile && (
             <li>
-              <span className={styles.label}>Favorites: </span>
+              <span className={styles.label}>Favorites:</span>
               <span className={styles.value}>{favoritesCount}</span>
             </li>
           )}
 
           <li>
-            <span className={styles.label}>Followers: </span>
+            <span className={styles.label}>Followers:</span>
             <span className={styles.value}>{user.followersCount}</span>
           </li>
 
           {isOwnProfile && (
             <li>
-              <span className={styles.label}>Following: </span>
+              <span className={styles.label}>Following:</span>
               <span className={styles.value}>{followingCount}</span>
             </li>
           )}

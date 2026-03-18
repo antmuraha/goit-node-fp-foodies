@@ -4,7 +4,6 @@
   gap: 20px;
   width: 100%;
   max-width: 343px;
-  margin: 0 auto;
 }
 
 .card {
@@ -46,22 +45,24 @@
   position: absolute;
   bottom: -10px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translateX(-50%) rotate(45deg);
   width: 28px;
   height: 28px;
   border-radius: 30px;
   border: none;
   background-color: var(--fd-color-main);
-  color: var(--fd-color-white);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 18px;
   cursor: pointer;
-  padding: 0;
   transition: background-color 0.2s ease;
 }
-
+.iconWrapper {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+}
 .uploadBtn:hover {
   background-color: var(--fd-color-main-alt);
 }
@@ -74,9 +75,9 @@
   text-transform: uppercase;
   margin: 16px 0;
   text-align: center;
+  letter-spacing: -2%;
 }
 
-/* Список параметрів (Email, Followers...) */
 .statsList {
   list-style: none;
   padding: 0;
@@ -115,12 +116,12 @@
 .actionButton {
   width: 100%;
   padding: 14px;
-  border-radius: 30px;
-  background-color: #1a1a1a;
-  color: #ffffff;
-  font-size: 14px;
-  font-weight: 700;
-  line-height: 20px;
+  border-radius: var(--fd-radius-pill);
+  background-color: var(--fd-color-main-alt);
+  color: var(--fd-color-white);
+  font-size: var(--fd-font-size-14);
+  font-weight: var(--fd-font-weight-bold);
+  line-height: var(--fd-line-height-20);
   text-transform: uppercase;
   border: none;
   cursor: pointer;
@@ -139,4 +140,59 @@
 .actionButton:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+@media (min-width: 768px) {
+.wrapper {
+  max-width: 394px;
+  margin: 0 auto;
+}
+
+.card {
+  padding: 39px 0px;
+  border: 1px solid var(--fd-color-main);
+}
+
+.avatarContainer {
+  width: 120px;
+  height: 120px;
+}
+
+.avatarFallback {
+  font-size: 96px;
+}
+
+.uploadBtn {
+  width: 38px;
+  height: 38px;
+}
+
+.iconWrapper {
+  width: 18px;
+  height: 18px;
+}
+
+.userName {
+  font-size: var(--fd-font-size-20);
+  margin: 20px 0;
+}
+
+.label {
+  font-size: var(--fd-font-size-14);
+  line-height: var(--fd-line-height-20);
+}
+
+.value {
+  font-size: var(--fd-font-size-16);
+  line-height: var(--fd-line-height-24);
+}
+.actionButton {
+  padding: 16px;
+}
+}
+
+@media (min-width: 1280px) {
+.card {
+  border: 1px solid var(--fd-color-muted);
+}
 }
