@@ -1,0 +1,65 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 0 16px;       
+  margin-bottom: 32px;  
+  position: relative; /* База для сірої лінії */
+  width: 100%;
+}
+
+.tabsList {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 30px;             
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  width: 100%;
+}
+
+.tabsList::-webkit-scrollbar {
+  display: none;
+}
+.link {
+  position: relative;
+  text-decoration: none;
+  padding-bottom: 14px; /* Твій відступ 14px */
+  display: inline-block;
+}
+
+/* Стан для ховера ТА активного класу */
+.link:hover::after,
+.active::after {
+  content: '';
+  height: 2px;         /* Товщина як у Figma */
+  width: 100%;         /* На всю ширину слова */
+  background-color: #050505;
+  position: absolute;
+  bottom: 0;           /* Кладемо рівно на лінію */
+  left: 0;
+}
+
+/* СІРА ЛІНІЯ НА ВСЮ ШИРИНУ */
+.bottomLine {
+  width: 100%;
+  height: 1px;
+  background-color: #E0E0E0;
+  position: absolute;
+  bottom: -15px;
+  left: 0;
+  z-index: 1;
+}
+
+/* --- МЕДІА ЗАПИТИ --- */
+@media (min-width: 768px) {
+  .section { padding: 0 32px; margin-bottom: 40px; }
+  .tabsList { gap: 40px; }
+  .link { font-size: 20px; }
+}
+
+@media (min-width: 1440px) {
+  .section { padding-left: 80px; padding-right: 40px; }
+}
