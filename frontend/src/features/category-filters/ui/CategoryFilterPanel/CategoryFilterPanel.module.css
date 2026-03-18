@@ -1,0 +1,87 @@
+/* Chevron SVG encoded inline — matches Figma chevron-down icon color #1a1a1a */
+/* Mobile first: vertical stack */
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+}
+
+/* Screen-reader-only label — accessible but invisible */
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.select {
+  /* Reset native appearance so we can fully style it */
+  appearance: none;
+  -webkit-appearance: none;
+
+  width: 100%;
+  /* Mobile: 48px height, 14px padding, 14px font */
+  height: 48px;
+  padding: 14px 46px 14px 14px;
+
+  border: 1px solid #bfbebe;
+  border-radius: 30px;
+  background-color: transparent;
+
+  /* Custom chevron-down icon */
+  background-image: url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4.5 6.75L9 11.25L13.5 6.75' stroke='%231a1a1a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  background-size: 18px 18px;
+
+  font-family: "Mulish", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #1a1a1a;
+  cursor: pointer;
+
+  transition: border-color 0.2s ease;
+}
+
+.select:focus-visible {
+  outline: 2px solid #1a1a1a;
+  outline-offset: 2px;
+}
+
+.select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Tablet: 768px — horizontal row, selects side by side */
+@media (min-width: 768px) {
+  .panel {
+    flex-direction: row;
+    gap: 14px;
+  }
+
+  .select {
+    /* Tablet: 56px height, 16px padding, 16px font */
+    height: 56px;
+    padding: 16px 46px 16px 18px;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.32px;
+    background-position: right 18px center;
+  }
+}
+
+/* Desktop: 1440px — back to vertical column (sidebar layout) */
+@media (min-width: 1440px) {
+  .panel {
+    flex-direction: column;
+    width: 330px;
+  }
+}

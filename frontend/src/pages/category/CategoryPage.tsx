@@ -1,6 +1,8 @@
 import { type ReactElement } from "react";
 import { useParams } from "react-router-dom";
 import { CategoryRecipesGrid } from "../../features/category-recipes-grid";
+import { CategoryFilterPanel } from "../../features/category-filters";
+import styles from "./CategoryPage.module.css";
 
 export const CategoryPage = (): ReactElement => {
   const { id: categoryId } = useParams();
@@ -10,9 +12,11 @@ export const CategoryPage = (): ReactElement => {
       <header>
         <h1>Category page</h1>
       </header>
-      <main>
-        <aside>{/* TODO: FE-CATEGORY-02 — category filters */}</aside>
-        <section>
+      <main className={styles.main}>
+        <aside className={styles.aside}>
+          <CategoryFilterPanel />
+        </aside>
+        <section className={styles.section}>
           {/* TODO: FE-CATEGORY-03 — pass pagination prop once ready */}
           <CategoryRecipesGrid categoryId={Number(categoryId)} />
         </section>
