@@ -28,20 +28,21 @@ const UserInfo = (props: UserInfoProps) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.card}>
-        
         <div className={styles.avatarContainer}>
           {user.avatar ? (
             <img src={user.avatar} alt={user.name} className={styles.avatar} />
           ) : (
             <div className={styles.avatarFallback}>{user.name?.[0]?.toUpperCase() || "U"}</div>
           )}
-          
+
           {isOwnProfile && (
-            <button 
-              className={styles.uploadBtn} 
+            <button
+              className={styles.uploadBtn}
               aria-label="Upload new avatar"
               type="button"
-              onClick={() => {alert("add this functional")}}
+              onClick={() => {
+                alert("add this functional");
+              }}
             >
               ?
             </button>
@@ -52,29 +53,29 @@ const UserInfo = (props: UserInfoProps) => {
 
         <ul className={styles.statsList}>
           <li>
-            <span className={styles.label}>Email: </span> 
+            <span className={styles.label}>Email: </span>
             <span className={styles.value}>{user.email}</span>
           </li>
           <li>
-            <span className={styles.label}>Added recipes: </span> 
+            <span className={styles.label}>Added recipes: </span>
             <span className={styles.value}>{user.recipesCreated}</span>
           </li>
-      
+
           {isOwnProfile && (
             <li>
-              <span className={styles.label}>Favorites: </span> 
+              <span className={styles.label}>Favorites: </span>
               <span className={styles.value}>{favoritesCount}</span>
             </li>
           )}
 
           <li>
-            <span className={styles.label}>Followers: </span> 
+            <span className={styles.label}>Followers: </span>
             <span className={styles.value}>{user.followersCount}</span>
           </li>
 
           {isOwnProfile && (
             <li>
-              <span className={styles.label}>Following: </span> 
+              <span className={styles.label}>Following: </span>
               <span className={styles.value}>{followingCount}</span>
             </li>
           )}
