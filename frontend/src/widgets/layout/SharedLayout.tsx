@@ -6,6 +6,7 @@ import { notificationService } from "../../shared/services/notifications";
 import { Modal, Toaster } from "../../shared/ui";
 import { SignInForm, SignUpForm, LogOutModal } from "../../features/auth";
 import { Footer } from "../footer/Footer";
+import { Breadcrumb } from "../../shared/ui/breadcrumb";
 
 export const SharedLayout = (): ReactElement => {
   const location = useLocation();
@@ -55,6 +56,7 @@ export const SharedLayout = (): ReactElement => {
 
   return (
     <div className="page-shell">
+      <Breadcrumb />
       <Outlet />
       <Footer />
       <Modal isOpen={isSignInOpen} title="Sign in" onClose={() => setIsSignInOpen(false)}>
