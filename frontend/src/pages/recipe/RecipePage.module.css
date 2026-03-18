@@ -1,0 +1,206 @@
+/* Figma: desktop 22:833 / tablet 108:5222 / mobile 117:5698 */
+
+/* ── Page wrapper ── */
+.page {
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 32px 16px;
+    box-sizing: border-box;
+}
+
+/* ── Two-column content block ── */
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+}
+
+/* ── Recipe image ── */
+.imageWrapper {
+    width: 100%;
+    /* Mobile: 318px height per Figma node 117:5820 */
+    height: 318px;
+    border-radius: 20px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* ── Right column (or full-width on mobile/tablet) ── */
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+/* ── Header: title + tags + description + author ── */
+.header {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.title {
+    font-family: "Mulish", sans-serif;
+    font-weight: 800;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.48px;
+    text-transform: uppercase;
+    color: #050505;
+    margin: 0;
+}
+
+/* Category + cooking time pill badges */
+.tags {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.tag {
+    border: 1px solid #bfbebe;
+    border-radius: 20px;
+    padding: 10px;
+    font-family: "Mulish", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 18px;
+    letter-spacing: -0.28px;
+    color: #bfbebe;
+    white-space: nowrap;
+}
+
+.description {
+    font-family: "Mulish", sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.32px;
+    color: #1a1a1a;
+    margin: 0;
+}
+
+/* Author row */
+.author {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    text-decoration: none;
+}
+
+.authorAvatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 30px;
+    object-fit: cover;
+    /* Fallback background when avatar is null */
+    background-color: #bfbebe;
+    flex-shrink: 0;
+}
+
+.authorMeta {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.authorLabel {
+    font-family: "Mulish", sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: -0.28px;
+    color: #bfbebe;
+}
+
+.authorName {
+    font-family: "Mulish", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.32px;
+    color: #1a1a1a;
+}
+
+/* ── "Add to Favorites" button wrapper ── */
+.actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* ── Loading / error states ── */
+.state {
+    padding: 40px 0;
+    font-family: "Mulish", sans-serif;
+    font-size: 16px;
+    color: #bfbebe;
+    text-align: center;
+}
+
+/* ── Popular recipes section ── */
+/* Figma: gap-[120px] between main content and Popular recipes */
+.popularSection {
+    margin-top: 80px;
+    padding: 0 16px;
+    max-width: 1440px;
+    margin-inline: auto;
+    box-sizing: border-box;
+}
+
+/* ── Tablet (768px) ── */
+@media (min-width: 768px) {
+    .page {
+        padding: 40px 32px;
+    }
+
+    .imageWrapper {
+        /* Tablet: full width, 400px height per Figma node 108:5346 */
+        height: 400px;
+        border-radius: 30px;
+    }
+
+    .popularSection {
+        margin-top: 100px;
+        padding: 0 32px;
+    }
+}
+
+/* ── Desktop (1440px) ── */
+@media (min-width: 1280px) {
+    .page {
+        padding: 40px 80px;
+    }
+
+    /* Two-column layout: image left (551px), details right (649px) */
+    .content {
+        flex-direction: row;
+        gap: 80px;
+        align-items: flex-start;
+    }
+
+    .imageWrapper {
+        /* Desktop: 551 × 400px per Figma node 22:855 */
+        width: 551px;
+        height: 400px;
+        border-radius: 30px;
+    }
+
+    .details {
+        flex: 1;
+        max-width: 649px;
+    }
+
+    .popularSection {
+        margin-top: 120px;
+        padding: 0 80px;
+    }
+}
