@@ -1,11 +1,7 @@
 .section {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 0 16px;       
-  margin-bottom: 32px;  
-  position: relative; /* База для сірої лінії */
   width: 100%;
+  padding: 0 var(--fd-space-16);
+  margin-bottom: var(--fd-space-32);
 }
 
 .tabsList {
@@ -13,53 +9,100 @@
   list-style: none;
   padding: 0;
   margin: 0;
-  gap: 30px;             
+  gap: var(--fd-space-30);
+  position: relative;
+  min-width: 100%;
   overflow-x: auto;
   scrollbar-width: none;
-  -ms-overflow-style: none;
-  width: 100%;
 }
-
 .tabsList::-webkit-scrollbar {
   display: none;
 }
+
 .link {
   position: relative;
-  text-decoration: none;
-  padding-bottom: 14px; /* Твій відступ 14px */
+  text-decoration: none !important;
+  display: inline-flex;
+  padding-bottom: var(--fd-space-14);
+  color: var(--fd-text-muted);
+  transition: color 0.3s ease;
+  cursor: pointer;
+}
+
+.link:hover {
+  color: var(--fd-text-primary);
+}
+
+.link:hover .labelText::after {
+  opacity: 1;
+}
+
+.active {
+  color: var(--fd-text-primary) !important;
+}
+
+.labelText {
+  position: relative;
   display: inline-block;
+  white-space: nowrap;
+  font-family: var(--fd-font-family-base);
+  font-weight: var(--fd-font-weight-extrabold);
+  font-size: 18px;
+  line-height: 24px;
+  letter-spacing: var(--fd-letter-spacing-tight);
+  text-transform: uppercase;
 }
 
-/* Стан для ховера ТА активного класу */
-.link:hover::after,
-.active::after {
-  content: '';
-  height: 2px;         /* Товщина як у Figma */
-  width: 100%;         /* На всю ширину слова */
-  background-color: #050505;
+.labelText::after {
+  content: "";
   position: absolute;
-  bottom: 0;           /* Кладемо рівно на лінію */
   left: 0;
-}
-
-/* СІРА ЛІНІЯ НА ВСЮ ШИРИНУ */
-.bottomLine {
+  bottom: -14px;
   width: 100%;
-  height: 1px;
-  background-color: #E0E0E0;
+  height: 2px;
+  background-color: var(--fd-text-primary);
+  z-index: 5;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.active .labelText::after {
+  opacity: 1;
+}
+
+.bottomLine {
   position: absolute;
-  bottom: -15px;
+  bottom: 0;
   left: 0;
-  z-index: 1;
+  right: 0;
+  height: var(--fd-border-width-hairline);
+  background-color: var(--fd-border-default);
+  pointer-events: none;
 }
 
-/* --- МЕДІА ЗАПИТИ --- */
 @media (min-width: 768px) {
-  .section { padding: 0 32px; margin-bottom: 40px; }
-  .tabsList { gap: 40px; }
-  .link { font-size: 20px; }
+  .section {
+    padding: 0 var(--fd-space-32);
+    margin-bottom: var(--fd-space-40);
+  }
+
+  .tabsList {
+    gap: var(--fd-space-40);
+  }
+
+  .labelText {
+    font-size: 20px;
+  }
 }
 
-@media (min-width: 1440px) {
-  .section { padding-left: 80px; padding-right: 40px; }
+@media (min-width: 1280px) {
+  .section {
+    padding-left: var(--fd-space-80);
+    padding-right: var(--fd-space-40);
+    margin-bottom: var(--fd-space-40);
+  }
+
+  .tabsList {
+    gap: var(--fd-space-40);
+  }
 }

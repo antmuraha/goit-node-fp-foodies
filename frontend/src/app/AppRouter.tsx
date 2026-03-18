@@ -42,7 +42,13 @@ export const AppRouter = (): ReactElement => {
               <UserPage />
             </AuthPage>
           }
-        />
+        >
+          <Route index element={<Navigate to="recipes" replace />} />
+          <Route path="recipes" element={<div>Мої рецепти</div>} />
+          <Route path="favorites" element={<div>Мої улюблені</div>} />
+          <Route path="followers" element={<div>Підписники</div>} />
+          <Route path="following" element={<div>Підписки</div>} />
+        </Route>
         <Route path={APP_ROUTES.UI_KIT} element={<UiKitPage />} />
         <Route path={APP_ROUTES.SIGN_IN} element={<SignInPage />} />
         <Route path={APP_ROUTES.NOT_FOUND} element={<NotFoundPage />} />
