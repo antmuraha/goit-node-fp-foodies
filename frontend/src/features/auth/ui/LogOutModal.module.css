@@ -3,24 +3,60 @@
   flex-direction: column;
   gap: var(--fd-space-32);
   width: 100%;
+  /* Modal component has a fixed 40px gap between title and content.
+     Figma specifies 16px — pull content up to compensate. */
+  margin-top: -24px;
 }
 
 .subtitle {
   font-size: var(--fd-font-size-14);
-  line-height: var(--fd-line-height-21);
-  color: var(--fd-text-muted);
+  line-height: var(--fd-line-height-20);
+  color: var(--fd-color-muted);
   text-align: center;
   margin: 0;
+  max-width: 283px;
 }
 
 .btns {
   display: flex;
   flex-direction: column;
   gap: var(--fd-space-16);
+  width: 100%;
+}
+
+/* Mobile: 14px / 48px height per Figma */
+.actionBtn {
+  min-height: 48px !important;
+  font-size: var(--fd-font-size-14) !important;
+  line-height: var(--fd-line-height-20) !important;
 }
 
 @media (min-width: 768px) {
+  .content {
+    /* Figma tablet gap between title and subtitle is 20px */
+    margin-top: -20px;
+    gap: var(--fd-space-40);
+  }
+
+  .subtitle {
+    font-size: var(--fd-font-size-16);
+    line-height: var(--fd-line-height-24);
+    color: var(--fd-text-secondary);
+    max-width: 400px;
+  }
+
   .btns {
     gap: var(--fd-space-20);
+  }
+
+  /* Tablet: 16px / 56px height per Figma */
+  .actionBtn {
+    min-height: var(--fd-control-height-xl) !important;
+    font-size: var(--fd-font-size-16) !important;
+    line-height: var(--fd-line-height-24) !important;
+  }
+
+  .cancelBtn {
+    border-color: var(--fd-color-main-alt);
   }
 }

@@ -69,6 +69,25 @@
   letter-spacing: -0.02em;
 }
 
+.titleCentered {
+  width: 100%;
+  text-align: center;
+}
+
+.titleTablet {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .titleMobile {
+    display: none;
+  }
+
+  .titleTablet {
+    display: inline;
+  }
+}
+
 .closeButton {
   position: absolute;
   top: 16px;

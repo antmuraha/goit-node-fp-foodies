@@ -17,14 +17,14 @@ export const LogOutModal = ({ isOpen, onClose }: LogOutModalProps): ReactElement
   };
 
   return (
-    <Modal isOpen={isOpen} title="Log out" onClose={onClose}>
+    <Modal isOpen={isOpen} title="Log out" tabletTitle="Are you logging out?" onClose={onClose} centeredTitle>
       <div className={styles.content}>
         <p className={styles.subtitle}>You can always log back in at any time.</p>
         <div className={styles.btns}>
-          <Button fullWidth onClick={handleConfirm}>
+          <Button fullWidth onClick={handleConfirm} className={styles.actionBtn}>
             Log out
           </Button>
-          <Button variant="secondary" fullWidth onClick={onClose}>
+          <Button variant="secondary" fullWidth onClick={onClose} className={`${styles.actionBtn} ${styles.cancelBtn}`}>
             Cancel
           </Button>
         </div>
