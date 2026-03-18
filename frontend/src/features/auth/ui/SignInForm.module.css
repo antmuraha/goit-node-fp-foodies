@@ -78,3 +78,13 @@
 .switchLink:hover {
   text-decoration: underline;
 }
+
+@media (min-width: 768px) {
+  .btns {
+    gap: var(--fd-space-20);
+  }
+
+  .switchText {
+    font-size: var(--fd-font-size-14);
+  }
+}

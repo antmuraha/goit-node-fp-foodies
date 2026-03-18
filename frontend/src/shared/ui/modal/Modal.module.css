@@ -62,7 +62,8 @@
   margin: 0;
   font-family: "Mulish", sans-serif;
   font-weight: 800;
-  font-size: 32px;
+  font-size: 28px;
+  line-height: 32px;
   text-transform: uppercase;
   color: #000;
   letter-spacing: -0.02em;
@@ -99,6 +100,11 @@
     max-width: 561px;
     max-height: 570px;
     padding: 80px;
+  }
+
+  .title {
+    font-size: 32px;
+    line-height: 40px;
   }
 
   .modalContent {
