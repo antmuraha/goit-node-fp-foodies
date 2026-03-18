@@ -133,7 +133,12 @@ export const useUserFavorites = () => {
 
   const toggleFavorite = useCallback(
     async (recipeId: number | string, isCurrentlyFavorite?: boolean): Promise<boolean> => {
-      if (!hasToken || isPending(recipeId)) {
+      if (!hasToken) {
+        notificationService.error(FAVORITE_NOTIFICATIONS.NOT_AUTHORIZED);
+        return false;
+      }
+
+      if (isPending(recipeId)) {
         return false;
       }
 

@@ -1,0 +1,87 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-20);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-8);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--fd-space-16);
+}
+
+.label {
+  color: var(--fd-text-primary);
+  font-size: var(--fd-font-size-14);
+  font-weight: var(--fd-font-weight-medium);
+}
+
+.areas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--fd-space-8);
+}
+
+.ingredientEditor {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-12);
+}
+
+.ingredientEditorRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--fd-space-12);
+}
+
+.ingredientTiles {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--fd-space-12);
+}
+
+.ingredientTile {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--fd-space-12);
+  padding: var(--fd-space-12);
+  border: var(--fd-border-width-hairline) solid var(--fd-border-default);
+  border-radius: var(--fd-radius-sm);
+  background-color: var(--fd-bg-muted);
+}
+
+.ingredientTileName {
+  margin: 0;
+  font-weight: var(--fd-font-weight-bold);
+  color: var(--fd-text-primary);
+}
+
+.ingredientTileMeasure {
+  margin: var(--fd-space-4) 0 0;
+  color: var(--fd-text-secondary);
+  font-size: var(--fd-font-size-14);
+}
+
+.actions {
+  display: flex;
+  gap: var(--fd-space-12);
+  flex-wrap: wrap;
+}
+
+@media (max-width: 767px) {
+  .ingredientEditorRow {
+    grid-template-columns: 1fr;
+  }
+
+  .ingredientTile {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}

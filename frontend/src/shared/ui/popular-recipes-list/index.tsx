@@ -1,18 +1,33 @@
+import { ReactElement } from "react";
 import { useDataPopularRecipes } from "../../hooks/useDataPopularRecipes";
+import RecipeCard from "../recipe-card/index";
+import styles from "./PopularRecipesList.module.css";
 
-const PopularRecipesList = () => {
+const PopularRecipesList = (): ReactElement => {
   const { recipes } = useDataPopularRecipes();
-  console.log("PopularRecipesList recipes:", recipes);
+
+  if (!recipes || recipes.length === 0) {
+    return <div className={styles.loader}>Loading...</div>;
+  }
+
   return (
-    <div>
-      <h2>Popular Recipes</h2>
-      {recipes.map((recipe) => (
-        <div key={recipe.id}>
-          <h3>{recipe.title}</h3>
-          <p>{recipe.description}</p>
-        </div>
-      ))}
-    </div>
+    <section className={styles.section}>
+      <h2 className={styles.title}>Popular Recipes</h2>
+      <div className={styles.grid}>
+        {recipes.map((recipe) => (
+          <RecipeCard
+            key={recipe.id}
+            id={recipe.id}
+            title={recipe.title}
+            description={recipe.description}
+            image={recipe.image}
+            thumbnail={recipe.thumbnail}
+            author={recipe.author}
+            variant="grid"
+          />
+        ))}
+      </div>
+    </section>
   );
 };
 

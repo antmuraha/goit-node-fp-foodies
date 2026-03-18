@@ -17,3 +17,9 @@ export const selectIsSigningIn = (state: RootState): boolean => state.auth.login
 export const selectProfileStatus = (state: RootState): AsyncStatus => state.auth.profileStatus;
 
 export const selectIsProfileLoading = (state: RootState): boolean => state.auth.profileStatus === "loading";
+
+export const selectRegisterStatus = (state: RootState): AsyncStatus => state.auth.registerStatus;
+
+export const selectRegisterError = (state: RootState): string | null => state.auth.registerError;
+
+export const selectIsRegistering = (state: RootState): boolean => state.auth.registerStatus === "loading";

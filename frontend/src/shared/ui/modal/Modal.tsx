@@ -1,15 +1,18 @@
 import type { ReactElement, ReactNode } from "react";
 import { useEffect, useRef, useId, useCallback } from "react";
 import { createPortal } from "react-dom";
+import { Icon } from "../../components/Icon";
 import styles from "./Modal.module.css";
 
 type ModalProps = {
   isOpen: boolean;
   title: string;
+  tabletTitle?: string;
   onClose: () => void;
   closeOnEscape?: boolean;
   closeOnOverlayClick?: boolean;
   showCloseButton?: boolean;
+  centeredTitle?: boolean;
   children: ReactNode;
 };
 
@@ -18,10 +21,12 @@ const FOCUSABLE_SELECTOR = 'button, [href], input, select, textarea, [tabindex]:
 export const Modal = ({
   isOpen,
   title,
+  tabletTitle,
   onClose,
   closeOnEscape = true,
   closeOnOverlayClick = true,
   showCloseButton = true,
+  centeredTitle = false,
   children,
 }: ModalProps): ReactElement | null => {
   const modalRef = useRef<HTMLDivElement>(null);
@@ -87,12 +92,19 @@ export const Modal = ({
     <div className={styles.overlay} onClick={onOverlayClick}>
       <div ref={modalRef} className={styles.modal} role="dialog" aria-modal="true" aria-labelledby={id} tabIndex={-1}>
         <div className={styles.header}>
-          <h2 className={styles.title} id={id}>
-            {title}
+          <h2 className={`${styles.title}${centeredTitle ? ` ${styles.titleCentered}` : ""}`} id={id}>
+            {tabletTitle ? (
+              <>
+                <span className={styles.titleMobile}>{title}</span>
+                <span className={styles.titleTablet}>{tabletTitle}</span>
+              </>
+            ) : (
+              title
+            )}
           </h2>
           {showCloseButton && (
             <button type="button" className={styles.closeButton} onClick={handleClose} aria-label="Close dialog">
-              ×
+              <Icon name="close" color="text-primary" size={24} />
             </button>
           )}
         </div>

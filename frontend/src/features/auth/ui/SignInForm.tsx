@@ -1,20 +1,26 @@
+import { useState } from "react";
 import { useFormik } from "formik";
 import type { ReactElement } from "react";
 import { Button, FormErrorMessage, Input } from "../../../shared/ui";
 import { useAuth } from "../../../shared/hooks";
+import { Icon } from "../../../shared/components/Icon";
 import { signInSchema, type SignInFormValues } from "../validation";
 import styles from "./SignInForm.module.css";
 
 type SignInFormProps = {
   onSuccess?: () => void;
+  onCreateAccount?: () => void;
 };
 
-export const SignInForm = ({ onSuccess }: SignInFormProps): ReactElement => {
+export const SignInForm = ({ onSuccess, onCreateAccount }: SignInFormProps): ReactElement => {
   const { signIn, isSigningIn, loginError } = useAuth();
+  const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik<SignInFormValues>({
     initialValues: { email: "", password: "" },
     validationSchema: signInSchema,
+    validateOnChange: false,
+    validateOnBlur: false,
     onSubmit: async (values) => {
       const success = await signIn(values);
       if (success) {
@@ -23,57 +29,72 @@ export const SignInForm = ({ onSuccess }: SignInFormProps): ReactElement => {
     },
   });
 
+  const hasSubmitted = formik.submitCount > 0;
+  const emailError = hasSubmitted ? formik.errors.email : undefined;
+  const passwordError = hasSubmitted ? formik.errors.password : undefined;
+
   return (
     <form className={styles.form} onSubmit={formik.handleSubmit} noValidate>
-      <div className={styles.field}>
-        <label className={styles.label} htmlFor="signin-email">
-          Email
-        </label>
-        <Input
-          id="signin-email"
-          name="email"
-          type="email"
-          placeholder="Enter your email"
-          value={formik.values.email}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          hasError={Boolean(formik.errors.email && formik.touched.email)}
-          aria-invalid={Boolean(formik.errors.email && formik.touched.email)}
-          aria-describedby={formik.errors.email && formik.touched.email ? "signin-email-error" : undefined}
-          disabled={isSigningIn}
-        />
-        {formik.errors.email && formik.touched.email && (
-          <FormErrorMessage id="signin-email-error">{formik.errors.email}</FormErrorMessage>
-        )}
-      </div>
+      <div className={styles.fields}>
+        <div className={styles.fieldGroup}>
+          <Input
+            id="signin-email"
+            name="email"
+            type="email"
+            placeholder="Email*"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            hasError={Boolean(emailError)}
+            disabled={isSigningIn}
+          />
+          {emailError && <FormErrorMessage id="signin-email-error">{emailError}</FormErrorMessage>}
+        </div>
 
-      <div className={styles.field}>
-        <label className={styles.label} htmlFor="signin-password">
-          Password
-        </label>
-        <Input
-          id="signin-password"
-          name="password"
-          type="password"
-          placeholder="Enter your password"
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          hasError={Boolean(formik.errors.password && formik.touched.password)}
-          aria-invalid={Boolean(formik.errors.password && formik.touched.password)}
-          aria-describedby={formik.errors.password && formik.touched.password ? "signin-password-error" : undefined}
-          disabled={isSigningIn}
-        />
-        {formik.errors.password && formik.touched.password && (
-          <FormErrorMessage id="signin-password-error">{formik.errors.password}</FormErrorMessage>
-        )}
+        <div className={styles.fieldGroup}>
+          <div className={styles.passwordWrapper}>
+            <Input
+              id="signin-password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={formik.values.password}
+              onChange={formik.handleChange}
+              hasError={Boolean(passwordError)}
+              disabled={isSigningIn}
+              className={styles.passwordInput}
+            />
+            <button
+              type="button"
+              className={styles.togglePasswordBtn}
+              onClick={() => setShowPassword((v) => !v)}
+              aria-label={showPassword ? "Hide password" : "Show password"}
+              tabIndex={-1}
+            >
+              <Icon name={showPassword ? "eye-off" : "eye"} color="text-primary" size={20} />
+            </button>
+          </div>
+          {passwordError && <FormErrorMessage id="signin-password-error">{passwordError}</FormErrorMessage>}
+        </div>
       </div>
 
       {loginError && <FormErrorMessage variant="form">{loginError}</FormErrorMessage>}
 
-      <Button type="submit" disabled={isSigningIn}>
-        {isSigningIn ? "Signing in…" : "Sign in"}
-      </Button>
+      <div className={styles.btns}>
+        <Button
+          type="submit"
+          fullWidth
+          disabled={isSigningIn || !formik.values.email || !formik.values.password}
+          isLoading={isSigningIn}
+        >
+          Sign in
+        </Button>
+        <p className={styles.switchText}>
+          {"Don't have an account? "}
+          <button type="button" className={styles.switchLink} onClick={onCreateAccount}>
+            Create an account
+          </button>
+        </p>
+      </div>
     </form>
   );
 };
