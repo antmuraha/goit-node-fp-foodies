@@ -28,86 +28,71 @@ export const RecipePage = (): ReactElement => {
   }, [recipeId, ensureFavoriteStatus]);
 
   return (
-      <>
-        <main className={styles.page}>
-          {isLoading && <p className={styles.state}>Loading recipe...</p>}
-          {error && <p className={styles.state}>Recipe error: {error}</p>}
-          {!isLoading && !error && recipe && (
-              <section className={styles.content}>
-                {/* Left column: recipe image */}
-                <div className={styles.imageWrapper}>
-                  <img
-                      className={styles.image}
-                      src={recipe.image ?? recipe.thumbnail ?? undefined}
-                      alt={recipe.title}
-                  />
+    <>
+      <main className={styles.page}>
+        {isLoading && <p className={styles.state}>Loading recipe...</p>}
+        {error && <p className={styles.state}>Recipe error: {error}</p>}
+        {!isLoading && !error && recipe && (
+          <section className={styles.content}>
+            {/* Left column: recipe image */}
+            <div className={styles.imageWrapper}>
+              <img className={styles.image} src={recipe.image ?? recipe.thumbnail ?? undefined} alt={recipe.title} />
+            </div>
+
+            {/* Right column: all recipe details */}
+            <div className={styles.details}>
+              {/* Title, tags, description, author */}
+              <div className={styles.header}>
+                <h1 className={styles.title}>{recipe.title}</h1>
+
+                <div className={styles.tags}>
+                  <span className={styles.tag}>{recipe.category.name}</span>
+                  <span className={styles.tag}>{recipe.cookingTime} min</span>
                 </div>
 
-                {/* Right column: all recipe details */}
-                <div className={styles.details}>
-                  {/* Title, tags, description, author */}
-                  <div className={styles.header}>
-                    <h1 className={styles.title}>{recipe.title}</h1>
+                <p className={styles.description}>{recipe.description ?? "No description yet"}</p>
 
-                    <div className={styles.tags}>
-                      <span className={styles.tag}>{recipe.category.name}</span>
-                      <span className={styles.tag}>{recipe.cookingTime} min</span>
-                    </div>
-
-                    <p className={styles.description}>
-                      {recipe.description ?? "No description yet"}
-                    </p>
-
-                    <NavLink
-                        className={styles.author}
-                        to={`/user/${recipe.author.id}`}
-                    >
-                      {recipe.author.avatar ? (
-                          <img
-                              className={styles.authorAvatar}
-                              src={recipe.author.avatar}
-                              alt={recipe.author.name}
-                          />
-                      ) : (
-                          <div className={styles.authorAvatar} aria-hidden="true" />
-                      )}
-                      <div className={styles.authorMeta}>
-                        <span className={styles.authorLabel}>Created by:</span>
-                        <span className={styles.authorName}>{recipe.author.name}</span>
-                      </div>
-                    </NavLink>
+                <NavLink className={styles.author} to={`/user/${recipe.author.id}`}>
+                  {recipe.author.avatar ? (
+                    <img className={styles.authorAvatar} src={recipe.author.avatar} alt={recipe.author.name} />
+                  ) : (
+                    <div className={styles.authorAvatar} aria-hidden="true" />
+                  )}
+                  <div className={styles.authorMeta}>
+                    <span className={styles.authorLabel}>Created by:</span>
+                    <span className={styles.authorName}>{recipe.author.name}</span>
                   </div>
+                </NavLink>
+              </div>
 
-                  {/* Ingredients */}
-                  <RecipeIngredientsPanel ingredients={recipe.ingredients} />
+              {/* Ingredients */}
+              <RecipeIngredientsPanel ingredients={recipe.ingredients} />
 
-                  {/* Instructions */}
-                  <RecipeInstructionsPanel instructions={recipe.instructions} />
+              {/* Instructions */}
+              <RecipeInstructionsPanel instructions={recipe.instructions} />
 
-                  {/* Actions */}
-                  <div className={styles.actions}>
-                    <Button
-                        disabled={isPending(recipe.id)}
-                        onClick={() => {
-                          void toggleFavorite(recipe.id);
-                        }}
-                    >
-                      {isFavorite(recipe.id) ? "Remove from Favorites" : "Add to Favorites"}
-                    </Button>
+              {/* Actions */}
+              <div className={styles.actions}>
+                <Button
+                  disabled={isPending(recipe.id)}
+                  onClick={() => {
+                    void toggleFavorite(recipe.id);
+                  }}
+                >
+                  {isFavorite(recipe.id) ? "Remove from Favorites" : "Add to Favorites"}
+                </Button>
 
-                    {ownRecipe && (
-                        <NavLink to={`/recipe/${recipe.id}/edit`}>Edit Recipe</NavLink>
-                    )}
-                  </div>
-                </div>
-              </section>
-          )}
-        </main>
+                {ownRecipe && <NavLink to={`/recipe/${recipe.id}/edit`}>Edit Recipe</NavLink>}
+              </div>
+            </div>
+          </section>
+        )}
+      </main>
 
-        {/* Popular recipes — outside the main, separate section with the top margin */}
-        <div className={styles.popularSection}>
-          <PopularRecipesList />
-        </div>
-      </>
+      {/* Popular recipes — outside the main, separate section with the top margin */}
+      <div className={styles.popularSection}>
+        <PopularRecipesList />
+      </div>
+    </>
   );
 };
