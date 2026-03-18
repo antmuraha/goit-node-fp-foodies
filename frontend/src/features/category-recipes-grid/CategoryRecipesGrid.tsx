@@ -26,6 +26,14 @@ interface CategoryRecipesGridProps {
 }
 
 export function CategoryRecipesGrid({ categoryId, pagination }: CategoryRecipesGridProps): ReactElement {
+  
+  /*
+    TODO: critical
+    DO NOT USE direct access and fetching from the page in components
+    Need replace with:
+    const { recipes, isLoading, error, loadRecipes } = useDataRecipes({ categoryId: Number(categoryId) });
+  */
+
   const dispatch = useDispatch<AppDispatch>();
   const [searchParams, setSearchParams] = useSearchParams();
 
