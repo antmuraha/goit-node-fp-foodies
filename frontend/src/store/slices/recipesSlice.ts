@@ -1,6 +1,12 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { recipesApi } from "../../api/endpoints/recipesApi";
-import type { RecipeDetails, RecipeSearchParams, RecipeSummary } from "../../entities/recipe/types";
+import type {
+  CreateRecipePayload,
+  RecipeDetails,
+  RecipeSearchParams,
+  RecipeSummary,
+  UpdateRecipePayload,
+} from "../../entities/recipe/types";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
 
 type RecipeListState = {
@@ -35,6 +41,8 @@ type RecipesState = {
   popularListError: string | null;
   ownRecipes: RecipeListState;
   favoriteRecipes: RecipeListState;
+  editorSubmitStatus: AsyncStatus;
+  editorSubmitError: string | null;
 };
 
 const initialRecipeListState: RecipeListState = {
@@ -63,6 +71,8 @@ const initialState: RecipesState = {
   popularListError: null,
   ownRecipes: { ...initialRecipeListState },
   favoriteRecipes: { ...initialRecipeListState },
+  editorSubmitStatus: "idle",
+  editorSubmitError: null,
 };
 
 const getErrorMessage = (error: unknown): string => {
@@ -144,6 +154,42 @@ export const fetchFavoriteRecipes = createAsyncThunk<
   }
 });
 
+export const createRecipe = createAsyncThunk<
+  RecipeDetails,
+  CreateRecipePayload,
+  { state: AuthTokenState; rejectValue: string }
+>("recipes/createRecipe", async (payload, thunkApi) => {
+  const token = thunkApi.getState().auth.token;
+
+  if (!token) {
+    return thunkApi.rejectWithValue("Missing auth token for recipe create request");
+  }
+
+  try {
+    return await recipesApi.createRecipe(token, payload);
+  } catch (error) {
+    return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
+  }
+});
+
+export const updateRecipe = createAsyncThunk<
+  RecipeDetails,
+  { id: number; payload: UpdateRecipePayload },
+  { state: AuthTokenState; rejectValue: string }
+>("recipes/updateRecipe", async ({ id, payload }, thunkApi) => {
+  const token = thunkApi.getState().auth.token;
+
+  if (!token) {
+    return thunkApi.rejectWithValue("Missing auth token for recipe update request");
+  }
+
+  try {
+    return await recipesApi.updateRecipe(token, id, payload);
+  } catch (error) {
+    return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
+  }
+});
+
 const recipesSlice = createSlice({
   name: "recipes",
   initialState,
@@ -192,6 +238,10 @@ const recipesSlice = createSlice({
 
       state.favoriteRecipes.data.unshift(action.payload.recipe);
       state.favoriteRecipes.total += 1;
+    },
+    resetEditorSubmitState: (state) => {
+      state.editorSubmitStatus = "idle";
+      state.editorSubmitError = null;
     },
   },
   extraReducers: (builder) => {
@@ -266,6 +316,42 @@ const recipesSlice = createSlice({
       .addCase(fetchFavoriteRecipes.rejected, (state, action) => {
         state.favoriteRecipes.status = "failed";
         state.favoriteRecipes.error = action.payload ?? "Unable to load favorite recipes";
+      })
+      .addCase(createRecipe.pending, (state) => {
+        state.editorSubmitStatus = "loading";
+        state.editorSubmitError = null;
+      })
+      .addCase(createRecipe.fulfilled, (state, action) => {
+        state.editorSubmitStatus = "succeeded";
+        state.selectedRecipe = action.payload;
+      })
+      .addCase(createRecipe.rejected, (state, action) => {
+        state.editorSubmitStatus = "failed";
+        state.editorSubmitError = action.payload ?? "Unable to create recipe";
+      })
+      .addCase(updateRecipe.pending, (state) => {
+        state.editorSubmitStatus = "loading";
+        state.editorSubmitError = null;
+      })
+      .addCase(updateRecipe.fulfilled, (state, action) => {
+        state.editorSubmitStatus = "succeeded";
+        state.selectedRecipe = action.payload;
+
+        state.list = state.list.map((recipeItem) =>
+          recipeItem.id === action.payload.id ? { ...recipeItem, ...action.payload } : recipeItem,
+        );
+
+        state.ownRecipes.data = state.ownRecipes.data.map((recipeItem) =>
+          recipeItem.id === action.payload.id ? { ...recipeItem, ...action.payload } : recipeItem,
+        );
+
+        state.favoriteRecipes.data = state.favoriteRecipes.data.map((recipeItem) =>
+          recipeItem.id === action.payload.id ? { ...recipeItem, ...action.payload } : recipeItem,
+        );
+      })
+      .addCase(updateRecipe.rejected, (state, action) => {
+        state.editorSubmitStatus = "failed";
+        state.editorSubmitError = action.payload ?? "Unable to update recipe";
       });
   },
 });
@@ -276,5 +362,6 @@ export const {
   optimisticRemoveFavorite,
   rollbackAddFavorite,
   rollbackRemoveFavorite,
+  resetEditorSubmitState,
 } = recipesSlice.actions;
 export const recipesReducer = recipesSlice.reducer;

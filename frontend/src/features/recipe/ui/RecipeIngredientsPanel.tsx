@@ -1,9 +1,9 @@
 import type { ReactElement } from "react";
-import type { RecipeIngredientDetails } from "../../../entities/ingredient/types";
+import type { RecipeIngredientItem } from "../../../entities/ingredient/types";
 import styles from "./RecipeIngredientsPanel.module.css";
 
 interface RecipeIngredientsPanelProps {
-  ingredients: RecipeIngredientDetails[];
+  ingredients: RecipeIngredientItem[];
 }
 
 const RecipeIngredientsPanel = ({ ingredients }: RecipeIngredientsPanelProps): ReactElement => {
@@ -25,9 +25,6 @@ const RecipeIngredientsPanel = ({ ingredients }: RecipeIngredientsPanelProps): R
       </h2>
       <ul className={styles.list}>
         {ingredients.map((item) => {
-          const { quantity, unit } = item.RecipeIngredient;
-          const measure = [quantity, unit].filter(Boolean).join(" ");
-
           return (
             <li key={item.id} className={styles.item}>
               <div className={styles.imageWrapper}>
@@ -39,7 +36,7 @@ const RecipeIngredientsPanel = ({ ingredients }: RecipeIngredientsPanelProps): R
               </div>
               <div className={styles.info}>
                 <span className={styles.name}>{item.name}</span>
-                <span className={styles.measure}>{measure || "—"}</span>
+                <span className={styles.measure}>{item.measure || "—"}</span>
               </div>
             </li>
           );

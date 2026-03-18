@@ -1,6 +1,6 @@
 import type { AreaSummary } from "../area/types";
 import type { CategorySummary } from "../category/model/types";
-import type { RecipeIngredientDetails } from "../ingredient/types";
+import type { RecipeIngredientItem } from "../ingredient/types";
 import type { UserSummary } from "../user";
 
 export type RecipeSummary = {
@@ -15,9 +15,9 @@ export type RecipeSummary = {
   userId: number;
   createdAt: string;
   updatedAt: string;
-  Category: CategorySummary;
+  category: CategorySummary;
   author: UserSummary;
-  Areas: AreaSummary[];
+  areas: AreaSummary[];
 };
 
 export type RecipeListResponse = {
@@ -28,7 +28,7 @@ export type RecipeListResponse = {
 };
 
 export type RecipeDetails = RecipeSummary & {
-  Ingredients: RecipeIngredientDetails[];
+  ingredients: RecipeIngredientItem[];
 };
 
 export type RecipeSearchParams = {
@@ -47,3 +47,21 @@ export type FavoriteRecipe = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type RecipeIngredientPayload = {
+  ingredientId: number;
+  measure: string;
+};
+
+export type CreateRecipePayload = {
+  name: string;
+  description?: string;
+  instructions: string;
+  image?: string;
+  cookingTime: number;
+  categoryId: number;
+  ingredients: RecipeIngredientPayload[];
+  areas: number[];
+};
+
+export type UpdateRecipePayload = Partial<CreateRecipePayload>;

@@ -22,7 +22,6 @@ export const UserPage = (): ReactNode => {
 
   const { currentUser } = useAuth();
   const { user, isLoading, error } = useDataUser(userId);
-
   if (isLoading) {
     return (
       <main>
@@ -45,12 +44,12 @@ export const UserPage = (): ReactNode => {
       : [TabsListTab.RECIPES, TabsListTab.FOLLOWERS],
     isOwnProfile
       ? [
-          <UserRecipesList key={id} user={id} />,
-          <MyFavoritesList />,
-          <UserFollowersList key={id} user={id} />,
-          <FollowingList />,
+          <UserRecipesList key={`recipes-${id}`} user={id} />,
+          <MyFavoritesList key="favorites" />,
+          <UserFollowersList key={`followers-${id}`} user={id} />,
+          <FollowingList key="following" />,
         ]
-      : [<UserRecipesList key={id} user={id} />, <UserFollowersList key={id} user={id} />],
+      : [<UserRecipesList key={`recipes-${id}`} user={id} />, <UserFollowersList key={`followers-${id}`} user={id} />],
   );
 
   return (

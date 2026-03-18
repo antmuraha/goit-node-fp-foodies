@@ -9,6 +9,12 @@ export type LoginCredentials = {
   password: string;
 };
 
+export type RegisterCredentials = {
+  name: string;
+  email: string;
+  password: string;
+};
+
 type AuthState = {
   token: string | null;
   currentUser: MeProfile | null;
@@ -16,6 +22,8 @@ type AuthState = {
   profileError: string | null;
   loginStatus: AsyncStatus;
   loginError: string | null;
+  registerStatus: AsyncStatus;
+  registerError: string | null;
 };
 
 const initialState: AuthState = {
@@ -25,6 +33,8 @@ const initialState: AuthState = {
   profileError: null,
   loginStatus: "idle",
   loginError: null,
+  registerStatus: "idle",
+  registerError: null,
 };
 
 const getErrorMessage = (error: unknown): string => {
@@ -50,6 +60,37 @@ export const login = createAsyncThunk<{ token: string; user: MeProfile }, LoginC
     } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
     }
+  },
+);
+
+export const register = createAsyncThunk<
+  { token: string; user: MeProfile },
+  RegisterCredentials,
+  { rejectValue: string }
+>("auth/register", async (credentials, thunkApi) => {
+  try {
+    await authApi.register(credentials);
+    const response = await authApi.login({ email: credentials.email, password: credentials.password });
+    const me = await authApi.getProfile(response.token);
+    sessionStorageAdapter.save(response.token);
+    return { ...response, user: me };
+  } catch (error) {
+    return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
+  }
+});
+
+export const logout = createAsyncThunk<void, void, { state: { auth: AuthState }; rejectValue: string }>(
+  "auth/logout",
+  async (_, thunkApi) => {
+    const token = thunkApi.getState().auth.token;
+    if (token) {
+      try {
+        await authApi.logout(token);
+      } catch {
+        // proceed with local cleanup even if server logout fails
+      }
+    }
+    thunkApi.dispatch(clearAuthSession());
   },
 );
 
@@ -96,6 +137,8 @@ const authSlice = createSlice({
       state.profileError = null;
       state.loginStatus = "idle";
       state.loginError = null;
+      state.registerStatus = "idle";
+      state.registerError = null;
       sessionStorageAdapter.clear();
     },
     adjustFollowingCount: (state, action: PayloadAction<number>) => {
@@ -129,6 +172,19 @@ const authSlice = createSlice({
       .addCase(login.rejected, (state, action) => {
         state.loginStatus = "failed";
         state.loginError = action.payload ?? "Login failed";
+      })
+      .addCase(register.pending, (state) => {
+        state.registerStatus = "loading";
+        state.registerError = null;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.registerStatus = "succeeded";
+        state.token = action.payload.token;
+        state.currentUser = action.payload.user;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.registerStatus = "failed";
+        state.registerError = action.payload ?? "Registration failed";
       })
       .addCase(fetchProfile.pending, (state) => {
         state.profileStatus = "loading";
