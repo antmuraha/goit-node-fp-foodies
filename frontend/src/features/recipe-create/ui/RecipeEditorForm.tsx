@@ -142,7 +142,11 @@ export const RecipeEditorForm = ({
   const getPendingIngredientError = (field: PendingIngredientField): string | undefined => {
     const pendingIngredientErrors = formik.errors.pendingIngredient;
 
-    if (!pendingIngredientErrors || typeof pendingIngredientErrors === "string" || Array.isArray(pendingIngredientErrors)) {
+    if (
+      !pendingIngredientErrors ||
+      typeof pendingIngredientErrors === "string" ||
+      Array.isArray(pendingIngredientErrors)
+    ) {
       return undefined;
     }
 
@@ -153,7 +157,11 @@ export const RecipeEditorForm = ({
   const getPendingIngredientTouched = (field: PendingIngredientField): boolean => {
     const pendingIngredientTouched = formik.touched.pendingIngredient;
 
-    if (!pendingIngredientTouched || typeof pendingIngredientTouched !== "object" || Array.isArray(pendingIngredientTouched)) {
+    if (
+      !pendingIngredientTouched ||
+      typeof pendingIngredientTouched !== "object" ||
+      Array.isArray(pendingIngredientTouched)
+    ) {
       return false;
     }
 
@@ -303,7 +311,9 @@ export const RecipeEditorForm = ({
                 id="ingredient-pending"
                 placeholder="Select ingredient"
                 value={"" + formik.values.pendingIngredient.ingredientId}
-                hasError={Boolean(getPendingIngredientTouched("ingredientId") && getPendingIngredientError("ingredientId"))}
+                hasError={Boolean(
+                  getPendingIngredientTouched("ingredientId") && getPendingIngredientError("ingredientId"),
+                )}
                 onChange={(event) => {
                   handlePendingIngredientChange("ingredientId", event.target.value);
                 }}

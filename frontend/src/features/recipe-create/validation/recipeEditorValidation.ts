@@ -40,7 +40,9 @@ export const recipeEditorSchema: Yup.ObjectSchema<RecipeEditorFormValues> = Yup.
     .min(3, "Name must be at least 3 characters")
     .max(200, "Name is too long")
     .required("Name is required"),
-  description: Yup.string().max(500, "Description must be less than 500 characters").required("Description is required"),
+  description: Yup.string()
+    .max(500, "Description must be less than 500 characters")
+    .required("Description is required"),
   instructions: Yup.string()
     .min(10, "Instructions must be at least 10 characters")
     .required("Instructions are required"),
