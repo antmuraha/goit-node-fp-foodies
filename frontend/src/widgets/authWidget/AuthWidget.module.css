@@ -1,0 +1,54 @@
+.authLinks {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+}
+
+.link {
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--fd-text-primary, #333);
+  transition: color 0.2s ease;
+
+  &:hover {
+    color: var(--fd-color-main, #333);
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--fd-color-focus, #0066cc);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--fd-text-primary-dark, #e5e5e5);
+  }
+
+  [data-theme="dark"] & {
+    color: var(--fd-text-primary-dark, #e5e5e5);
+  }
+}
+
+.logoutDescription {
+  margin: 0 0 24px 0;
+  font-size: 14px;
+  color: var(--fd-text-secondary, #666);
+  line-height: 1.5;
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--fd-text-secondary-dark, #999);
+  }
+
+  [data-theme="dark"] & {
+    color: var(--fd-text-secondary-dark, #999);
+  }
+}
+
+.logoutActions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
