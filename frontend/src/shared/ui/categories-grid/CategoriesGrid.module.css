@@ -1,0 +1,146 @@
+/* CategoriesGrid — mobile-first */
+
+.section {
+  padding: 0 var(--fd-container-px-mobile);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-32);
+  margin-top: 64px;
+  margin-bottom: 64px;
+}
+
+/* ── Heading block ── */
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-16);
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: var(--fd-font-weight-extrabold);
+  line-height: 32px;
+  letter-spacing: -0.56px;
+  text-transform: uppercase;
+  color: var(--fd-text-primary);
+}
+
+.description {
+  margin: 0;
+  font-size: var(--fd-type-main-mobile-size);
+  font-weight: var(--fd-font-weight-medium);
+  line-height: var(--fd-type-main-mobile-height);
+  letter-spacing: -0.28px;
+  color: var(--fd-text-muted);
+}
+
+/* ── Cards list ── */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-16);
+}
+
+/* ── Loading / Error states ── */
+.statusMessage {
+  font-size: var(--fd-type-main-mobile-size);
+  color: var(--fd-text-muted);
+  text-align: center;
+  padding: var(--fd-space-40) 0;
+}
+
+/* ── "All categories" card ── */
+.allCard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 250px;
+  background-color: var(--fd-color-main);
+  border-radius: var(--fd-radius-pill);
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.allCard:hover {
+  opacity: 0.85;
+}
+
+.allCard:focus-visible {
+  outline: 2px solid var(--fd-color-main);
+  outline-offset: 2px;
+}
+
+.allCardLabel {
+  font-size: var(--fd-font-size-16);
+  font-weight: var(--fd-font-weight-extrabold);
+  line-height: var(--fd-line-height-24);
+  letter-spacing: -0.32px;
+  text-transform: uppercase;
+  color: var(--fd-color-white);
+}
+
+/* ── Tablet ── */
+@media (min-width: 768px) {
+  .section {
+    padding: 0 var(--fd-container-px-tablet);
+    margin-top: 96px;
+    margin-bottom: 96px;
+  }
+
+  .title {
+    font-size: 36px;
+    line-height: 40px;
+  }
+
+  .description {
+    font-size: var(--fd-type-main-desktop-size);
+    line-height: var(--fd-type-main-desktop-height);
+    max-width: 600px;
+  }
+
+  .list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--fd-space-16);
+  }
+
+  .allCard {
+    grid-column: span 2;
+  }
+}
+
+/* ── Desktop ── */
+@media (min-width: 1280px) {
+  .section {
+    padding: 0 var(--fd-container-px-desktop);
+    margin-top: 120px;
+    margin-bottom: 120px;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--fd-space-80);
+  }
+
+  .heading {
+    flex: 0 0 auto;
+    max-width: 350px;
+    position: sticky;
+    top: var(--fd-space-40);
+  }
+
+  .title {
+    font-size: 40px;
+    line-height: 44px;
+  }
+
+  .list {
+    flex: 1;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .allCard {
+    grid-column: span 1;
+  }
+}

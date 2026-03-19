@@ -3,7 +3,7 @@ import styles from "./CategoryCard.module.css";
 import { NavLink } from "react-router-dom";
 import { Icon } from "../../../shared/components/Icon";
 
-const FALLBACK_IMAGE = "https://placehold.co/320x320?text=Category";
+const FALLBACK_IMAGE = "https://placehold.co/343x250?text=Category";
 
 interface CategoryCardProps {
   id: number;
@@ -14,12 +14,9 @@ interface CategoryCardProps {
 export const CategoryCard = ({ id, name, image }: CategoryCardProps): ReactElement => {
   return (
     <div className={styles.categoryCard}>
-      <NavLink to={`/category/${id}`} className={styles.link}>
-        {image ? (
-          <img src={image} alt={name} className={styles.image} />
-        ) : (
-          <img src={FALLBACK_IMAGE} alt={name} className={styles.image} />
-        )}
+      <NavLink to={`/category/${id}`} className={styles.link} aria-label={`Browse ${name} recipes`}>
+        <img src={image ?? FALLBACK_IMAGE} alt={name} className={styles.image} loading="lazy" />
+        <div className={styles.overlay} aria-hidden="true" />
         <div className={styles.content}>
           <div className={styles.titleWrapper}>
             <p className={styles.title}>{name}</p>
