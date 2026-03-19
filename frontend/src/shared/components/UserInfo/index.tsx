@@ -49,6 +49,8 @@ const UserInfo = (props: UserInfoProps) => {
             onFileSelect={handleAvatarSelect}
             hasError={isOwnProfile && Boolean(avatarUpdateError)}
             error={isOwnProfile ? (avatarUpdateError ?? undefined) : undefined}
+            targetHeight={256}
+            targetWidth={256}
             elementTrigger={
               isOwnProfile ? (
                 <Button

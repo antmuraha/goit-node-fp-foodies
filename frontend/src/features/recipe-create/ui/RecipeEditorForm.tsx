@@ -181,6 +181,8 @@ export const RecipeEditorForm = ({
           initialImageUrl={typeof formik.values.image === "string" ? formik.values.image.trim() : undefined}
           accept="image/*"
           elementTrigger={<a href="#">Upload another photo</a>}
+          targetWidth={551}
+          targetHeight={400}
           onFileSelect={(file) => {
             if (file) {
               formik.setFieldValue("image", file);
