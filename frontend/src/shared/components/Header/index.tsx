@@ -1,11 +1,12 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/routes";
 import { useAuth } from "../../hooks";
+import { useAuthModal } from "../../contexts/AuthModalContext";
 import styles from "./styles.module.css";
 
 const Header = () => {
-  const navigate = useNavigate();
   const { isAuthenticated } = useAuth();
+  const { openSignIn, openSignUp, openLogOut } = useAuthModal();
 
   return (
     <header className={styles.header}>
@@ -14,11 +15,11 @@ const Header = () => {
       <NavLink to={APP_ROUTES.RECIPE_ADD}>Add Recipe</NavLink>
       <section>
         {isAuthenticated ? (
-          <button onClick={() => navigate(".", { state: { openLogOut: true } })}>LOG OUT</button>
+          <button onClick={openLogOut}>LOG OUT</button>
         ) : (
           <>
-            <button onClick={() => navigate(".", { state: { openSignIn: true } })}>SIGN IN</button>
-            <button onClick={() => navigate(".", { state: { openSignUp: true } })}>SIGN UP</button>
+            <button onClick={openSignIn}>SIGN IN</button>
+            <button onClick={openSignUp}>SIGN UP</button>
           </>
         )}
       </section>

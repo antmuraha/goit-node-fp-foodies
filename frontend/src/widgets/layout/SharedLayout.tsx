@@ -1,10 +1,11 @@
-import { useState, useEffect, type ReactElement } from "react";
+import { useState, useEffect, useMemo, type ReactElement } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../shared/constants/routes";
 import { AUTH_NOTIFICATIONS } from "../../shared/constants/notifications";
 import { notificationService } from "../../shared/services/notifications";
 import { Toaster } from "../../shared/ui";
 import { AuthModalShell, LogOutModal } from "../../features/auth";
+import { AuthModalContext } from "../../shared/contexts/AuthModalContext";
 import { Footer } from "../footer/Footer";
 import { Breadcrumb } from "../../shared/ui/breadcrumb";
 
@@ -48,20 +49,39 @@ export const SharedLayout = (): ReactElement => {
     navigate(returnTo, { replace: true });
   };
 
+  const authModalCtx = useMemo(
+    () => ({
+      openSignIn: () => {
+        setReturnTo(location.pathname);
+        setAuthView("signIn");
+        setIsAuthOpen(true);
+      },
+      openSignUp: () => {
+        setReturnTo(location.pathname);
+        setAuthView("signUp");
+        setIsAuthOpen(true);
+      },
+      openLogOut: () => setIsLogOutOpen(true),
+    }),
+    [location.pathname],
+  );
+
   return (
-    <div className="page-shell">
-      <Breadcrumb />
-      <Outlet />
-      <Footer />
-      <AuthModalShell
-        isOpen={isAuthOpen}
-        initialView={authView}
-        onClose={() => setIsAuthOpen(false)}
-        onSignInSuccess={handleSignInSuccess}
-        onSignUpSuccess={handleSignUpSuccess}
-      />
-      <LogOutModal isOpen={isLogOutOpen} onClose={() => setIsLogOutOpen(false)} />
-      <Toaster />
-    </div>
+    <AuthModalContext.Provider value={authModalCtx}>
+      <div className="page-shell">
+        <Breadcrumb />
+        <Outlet />
+        <Footer />
+        <AuthModalShell
+          isOpen={isAuthOpen}
+          initialView={authView}
+          onClose={() => setIsAuthOpen(false)}
+          onSignInSuccess={handleSignInSuccess}
+          onSignUpSuccess={handleSignUpSuccess}
+        />
+        <LogOutModal isOpen={isLogOutOpen} onClose={() => setIsLogOutOpen(false)} />
+        <Toaster />
+      </div>
+    </AuthModalContext.Provider>
   );
 };
