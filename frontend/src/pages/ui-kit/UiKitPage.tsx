@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Button, Checkbox, Input, Modal, Radio, Select, TextArea, Pagination } from "../../shared/ui";
 import styles from "./UiKitPage.module.css";
 import { Icon } from "../../shared/components/Icon";
+import { NumericStepper } from "../../shared/ui/numeric-stepper";
 
 const SERVING_OPTIONS = [
   { value: "1", label: "1 serving" },
@@ -19,6 +20,7 @@ export const UiKitPage = (): ReactElement => {
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [currentPageManyPages, setCurrentPageManyPages] = useState<number>(1);
+  const [cookingTime, setCookingTime] = useState<number>(10);
 
   const handlePublishToggle = (event: ChangeEvent<HTMLInputElement>): void => {
     setIsPublished(event.target.checked);
@@ -223,6 +225,19 @@ export const UiKitPage = (): ReactElement => {
               </p>
               <Pagination currentPage={currentPageManyPages} totalPages={15} onPageChange={setCurrentPageManyPages} />
             </div>
+          </div>
+        </article>
+        <article className={styles.card}>
+          <h2 className={styles.cardTitle}>Numeric Stepper</h2>
+          <div className={styles.column}>
+            <NumericStepper
+              label="Cooking time"
+              value={cookingTime}
+              min={10}
+              max={480}
+              step={10}
+              onChange={(val) => setCookingTime(val)}
+            />
           </div>
         </article>
       </section>
