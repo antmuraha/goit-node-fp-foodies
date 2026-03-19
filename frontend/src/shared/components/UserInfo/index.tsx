@@ -1,8 +1,8 @@
 import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { UserDetailsResponse } from "../../../entities/user/model/types";
 import { useUserFollowing } from "../../helpers/useUserFollowing";
 import { Button, ImageInput } from "../../ui";
-import { useAuth } from "../../hooks/useAuth";
 import { useDataUser } from "../../hooks/useDataUser";
 import { Icon } from "../../../shared/components/Icon";
 import styles from "./UserInfo.module.css";
@@ -17,8 +17,13 @@ type UserInfoProps = {
 const UserInfo = (props: UserInfoProps) => {
   const { isOwnProfile, user, favoritesCount, followingCount } = props;
   const { ensureFollowingStatus, isFollowing, isPending, toggleFollowing } = useUserFollowing();
-  const { signOut } = useAuth();
   const { uploadAvatar, isAvatarUpdating, avatarUpdateError } = useDataUser();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleLogoutClick = () => {
+    navigate(location.pathname, { state: { openLogOut: true } });
+  };
 
   const handleAvatarSelect = (file: File | null): void => {
     if (!file) {
@@ -107,7 +112,7 @@ const UserInfo = (props: UserInfoProps) => {
 
       <div className={styles.actions}>
         {isOwnProfile ? (
-          <Button className={styles.actionButton} onClick={signOut}>
+          <Button className={styles.actionButton} onClick={handleLogoutClick}>
             LOG OUT
           </Button>
         ) : (

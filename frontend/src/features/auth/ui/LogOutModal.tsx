@@ -1,6 +1,8 @@
 import type { ReactElement } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button, Modal } from "../../../shared/ui";
 import { useAuth } from "../../../shared/hooks";
+import { APP_ROUTES } from "../../../shared/constants/routes";
 import styles from "./LogOutModal.module.css";
 
 type LogOutModalProps = {
@@ -10,10 +12,12 @@ type LogOutModalProps = {
 
 export const LogOutModal = ({ isOpen, onClose }: LogOutModalProps): ReactElement => {
   const { signOut } = useAuth();
+  const navigate = useNavigate();
 
   const handleConfirm = async (): Promise<void> => {
-    await signOut();
     onClose();
+    await signOut();
+    navigate(APP_ROUTES.HOME, { replace: true });
   };
 
   return (
