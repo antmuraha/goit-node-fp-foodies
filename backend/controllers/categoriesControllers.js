@@ -1,6 +1,5 @@
+import { baseImageUrl } from "../config/constants.js";
 import { listCategories } from "../services/categoriesServices.js";
-
-const baseImageUrl = process.env.BASE_IMAGE_URL || "http://localhost:3000";
 
 export const getCategories = async (req, res, next) => {
   try {
