@@ -82,7 +82,7 @@
   color: var(--fd-color-white);
 }
 
-/* ── Tablet ── */
+/* ── Tablet (768px) ── */
 @media (min-width: 768px) {
   .section {
     padding: 0 var(--fd-container-px-tablet);
@@ -96,7 +96,7 @@
   }
 
   .title {
-    font-size: var(--fd-type-h2-size);  /* 40px */
+    font-size: var(--fd-type-h2-size);   /* 40px */
     line-height: var(--fd-type-h2-height); /* 44px */
     letter-spacing: -0.8px;
   }
@@ -130,40 +130,39 @@
   }
 }
 
-/* ── Desktop ── */
+/* ── Desktop (1280px) ── */
 @media (min-width: 1280px) {
   .section {
     padding: 0 var(--fd-container-px-desktop);
     margin-top: 120px;
     margin-bottom: 120px;
-    flex-direction: row;
-    align-items: flex-start;
-    gap: var(--fd-space-80);
+    gap: var(--fd-space-40);
   }
 
-  .heading {
-    flex: 0 0 auto;
-    max-width: 350px;
-    position: sticky;
-    top: var(--fd-space-40);
-  }
-
-  .title {
-    font-size: var(--fd-type-h2-size);
-    line-height: var(--fd-type-h2-height);
-  }
-
+  /*
+   * 4-column grid; wide cards (span 2) repeat every 12 items.
+   * Positions in each cycle of 12: 3, 4, 8, 10.
+   * This replicates the Figma rows:
+   *   Row 1: [1][1][WW]  Row 2: [WW][1][1]
+   *   Row 3: [1][WW][1]  Row 4: [WW][1][1]
+   * CSS grid auto-placement fills columns correctly because each row
+   * sums to exactly 4 column units (2×1 + 1×2 = 4).
+   */
   .list {
-    flex: 1;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
   }
 
-  /* Reset tablet full-width rule; desktop uses uniform 3-col grid */
+  /* Reset tablet full-width rule */
   .list > :nth-child(5n + 3) {
     grid-column: span 1;
   }
 
-  .allCard {
-    grid-column: span 1;
+  /* Desktop wide-card positions within each 12-item cycle */
+  .list > :nth-child(12n + 3),
+  .list > :nth-child(12n + 4),
+  .list > :nth-child(12n + 8),
+  .list > :nth-child(12n + 10) {
+    grid-column: span 2;
   }
 }
