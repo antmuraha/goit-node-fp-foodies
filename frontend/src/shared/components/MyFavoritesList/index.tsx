@@ -27,4 +27,3 @@ const MyFavoritesList = () => {
 };
 
 export default MyFavoritesList;
-

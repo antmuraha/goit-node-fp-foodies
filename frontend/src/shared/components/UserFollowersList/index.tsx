@@ -2,7 +2,6 @@ import { NavLink } from "react-router-dom";
 import { useDataProfileFollowers } from "../../hooks";
 import { EmptyState } from "../../ui";
 
-
 type UserFollowersListProps = {
   user: string;
 };
