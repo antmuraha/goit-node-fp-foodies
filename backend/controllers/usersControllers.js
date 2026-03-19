@@ -32,8 +32,8 @@ export const updateAvatar = async (req, res, next) => {
     if (req.file) {
       avatar = await saveAvatar(userId, req.file);
     } else if (req.body.avatar !== undefined) {
-      await validateAvatarUrl(req.body.avatarURL);
-      avatar = req.body.avatarURL || null;
+      await validateAvatarUrl(req.body.avatar);
+      avatar = req.body.avatar || null;
     } else {
       throw HttpError(400, "Avatar file or URL required");
     }

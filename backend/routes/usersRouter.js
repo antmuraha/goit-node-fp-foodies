@@ -9,12 +9,12 @@ import {
   unfollowUser,
   updateAvatar,
 } from "../controllers/usersControllers.js";
-import { getOwnRecipes } from "../controllers/recipesControllers.js";
-import { validateParams } from "../helpers/validateParams.js";
 import authenticate from "../middleware/authenticate.js";
+import { validateBody } from "../helpers/validateBody.js";
 import { avatarUpdateSchema, followParamsSchema } from "../schemas/userSchemas.js";
 import upload from "../config/multerConfig.js";
-import { validateBody } from "../helpers/validateBody.js";
+import { getOwnRecipes } from "../controllers/recipesControllers.js";
+import { validateParams } from "../helpers/validateParams.js";
 
 const usersRouter = Router();
 

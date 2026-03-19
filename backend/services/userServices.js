@@ -9,7 +9,7 @@ export const getFollowersList = async (userId, { page, limit }) => {
       {
         model: db.User,
         as: "follower",
-        attributes: ["id", "name", "email", "avatarURL"],
+        attributes: ["id", "name", "email", "avatar"],
       },
     ],
     order: [["createdAt", "DESC"]],
@@ -74,7 +74,7 @@ export const getFollowingList = async (userId, { page, limit }) => {
       {
         model: db.User,
         as: "following",
-        attributes: ["id", "name", "email", "avatarURL"],
+        attributes: ["id", "name", "email", "avatar"],
       },
     ],
     order: [["createdAt", "DESC"]],
@@ -107,7 +107,7 @@ export const getFollowStatus = async (followerId, followingId) => {
 
 export const getOtherUserProfile = async (targetId) => {
   const user = await db.User.findByPk(targetId, {
-    attributes: ["id", "name", "email", "avatarURL", "createdAt"],
+    attributes: ["id", "name", "email", "avatar", "createdAt"],
   });
 
   if (!user) {
@@ -134,7 +134,7 @@ export const getOtherUserProfile = async (targetId) => {
 
 export const getUserProfileWithMetrics = async (userId) => {
   const user = await db.User.findByPk(userId, {
-    attributes: ["id", "name", "email", "avatarURL"],
+    attributes: ["id", "name", "email", "avatar"],
   });
 
   if (!user) {
