@@ -11,6 +11,7 @@ export type RequestConfig<TBody = unknown> = {
 export type ApiError = {
   message: string;
   status: number;
+  code?: string;
   details?: unknown;
 };
 

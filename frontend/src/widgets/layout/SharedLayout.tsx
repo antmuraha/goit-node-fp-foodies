@@ -8,12 +8,15 @@ import { AuthModalShell, LogOutModal } from "../../features/auth";
 import { AuthModalContext } from "../../shared/contexts/AuthModalContext";
 import { Footer } from "../footer/Footer";
 import { Breadcrumb } from "../../shared/ui/breadcrumb";
+import { useAppDispatch } from "../../shared/hooks";
+import { clearAuthSession } from "../../store/slices/authSlice";
 
 type AuthView = "signIn" | "signUp";
 
 export const SharedLayout = (): ReactElement => {
   const location = useLocation();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   const [isAuthOpen, setIsAuthOpen] = useState(false);
   const [authView, setAuthView] = useState<AuthView>("signIn");
@@ -36,6 +39,16 @@ export const SharedLayout = (): ReactElement => {
       navigate(location.pathname, { replace: true, state: {} });
     }
   }, [location.state?.openSignIn, location.state?.openSignUp, location.state?.openLogOut]);
+
+  useEffect(() => {
+    const handleSessionExpired = (): void => {
+      dispatch(clearAuthSession());
+      notificationService.error(AUTH_NOTIFICATIONS.SESSION_EXPIRED);
+    };
+
+    window.addEventListener("session:expired", handleSessionExpired);
+    return () => window.removeEventListener("session:expired", handleSessionExpired);
+  }, [dispatch]);
 
   const handleSignInSuccess = (): void => {
     setIsAuthOpen(false);

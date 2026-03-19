@@ -11,6 +11,7 @@ export const FOLLOW_NOTIFICATIONS = {
 export const AUTH_NOTIFICATIONS = {
   SIGN_IN_SUCCESS: "Welcome back! You are now signed in.",
   SIGN_UP_SUCCESS: "Account created successfully! Welcome to Foodies.",
+  SESSION_EXPIRED: "Your session has expired. Please sign in again.",
 } as const;
 
 export const FAVORITE_NOTIFICATIONS = {
