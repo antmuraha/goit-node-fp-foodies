@@ -17,7 +17,6 @@ export const CategoryPage = (): ReactElement => {
           <CategoryFilterPanel />
         </aside>
         <section className={styles.section}>
-          {/* TODO: FE-CATEGORY-03 — pass pagination prop once ready */}
           <CategoryRecipesGrid categoryId={Number(categoryId)} />
         </section>
       </main>
