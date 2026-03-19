@@ -19,7 +19,6 @@ export const ProfileDropdownMenu = ({ user, onLogout }: ProfileDropdownMenuProps
   const menuRef = useRef<HTMLUListElement>(null);
   const previousFocus = useRef<HTMLElement | null>(null);
 
-  // Close menu when clicking outside
   useEffect(() => {
     if (!isOpen) return;
 
@@ -33,7 +32,6 @@ export const ProfileDropdownMenu = ({ user, onLogout }: ProfileDropdownMenuProps
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isOpen]);
 
-  // Handle keyboard events
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (!isOpen && (e.key === "Enter" || e.key === " " || e.key === "ArrowDown")) {
@@ -83,13 +81,11 @@ export const ProfileDropdownMenu = ({ user, onLogout }: ProfileDropdownMenuProps
     [isOpen],
   );
 
-  // Open menu and focus first item
   const handleOpenMenu = useCallback(() => {
     previousFocus.current = document.activeElement as HTMLElement;
     setIsOpen(true);
   }, []);
 
-  // Close menu and restore focus
   const handleCloseMenu = useCallback(() => {
     setIsOpen(false);
     triggerRef.current?.focus();
@@ -114,6 +110,8 @@ export const ProfileDropdownMenu = ({ user, onLogout }: ProfileDropdownMenuProps
   };
 
   const avatarContent = <img src={user.avatar || defaultAvatar} alt={user.name} className={styles.avatar} />;
+
+  console.log(user)
 
   return (
     <div className={styles.container}>
