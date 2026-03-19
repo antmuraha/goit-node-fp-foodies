@@ -28,7 +28,6 @@
     "dotenv": "^17.3.1",
     "express": "^5.2.1",
     "gravatar": "^1.8.2",
-    "jimp": "^1.6.0",
     "joi": "^18.0.2",
     "jsonwebtoken": "^9.0.3",
     "morgan": "^1.10.1",
@@ -36,6 +35,7 @@
     "nodemailer": "^8.0.2",
     "pg": "^8.20.0",
     "sequelize": "^6.37.8",
+    "sharp": "^0.34.5",
     "uuid": "^13.0.0"
   },
   "devDependencies": {

@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { Jimp } from "jimp";
+import sharp from "sharp";
 import HttpError from "../helpers/HttpError.js";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -28,9 +28,7 @@ export const saveAvatar = async (userId, file) => {
     const filename = `${userId}${AVATAR_OUTPUT_EXTENSION}`;
     const filepath = path.join(AVATARS_DIR, filename);
 
-    const image = await Jimp.read(file.buffer);
-    image.cover({ w: AVATAR_SIZE, h: AVATAR_SIZE });
-    const imageBuffer = await image.getBuffer(AVATAR_OUTPUT_MIME);
+    const imageBuffer = await sharp(file.buffer).resize(AVATAR_SIZE, AVATAR_SIZE, { fit: "cover" }).png().toBuffer();
     await fs.writeFile(filepath, imageBuffer);
 
     return `/avatars/${filename}`;
