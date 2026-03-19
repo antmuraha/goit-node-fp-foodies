@@ -21,6 +21,7 @@ export const API_ROUTES = {
     POPULAR: "/recipes/popular",
     FAVORITES: "/recipes/favorites",
     FAVORITE_BY_ID: (id: number | string): string => `/recipes/${id}/favorite`,
+    UPLOAD_IMAGE: "/recipes/upload/image",
   },
   CATEGORIES: {
     ROOT: "/categories",

@@ -11,6 +11,7 @@ import {
   useDataCategories,
   useDataIngredients,
   useDataRecipe,
+  useDataRecipes,
 } from "../../shared/hooks";
 import { APP_ROUTES } from "../../shared/constants/routes";
 import { createRecipe, resetEditorSubmitState, updateRecipe } from "../../store/slices/recipesSlice";
@@ -31,6 +32,7 @@ export const AddRecipePage = (): ReactElement => {
   const { categories, isLoading: isCategoriesLoading, error: categoriesError } = useDataCategories();
   const { ingredients, isLoading: isIngredientsLoading, error: ingredientsError } = useDataIngredients();
   const { areas, isLoading: isAreasLoading, error: areasError } = useDataAreas();
+  const { uploadImage, isImageUploading, imageUploadError } = useDataRecipes();
 
   const editorSubmitStatus = useAppSelector((state) => state.recipes.editorSubmitStatus);
   const editorSubmitError = useAppSelector((state) => state.recipes.editorSubmitError);
@@ -71,11 +73,23 @@ export const AddRecipePage = (): ReactElement => {
   const handleSubmit = async (values: RecipeEditorFormValues): Promise<void> => {
     dispatch(resetEditorSubmitState());
 
+    let imageUrl: string | null = null;
+
+    // Upload image if it's a File
+    if (values.image instanceof File) {
+      imageUrl = await uploadImage(values.image);
+      if (!imageUrl) {
+        return; // Image upload failed, error is already in imageUploadError
+      }
+    } else if (typeof values.image === "string") {
+      imageUrl = values.image.trim();
+    }
+
     const payload: CreateRecipePayload = {
       name: values.name.trim(),
       description: values.description.trim(),
       instructions: values.instructions.trim(),
-      image: typeof values.image === "string" ? values.image.trim() : null,
+      image: imageUrl,
       cookingTime: Number(values.cookingTime),
       categoryId: Number(values.categoryId),
       ingredients: values.ingredients.map((ingredientItem) => ({
@@ -116,8 +130,10 @@ export const AddRecipePage = (): ReactElement => {
             areas={areas}
             initialValues={initialValues}
             isCatalogLoading={isCatalogLoading}
-            isSubmitting={editorSubmitStatus === "loading"}
-            submitError={editorSubmitError}
+            isSubmitting={editorSubmitStatus === "loading" || isImageUploading}
+            submitError={editorSubmitError ?? imageUploadError}
+            isImageUploading={isImageUploading}
+            imageUploadError={imageUploadError}
             onSubmit={handleSubmit}
             onCancel={handleCancel}
           />

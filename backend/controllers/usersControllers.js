@@ -1,4 +1,4 @@
-import { saveAvatar, validateAvatarUrl } from "../services/avatarServices.js";
+import { saveAvatar } from "../services/avatarServices.js";
 import db from "../models/index.js";
 import HttpError from "../helpers/HttpError.js";
 import {
@@ -10,6 +10,7 @@ import {
   getOtherUserProfile,
   removeFollow,
 } from "../services/userServices.js";
+import validateUrl from "../helpers/validateUrl.js";
 
 export const getCurrentUser = async (req, res, next) => {
   try {
@@ -32,7 +33,7 @@ export const updateAvatar = async (req, res, next) => {
     if (req.file) {
       avatar = await saveAvatar(userId, req.file);
     } else if (req.body.avatar !== undefined) {
-      await validateAvatarUrl(req.body.avatar);
+      await validateUrl(req.body.avatar);
       avatar = req.body.avatar || null;
     } else {
       throw HttpError(400, "Avatar file or URL required");

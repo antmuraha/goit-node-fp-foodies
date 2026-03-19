@@ -50,20 +50,3 @@ export const saveAvatar = async (userId, file) => {
     throw HttpError(500, "Failed to save avatar");
   }
 };
-
-/**
- * Validates an avatar URL
- * @param {string} url - The avatar URL to validate
- * @returns {Promise<void>}
- */
-export const validateAvatarUrl = async (url) => {
-  if (!url || url.trim() === "") {
-    return;
-  }
-
-  try {
-    new URL(url);
-  } catch {
-    throw HttpError(400, "Invalid avatar URL format");
-  }
-};

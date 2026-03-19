@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { updateAvatar } from "../../store/slices/authSlice";
-import { clearSelectedUser, fetchUserById } from "../../store/slices/usersSlice";
+import { fetchUserById } from "../../store/slices/usersSlice";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
 
 export const useDataUser = (userId?: number) => {
