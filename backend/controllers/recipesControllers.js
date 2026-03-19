@@ -115,7 +115,7 @@ export const uploadRecipeImage = async (req, res, next) => {
     let image;
 
     if (req.file) {
-      image = await saveImage(userId, req.file);
+      image = await saveImage(`recipe-${Date.now()}`, req.file);
     } else if (req.body.avatar !== undefined) {
       await validateUrl(req.body.avatar);
       image = req.body.avatar || null;

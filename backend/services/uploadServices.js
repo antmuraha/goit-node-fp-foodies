@@ -27,11 +27,11 @@ const getRecipeImageExtension = (file) => {
 
 /**
  * Saves an uploaded recipe image file for a user
- * @param {number} userId - The user ID
+ * @param {string} prefix - The prefix for the image filename
  * @param {object} file - Multer file object
  * @returns {Promise<string>} - The recipe image URL path
  */
-export const saveImage = async (userId, file) => {
+export const saveImage = async (prefix, file) => {
   if (!file) {
     throw HttpError(400, "No file provided");
   }
@@ -39,7 +39,7 @@ export const saveImage = async (userId, file) => {
   try {
     await fs.mkdir(RECIPE_IMAGE_DIR, { recursive: true });
 
-    const filename = `${userId}${getRecipeImageExtension(file)}`;
+    const filename = `${prefix}${getRecipeImageExtension(file)}`;
     const filepath = path.join(RECIPE_IMAGE_DIR, filename);
 
     const imageBuffer = await sharp(file.buffer)
