@@ -43,6 +43,8 @@ type RecipesState = {
   favoriteRecipes: RecipeListState;
   editorSubmitStatus: AsyncStatus;
   editorSubmitError: string | null;
+  imageUploadStatus: AsyncStatus;
+  imageUploadError: string | null;
 };
 
 const initialRecipeListState: RecipeListState = {
@@ -73,6 +75,8 @@ const initialState: RecipesState = {
   favoriteRecipes: { ...initialRecipeListState },
   editorSubmitStatus: "idle",
   editorSubmitError: null,
+  imageUploadStatus: "idle",
+  imageUploadError: null,
 };
 
 const getErrorMessage = (error: unknown): string => {
@@ -189,6 +193,24 @@ export const updateRecipe = createAsyncThunk<
     return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
   }
 });
+
+export const uploadRecipeImage = createAsyncThunk<string, File, { state: AuthTokenState; rejectValue: string }>(
+  "recipes/uploadRecipeImage",
+  async (file, thunkApi) => {
+    const token = thunkApi.getState().auth.token;
+
+    if (!token) {
+      return thunkApi.rejectWithValue("Missing auth token for recipe image upload request");
+    }
+
+    try {
+      const response = await recipesApi.uploadRecipeImage(token, file);
+      return response.image;
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
+    }
+  },
+);
 
 const recipesSlice = createSlice({
   name: "recipes",
@@ -352,6 +374,17 @@ const recipesSlice = createSlice({
       .addCase(updateRecipe.rejected, (state, action) => {
         state.editorSubmitStatus = "failed";
         state.editorSubmitError = action.payload ?? "Unable to update recipe";
+      })
+      .addCase(uploadRecipeImage.pending, (state) => {
+        state.imageUploadStatus = "loading";
+        state.imageUploadError = null;
+      })
+      .addCase(uploadRecipeImage.fulfilled, (state) => {
+        state.imageUploadStatus = "succeeded";
+      })
+      .addCase(uploadRecipeImage.rejected, (state, action) => {
+        state.imageUploadStatus = "failed";
+        state.imageUploadError = action.payload ?? "Unable to upload recipe image";
       });
   },
 });

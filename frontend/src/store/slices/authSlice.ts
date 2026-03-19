@@ -1,10 +1,17 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { authApi } from "../../api/endpoints/authApi";
+import { usersApi } from "../../api/endpoints/usersApi";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
 import { sessionStorageAdapter } from "../../shared/services/sessionStorage";
 import { MeProfile } from "../../entities/user/model/types";
 
 export type LoginCredentials = {
+  email: string;
+  password: string;
+};
+
+export type RegisterCredentials = {
+  name: string;
   email: string;
   password: string;
 };
@@ -16,6 +23,10 @@ type AuthState = {
   profileError: string | null;
   loginStatus: AsyncStatus;
   loginError: string | null;
+  registerStatus: AsyncStatus;
+  registerError: string | null;
+  avatarUpdateStatus: AsyncStatus;
+  avatarUpdateError: string | null;
 };
 
 const initialState: AuthState = {
@@ -25,6 +36,10 @@ const initialState: AuthState = {
   profileError: null,
   loginStatus: "idle",
   loginError: null,
+  registerStatus: "idle",
+  registerError: null,
+  avatarUpdateStatus: "idle",
+  avatarUpdateError: null,
 };
 
 const getErrorMessage = (error: unknown): string => {
@@ -53,6 +68,37 @@ export const login = createAsyncThunk<{ token: string; user: MeProfile }, LoginC
   },
 );
 
+export const register = createAsyncThunk<
+  { token: string; user: MeProfile },
+  RegisterCredentials,
+  { rejectValue: string }
+>("auth/register", async (credentials, thunkApi) => {
+  try {
+    await authApi.register(credentials);
+    const response = await authApi.login({ email: credentials.email, password: credentials.password });
+    const me = await authApi.getProfile(response.token);
+    sessionStorageAdapter.save(response.token);
+    return { ...response, user: me };
+  } catch (error) {
+    return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
+  }
+});
+
+export const logout = createAsyncThunk<void, void, { state: { auth: AuthState }; rejectValue: string }>(
+  "auth/logout",
+  async (_, thunkApi) => {
+    const token = thunkApi.getState().auth.token;
+    if (token) {
+      try {
+        await authApi.logout(token);
+      } catch {
+        // proceed with local cleanup even if server logout fails
+      }
+    }
+    thunkApi.dispatch(clearAuthSession());
+  },
+);
+
 export const fetchProfile = createAsyncThunk<MeProfile, void, { state: { auth: AuthState }; rejectValue: string }>(
   "auth/fetchProfile",
   async (_, thunkApi) => {
@@ -69,6 +115,24 @@ export const fetchProfile = createAsyncThunk<MeProfile, void, { state: { auth: A
         thunkApi.dispatch(clearAuthSession());
       }
 
+      return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
+    }
+  },
+);
+
+export const updateAvatar = createAsyncThunk<string, File, { state: { auth: AuthState }; rejectValue: string }>(
+  "auth/updateAvatar",
+  async (file, thunkApi) => {
+    const token = thunkApi.getState().auth.token;
+
+    if (!token) {
+      return thunkApi.rejectWithValue("Missing auth token for avatar update request");
+    }
+
+    try {
+      const response = await usersApi.updateAvatar(token, file);
+      return response.user.avatar ?? "";
+    } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
     }
   },
@@ -96,6 +160,10 @@ const authSlice = createSlice({
       state.profileError = null;
       state.loginStatus = "idle";
       state.loginError = null;
+      state.registerStatus = "idle";
+      state.registerError = null;
+      state.avatarUpdateStatus = "idle";
+      state.avatarUpdateError = null;
       sessionStorageAdapter.clear();
     },
     adjustFollowingCount: (state, action: PayloadAction<number>) => {
@@ -130,6 +198,19 @@ const authSlice = createSlice({
         state.loginStatus = "failed";
         state.loginError = action.payload ?? "Login failed";
       })
+      .addCase(register.pending, (state) => {
+        state.registerStatus = "loading";
+        state.registerError = null;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.registerStatus = "succeeded";
+        state.token = action.payload.token;
+        state.currentUser = action.payload.user;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.registerStatus = "failed";
+        state.registerError = action.payload ?? "Registration failed";
+      })
       .addCase(fetchProfile.pending, (state) => {
         state.profileStatus = "loading";
         state.profileError = null;
@@ -145,6 +226,23 @@ const authSlice = createSlice({
 
         state.profileStatus = "failed";
         state.profileError = action.payload ?? "Unable to load profile";
+      })
+      .addCase(updateAvatar.pending, (state) => {
+        state.avatarUpdateStatus = "loading";
+        state.avatarUpdateError = null;
+      })
+      .addCase(updateAvatar.fulfilled, (state, action) => {
+        state.avatarUpdateStatus = "succeeded";
+
+        if (!state.currentUser) {
+          return;
+        }
+
+        state.currentUser.avatar = action.payload || null;
+      })
+      .addCase(updateAvatar.rejected, (state, action) => {
+        state.avatarUpdateStatus = "failed";
+        state.avatarUpdateError = action.payload ?? "Unable to update avatar";
       });
   },
 });

@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import { type ReactElement } from "react";
-import { Button, FormErrorMessage, Input, Select, TextArea } from "../../../shared/ui";
+import { Button, FormErrorMessage, ImageInput, Input, Select, TextArea } from "../../../shared/ui";
 import { DEFAULT_RECIPE_FORM_VALUES, recipeEditorSchema, type RecipeEditorFormValues } from "../validation";
 import styles from "./RecipeEditorForm.module.css";
 
@@ -18,6 +18,8 @@ type RecipeEditorFormProps = {
   isCatalogLoading: boolean;
   isSubmitting: boolean;
   submitError: string | null;
+  isImageUploading?: boolean;
+  imageUploadError?: string | null;
   onSubmit: (values: RecipeEditorFormValues) => Promise<void>;
   onCancel?: () => void;
 };
@@ -43,6 +45,8 @@ export const RecipeEditorForm = ({
   isCatalogLoading,
   isSubmitting,
   submitError,
+  isImageUploading = false,
+  imageUploadError,
   onSubmit,
   onCancel,
 }: RecipeEditorFormProps): ReactElement => {
@@ -171,21 +175,29 @@ export const RecipeEditorForm = ({
   return (
     <form className={styles.form} onSubmit={formik.handleSubmit} noValidate>
       <div className={styles.group}>
-        <label className={styles.label} htmlFor="recipe-image-url">
-          Image URL
-        </label>
-        <Input
-          id="recipe-image-url"
-          name="image"
-          value={formik.values.image}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          placeholder="https://example.com/recipe-image.jpg"
-          hasError={Boolean(formik.touched.image && formik.errors.image)}
-          disabled={isSubmitting}
+        <ImageInput
+          id="recipe-image"
+          label="Recipe image"
+          initialImageUrl={typeof formik.values.image === "string" ? formik.values.image.trim() : undefined}
+          accept="image/*"
+          elementTrigger={<a href="#">Upload another photo</a>}
+          targetWidth={551}
+          targetHeight={400}
+          onFileSelect={(file) => {
+            if (file) {
+              formik.setFieldValue("image", file);
+            }
+          }}
+          disabled={isSubmitting || isImageUploading}
+          hasError={Boolean(formik.touched.image && formik.errors.image) || Boolean(imageUploadError)}
+          error={
+            (formik.touched.image && formik.errors.image) || imageUploadError
+              ? (imageUploadError ?? (formik.touched.image ? formik.errors.image : undefined))
+              : undefined
+          }
         />
-        {formik.touched.image && formik.errors.image && <FormErrorMessage>{formik.errors.image}</FormErrorMessage>}
       </div>
+
       <div className={styles.grid}>
         <div className={styles.group}>
           <label className={styles.label} htmlFor="recipe-name">
@@ -214,10 +226,11 @@ export const RecipeEditorForm = ({
             value={formik.values.description}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            placeholder="Describe this recipe"
+            placeholder="Enter a description of the dish"
             hasError={Boolean(formik.touched.description && formik.errors.description)}
             disabled={isSubmitting}
             rows={4}
+            maxLength={200}
           />
           {formik.touched.description && formik.errors.description && (
             <FormErrorMessage>{formik.errors.description}</FormErrorMessage>
@@ -391,10 +404,11 @@ export const RecipeEditorForm = ({
           value={formik.values.instructions}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          placeholder="Provide the cooking instructions"
+          placeholder="Enter recipe"
           hasError={Boolean(formik.touched.instructions && formik.errors.instructions)}
           disabled={isSubmitting}
           rows={6}
+          maxLength={1000}
         />
         {formik.touched.instructions && formik.errors.instructions && (
           <FormErrorMessage>{formik.errors.instructions}</FormErrorMessage>

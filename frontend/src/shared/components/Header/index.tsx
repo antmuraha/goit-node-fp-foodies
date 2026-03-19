@@ -1,9 +1,12 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/routes";
 import { AuthWidget } from "../../../widgets/authWidget/AuthWidget";
 import styles from "./styles.module.css";
 
 const Header = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+
   return (
     <header className={styles.header}>
       <NavLink to={APP_ROUTES.HOME}>LOGO</NavLink>

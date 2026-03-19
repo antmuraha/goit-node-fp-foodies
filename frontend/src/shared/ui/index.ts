@@ -1,5 +1,7 @@
 export { Button } from "./button";
 export { Input } from "./input";
+export { FileInput } from "./file-input";
+export { ImageInput } from "./image-input";
 export { TextArea } from "./textarea";
 export { Select } from "./select";
 export { Checkbox } from "./checkbox";
@@ -7,6 +9,7 @@ export { Radio } from "./radio";
 export { FormErrorMessage } from "./form-error";
 export { Modal } from "./modal";
 export { Pagination } from "./pagination";
+export { Toaster } from "./toaster/Toaster";
 export { ImageCategory } from "./image-category";
 export { HeroSection } from "./hero-section";
 export { Container } from "./container";

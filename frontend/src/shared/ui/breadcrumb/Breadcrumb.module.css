@@ -1,0 +1,33 @@
+.breadcrumbList {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.breadcrumbItem {
+  font-size: var(--fd-font-size-14);
+  line-height: var(--fd-line-height-18);
+  color: var(--fd-color-muted);
+  text-transform: uppercase;
+}
+
+.breadcrumbLink {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.breadcrumbLink:hover {
+  text-decoration: underline;
+}
+
+.breadcrumbCurrent {
+  color: var(--fd-text-primary);
+}
+
+.separator {
+  margin-left: 8px;
+  color: var(--fd-text-muted);
+  font-size: var(--fd-font-size-14);
+}

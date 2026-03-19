@@ -2,7 +2,7 @@ import { NOTIFICATION_TYPES } from "../constants/notifications";
 
 type NotificationType = (typeof NOTIFICATION_TYPES)[keyof typeof NOTIFICATION_TYPES];
 
-type AppNotification = {
+export type AppNotification = {
   type: NotificationType;
   message: string;
 };
@@ -14,8 +14,10 @@ const dispatchNotificationEvent = (notification: AppNotification): void => {
 };
 
 export const notificationService = {
+  success: (message: string): void => {
+    dispatchNotificationEvent({ type: NOTIFICATION_TYPES.SUCCESS, message });
+  },
   error: (message: string): void => {
     dispatchNotificationEvent({ type: NOTIFICATION_TYPES.ERROR, message });
-    window.alert(message);
   },
 };

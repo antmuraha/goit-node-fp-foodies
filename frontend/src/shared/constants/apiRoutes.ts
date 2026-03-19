@@ -11,6 +11,7 @@ export const API_ROUTES = {
     FOLLOW_STATUS: (id: number | string): string => `/users/${id}/follow/status`,
     RECIPES: (id: number | string): string => `/users/${id}/recipes`,
     ME: "/users/me",
+    ME_AVATAR: "/users/me/avatar",
     FOLLOWERS: (id: number | string): string => `/users/${id}/followers`,
     FOLLOWING: "/users/me/following",
   },
@@ -20,6 +21,7 @@ export const API_ROUTES = {
     POPULAR: "/recipes/popular",
     FAVORITES: "/recipes/favorites",
     FAVORITE_BY_ID: (id: number | string): string => `/recipes/${id}/favorite`,
+    UPLOAD_IMAGE: "/recipes/upload/image",
   },
   CATEGORIES: {
     ROOT: "/categories",
