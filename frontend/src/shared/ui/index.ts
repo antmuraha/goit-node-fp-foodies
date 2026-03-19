@@ -1,5 +1,7 @@
 export { Button } from "./button";
 export { Input } from "./input";
+export { FileInput } from "./file-input";
+export { ImageInput } from "./image-input";
 export { TextArea } from "./textarea";
 export { Select } from "./select";
 export { Checkbox } from "./checkbox";
