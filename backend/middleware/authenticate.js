@@ -15,7 +15,17 @@ const authenticate = async (req, res, next) => {
       return res.status(401).json({ message: "Not authorized" });
     }
 
-    const { id } = jwt.verify(token, process.env.JWT_SECRET);
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      if (err.name === "TokenExpiredError") {
+        return res.status(401).json({ message: "Token expired", code: "TOKEN_EXPIRED" });
+      }
+      return res.status(401).json({ message: "Not authorized" });
+    }
+
+    const { id } = decoded;
     const user = await db.User.findByPk(id);
 
     if (!user || user.token !== token) {

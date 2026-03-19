@@ -21,6 +21,8 @@ const buildQueryString = (params?: Record<string, QueryValue>): string => {
   return queryString ? `?${queryString}` : "";
 };
 
+const TOKEN_EXPIRED_CODE = "TOKEN_EXPIRED";
+
 const normalizeError = async (response: Response): Promise<ApiError> => {
   let data: unknown = null;
 
@@ -30,12 +32,14 @@ const normalizeError = async (response: Response): Promise<ApiError> => {
     data = null;
   }
 
-  const messageFromBody =
-    data && typeof data === "object" && "message" in data && typeof data.message === "string" ? data.message : null;
+  const body = data && typeof data === "object" ? (data as Record<string, unknown>) : null;
+  const messageFromBody = typeof body?.message === "string" ? body.message : null;
+  const codeFromBody = typeof body?.code === "string" ? body.code : undefined;
 
   return {
     message: messageFromBody ?? `Request failed with status ${response.status}`,
     status: response.status,
+    code: codeFromBody,
     details: data,
   };
 };
@@ -69,7 +73,11 @@ const request = async <TResponse, TBody = unknown>(
   });
 
   if (!response.ok) {
-    throw await normalizeError(response);
+    const error = await normalizeError(response);
+    if (error.status === 401 && error.code === TOKEN_EXPIRED_CODE) {
+      window.dispatchEvent(new CustomEvent("session:expired"));
+    }
+    throw error;
   }
 
   if (response.status === 204) {
