@@ -1,6 +1,6 @@
 import { useFormik } from "formik";
 import { type ReactElement } from "react";
-import { Button, FormErrorMessage, Input, Select, TextArea } from "../../../shared/ui";
+import { Button, FormErrorMessage, ImageInput, Input, Select, TextArea } from "../../../shared/ui";
 import { DEFAULT_RECIPE_FORM_VALUES, recipeEditorSchema, type RecipeEditorFormValues } from "../validation";
 import styles from "./RecipeEditorForm.module.css";
 
@@ -171,21 +171,23 @@ export const RecipeEditorForm = ({
   return (
     <form className={styles.form} onSubmit={formik.handleSubmit} noValidate>
       <div className={styles.group}>
-        <label className={styles.label} htmlFor="recipe-image-url">
-          Image URL
-        </label>
-        <Input
-          id="recipe-image-url"
-          name="image"
-          value={formik.values.image}
-          onChange={formik.handleChange}
-          onBlur={formik.handleBlur}
-          placeholder="https://example.com/recipe-image.jpg"
-          hasError={Boolean(formik.touched.image && formik.errors.image)}
+        <ImageInput
+          id="recipe-image"
+          label="Recipe image"
+          initialImageUrl={typeof formik.values.image === "string" ? formik.values.image.trim() : undefined}
+          accept="image/*"
+          elementTrigger={<a href="#">Upload another photo</a>}
+          onFileSelect={(file) => {
+            if (file) {
+              formik.setFieldValue("image", file);
+            }
+          }}
           disabled={isSubmitting}
+          hasError={Boolean(formik.touched.image && formik.errors.image)}
+          error={formik.touched.image && formik.errors.image ? formik.errors.image : undefined}
         />
-        {formik.touched.image && formik.errors.image && <FormErrorMessage>{formik.errors.image}</FormErrorMessage>}
       </div>
+
       <div className={styles.grid}>
         <div className={styles.group}>
           <label className={styles.label} htmlFor="recipe-name">

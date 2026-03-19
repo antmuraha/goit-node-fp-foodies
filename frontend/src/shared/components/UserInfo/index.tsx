@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { UserDetailsResponse } from "../../../entities/user/model/types";
 import { useUserFollowing } from "../../helpers/useUserFollowing";
-import { Button } from "../../ui";
+import { Button, ImageInput } from "../../ui";
 import { useAuth } from "../../hooks/useAuth";
 import { Icon } from "../../../shared/components/Icon";
 import styles from "./UserInfo.module.css";
@@ -30,26 +30,27 @@ const UserInfo = (props: UserInfoProps) => {
     <div className={styles.wrapper}>
       <div className={styles.card}>
         <div className={styles.avatarContainer}>
-          {user.avatar ? (
-            <img src={user.avatar} alt={user.name} className={styles.avatar} />
-          ) : (
-            <div className={styles.avatarFallback}>{user.name?.[0]?.toUpperCase() || "U"}</div>
-          )}
-
-          {isOwnProfile && (
-            <button
-              className={styles.uploadBtn}
-              aria-label="Upload new avatar"
-              type="button"
-              onClick={() => {
-                alert("add this functional");
-              }}
-            >
-              <div className={styles.iconWrapper}>
-                <Icon name="close" color="action-secondary-bg" size={24} />
-              </div>
-            </button>
-          )}
+          <ImageInput
+            id="profile-avatar-file"
+            label=""
+            initialImageUrl={user.avatar ?? undefined}
+            accept="image/*"
+            elementTrigger={
+              isOwnProfile ? (
+                <Button
+                  variant="primary"
+                  size="small"
+                  isIconOnly
+                  className={styles.uploadBtn}
+                  aria-label="Upload new avatar"
+                >
+                  <div className={styles.iconWrapper}>
+                    <Icon name="close" color="action-secondary-bg" size={24} />
+                  </div>
+                </Button>
+              ) : undefined
+            }
+          />
         </div>
 
         <h2 className={styles.userName}>{user.name}</h2>
