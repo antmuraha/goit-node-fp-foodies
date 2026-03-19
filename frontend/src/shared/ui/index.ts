@@ -13,3 +13,4 @@ export { Toaster } from "./toaster/Toaster";
 export { ImageCategory } from "./image-category";
 export { HeroSection } from "./hero-section";
 export { Container } from "./container";
+export { EmptyState } from "./empty-state";
