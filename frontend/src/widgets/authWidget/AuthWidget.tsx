@@ -13,37 +13,31 @@ export const AuthWidget = (): ReactElement => {
 
   const handleSignInClick = () => {
     setActiveTab("signin");
-    navigate(location.pathname, { 
-      state: { openSignIn: true, returnTo: location.pathname } 
+    navigate(location.pathname, {
+      state: { openSignIn: true, returnTo: location.pathname },
     });
   };
 
   const handleSignUpClick = () => {
     setActiveTab("signup");
-    navigate(location.pathname, { 
-      state: { openSignUp: true, returnTo: location.pathname } 
+    navigate(location.pathname, {
+      state: { openSignUp: true, returnTo: location.pathname },
     });
   };
 
   const handleLogoutClick = () => {
-    navigate(location.pathname, { 
-      state: { openLogOut: true } 
+    navigate(location.pathname, {
+      state: { openLogOut: true },
     });
   };
 
   if (!isAuthenticated || !currentUser) {
     return (
       <div className={styles.authLinks}>
-        <button
-          onClick={handleSignInClick}
-          className={`${styles.link} ${activeTab === "signin" ? styles.active : ""}`}
-        >
+        <button onClick={handleSignInClick} className={`${styles.link} ${activeTab === "signin" ? styles.active : ""}`}>
           Sign in
         </button>
-        <button
-          onClick={handleSignUpClick}
-          className={`${styles.link} ${activeTab === "signup" ? styles.active : ""}`}
-        >
+        <button onClick={handleSignUpClick} className={`${styles.link} ${activeTab === "signup" ? styles.active : ""}`}>
           Sign up
         </button>
       </div>

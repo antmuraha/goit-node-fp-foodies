@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/routes";
 import type { MeProfile } from "../../../entities/user/model/types";
 import defaultAvatar from "../../../assets/images/defaultAvatar.svg";
+import { Icon } from "../Icon";
 import styles from "./ProfileDropdownMenu.module.css";
 
 type ProfileDropdownMenuProps = {
@@ -127,22 +128,32 @@ export const ProfileDropdownMenu = ({ user, onLogout }: ProfileDropdownMenuProps
         type="button"
       >
         {avatarContent}
-        <span className={styles.name}>{user.name}</span>
-        <svg className={styles.chevron} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-          <path d="M19 9l-7 7-7-7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <div className={styles.buttonPart}>
+          <p className={styles.name}>{user.name}</p>
+          <div className={`${styles.chevron} ${isOpen ? styles.chevronOpen : ""}`}>
+            <Icon name="chevron-down" color="color-white" size={24} />
+          </div>
+        </div>
       </button>
 
       {isOpen && (
         <ul ref={menuRef} className={styles.menu} role="menu">
-          <li>
+          <li className={styles.menuLi}>
             <button className={styles.menuItem} onClick={handleProfileClick} role="menuitem" type="button">
-              View Profile
+              PROFILE
             </button>
           </li>
-          <li>
-            <button className={styles.menuItem} onClick={handleLogoutClick} role="menuitem" type="button">
-              Log Out
+          <li className={styles.menuLi}>
+            <button
+              className={`${styles.menuItem} ${styles.logOutItem}`}
+              onClick={handleLogoutClick}
+              role="menuitem"
+              type="button"
+            >
+              LOG OUT
+              <div className={styles.chevron}>
+                <Icon name="arrow-up-right" color="color-white" size={24} />
+              </div>
             </button>
           </li>
         </ul>
