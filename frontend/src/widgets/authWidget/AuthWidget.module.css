@@ -3,22 +3,22 @@
   align-items: center;
   width: 156px;
   height: 38px;
-  background-color: #ffffff;
-  border-radius: 30px;
+  background-color: var(--fd-bg-canvas);
+  border-radius: var(--fd-radius-pill);
   overflow: hidden;
   padding: 0;
-  border: none; 
+  border: none;
 }
 
 .link {
-  flex: 1; 
+  flex: 1;
   height: 100%;
   background: none;
   border: none;
   text-transform: uppercase;
-  font-size: 12px;
-  font-weight: 700;
-  color: #050505;
+  font-size: var(--fd-font-size-12);
+  font-weight: var(--fd-font-weight-bold);
+  color: var(--fd-action-secondary-text);
   transition: all 0.2s ease;
   cursor: pointer;
   font-family: inherit;
@@ -30,53 +30,19 @@
 }
 
 .active {
-  color: #fff;
-  background-color: #1a1a1a;
-  border-radius: 30px;
-  box-shadow: inset 0 0 0 1px #bfbebe;
+  color: var(--fd-action-secondary-bg);
+  background-color: var(--fd-color-main-alt);
+  border-radius: var(--fd-radius-pill);
+  box-shadow: inset 0 0 0 1px var(--fd-border-default);
 }
 
-.formContainer {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.switchText {
-  text-align: center;
-  margin: 0;
-  font-size: 14px;
-  color: var(--fd-text-secondary, #666);
-}
-
-.switchButton {
-  background: none;
-  border: none;
-  color: var(--fd-color-main, #333);
-  cursor: pointer;
-  font-weight: 600;
-  text-decoration: none;
-  font-size: inherit;
-  font-family: inherit;
-}
-
-.logoutDescription {
-  margin: 0 0 24px 0;
-  font-size: 14px;
-  color: var(--fd-text-secondary, #666);
-  line-height: 1.5;
-}
-
-.logoutActions {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  width: 100%;
+.active:hover {
+  background-color: #050505;
 }
 
 @media (min-width: 768px) {
   .authLinks {
-  width: 208px;
-  height: 46px;
-}
+    width: 208px;
+    height: 46px;
+  }
 }
