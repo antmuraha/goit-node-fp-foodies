@@ -11,7 +11,7 @@ export const Breadcrumb = () => {
       pathname: match.pathname,
     }));
 
-  if (crumbs.length === 0) {
+  if (crumbs.length <= 1) {
     return null;
   }
 
