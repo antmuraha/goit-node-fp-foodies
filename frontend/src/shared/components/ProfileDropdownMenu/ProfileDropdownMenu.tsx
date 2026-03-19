@@ -3,6 +3,7 @@ import { useRef, useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../constants/routes";
 import type { MeProfile } from "../../../entities/user/model/types";
+import defaultAvatar from "../../../assets/images/defaultAvatar.svg";
 import styles from "./ProfileDropdownMenu.module.css";
 
 type ProfileDropdownMenuProps = {
@@ -22,10 +23,7 @@ export const ProfileDropdownMenu = ({ user, onLogout }: ProfileDropdownMenuProps
     if (!isOpen) return;
 
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        !triggerRef.current?.contains(e.target as Node) &&
-        !menuRef.current?.contains(e.target as Node)
-      ) {
+      if (!triggerRef.current?.contains(e.target as Node) && !menuRef.current?.contains(e.target as Node)) {
         setIsOpen(false);
       }
     };
@@ -35,48 +33,54 @@ export const ProfileDropdownMenu = ({ user, onLogout }: ProfileDropdownMenuProps
   }, [isOpen]);
 
   // Handle keyboard events
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (!isOpen && (e.key === "Enter" || e.key === " " || e.key === "ArrowDown")) {
-      e.preventDefault();
-      setIsOpen(true);
-      return;
-    }
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (!isOpen && (e.key === "Enter" || e.key === " " || e.key === "ArrowDown")) {
+        e.preventDefault();
+        setIsOpen(true);
+        return;
+      }
 
-    if (isOpen && e.key === "Escape") {
-      e.preventDefault();
-      setIsOpen(false);
-      triggerRef.current?.focus();
-      return;
-    }
+      if (isOpen && e.key === "Escape") {
+        e.preventDefault();
+        setIsOpen(false);
+        triggerRef.current?.focus();
+        return;
+      }
 
-    if (isOpen && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
-      e.preventDefault();
-      const items = menuRef.current?.querySelectorAll<HTMLElement>("[role='menuitem']");
-      if (!items || items.length === 0) return;
+      if (isOpen && (e.key === "ArrowDown" || e.key === "ArrowUp")) {
+        e.preventDefault();
+        const items = menuRef.current?.querySelectorAll<HTMLElement>("[role='menuitem']");
+        if (!items || items.length === 0) return;
 
-      const currentFocus = document.activeElement;
-      let nextIndex = 0;
+        const currentFocus = document.activeElement;
+        let nextIndex = 0;
 
-      if (currentFocus && items.length > 0) {
-        const currentIndex = Array.from(items).indexOf(currentFocus as HTMLElement);
-        if (e.key === "ArrowDown") {
-          nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
-        } else {
-          nextIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+        if (currentFocus && items.length > 0) {
+          const currentIndex = Array.from(items).indexOf(currentFocus as HTMLElement);
+          if (e.key === "ArrowDown") {
+            nextIndex = currentIndex < items.length - 1 ? currentIndex + 1 : 0;
+          } else {
+            nextIndex = currentIndex > 0 ? currentIndex - 1 : items.length - 1;
+          }
+        }
+
+        items[nextIndex]?.focus();
+        return;
+      }
+
+      if (isOpen && (e.key === "Enter" || e.key === " ")) {
+        if (
+          document.activeElement?.hasAttribute("role") &&
+          document.activeElement?.getAttribute("role") === "menuitem"
+        ) {
+          e.preventDefault();
+          (document.activeElement as HTMLElement).click();
         }
       }
-
-      items[nextIndex]?.focus();
-      return;
-    }
-
-    if (isOpen && (e.key === "Enter" || e.key === " ")) {
-      if (document.activeElement?.hasAttribute("role") && document.activeElement?.getAttribute("role") === "menuitem") {
-        e.preventDefault();
-        (document.activeElement as HTMLElement).click();
-      }
-    }
-  }, [isOpen]);
+    },
+    [isOpen],
+  );
 
   // Open menu and focus first item
   const handleOpenMenu = useCallback(() => {
@@ -108,11 +112,7 @@ export const ProfileDropdownMenu = ({ user, onLogout }: ProfileDropdownMenuProps
     handleCloseMenu();
   };
 
-  const avatarContent = user.avatar ? (
-    <img src={user.avatar} alt={user.name} className={styles.avatar} />
-  ) : (
-    <div className={styles.avatarFallback}>{user.name?.[0]?.toUpperCase() || "U"}</div>
-  );
+  const avatarContent = <img src={user.avatar || defaultAvatar} alt={user.name} className={styles.avatar} />;
 
   return (
     <div className={styles.container}>
@@ -136,22 +136,12 @@ export const ProfileDropdownMenu = ({ user, onLogout }: ProfileDropdownMenuProps
       {isOpen && (
         <ul ref={menuRef} className={styles.menu} role="menu">
           <li>
-            <button
-              className={styles.menuItem}
-              onClick={handleProfileClick}
-              role="menuitem"
-              type="button"
-            >
+            <button className={styles.menuItem} onClick={handleProfileClick} role="menuitem" type="button">
               View Profile
             </button>
           </li>
           <li>
-            <button
-              className={styles.menuItem}
-              onClick={handleLogoutClick}
-              role="menuitem"
-              type="button"
-            >
+            <button className={styles.menuItem} onClick={handleLogoutClick} role="menuitem" type="button">
               Log Out
             </button>
           </li>
