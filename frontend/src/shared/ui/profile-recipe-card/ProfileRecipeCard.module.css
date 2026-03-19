@@ -3,6 +3,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    gap: 16px;
 }
 
 .image {
@@ -11,8 +12,14 @@
     border-radius: 15px;
 }
 
-/* .section {} */
-.content {}
+.section {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    position: relative;
+}
 
 .title {
     font-size: 20px;
@@ -35,8 +42,11 @@
     display: flex;
     flex-direction: row;
     gap: 4px;
+    position: absolute;
+    top: 0;
+    right: 0;
 }
-.linkArrowUp {}
+
 
 .iconWrapper {
     flex-shrink: 0;
@@ -44,6 +54,6 @@
     border: 1px solid var(--fd-button-muted-bg);
     padding: 12px;
     display: flex;
-    align-items: center;
+    align-items: center;content
     justify-content: center;
 }
