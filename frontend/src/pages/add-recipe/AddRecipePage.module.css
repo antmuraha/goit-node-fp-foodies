@@ -1,0 +1,33 @@
+.page {
+  display: flex;
+  justify-content: center;
+  padding: var(--fd-space-24) var(--fd-space-16);
+}
+
+.card {
+  width: min(100%, 900px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-20);
+  padding: var(--fd-space-24);
+  border-radius: var(--fd-radius-md);
+  background: var(--fd-bg-canvas);
+  border: 1px solid var(--fd-border-default);
+}
+
+.title {
+  margin: 0;
+  color: var(--fd-text-primary);
+  font-size: var(--fd-font-size-24);
+  line-height: var(--fd-line-height-28);
+}
+
+@media (max-width: 767px) {
+  .card {
+    padding: var(--fd-space-16);
+  }
+
+  .title {
+    font-size: var(--fd-font-size-20);
+  }
+}

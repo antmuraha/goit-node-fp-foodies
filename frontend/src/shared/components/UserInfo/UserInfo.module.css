@@ -1,0 +1,176 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 343px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 29px 0px;
+  border: 1px solid var(--fd-color-muted);
+  border-radius: var(--fd-radius-pill);
+}
+
+.avatarContainer {
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+
+.uploadBtn {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%) rotate(45deg);
+  width: 28px;
+  height: 28px;
+  border-radius: 30px;
+  border: none;
+  background-color: var(--fd-color-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.uploadBtn:hover {
+  background-color: var(--fd-color-main-alt);
+}
+
+.iconWrapper {
+  width: 14px;
+  height: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.userName {
+  font-size: var(--fd-font-size-18);
+  font-weight: var(--fd-font-weight-extrabold);
+  line-height: var(--fd-line-height-24);
+  color: var(--fd-text-primary);
+  text-transform: uppercase;
+  margin: 16px 0;
+  text-align: center;
+  letter-spacing: -2%;
+}
+
+.statsList {
+  list-style: none;
+  padding: 0;
+  margin: 0 auto;
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.statsList li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: -2%;
+}
+
+.label {
+  color: var(--fd-color-muted);
+  font-weight: var(--fd-font-weight-medium);
+  font-size: var(--fd-font-size-12);
+  line-height: var(--fd-line-height-18);
+}
+
+.value {
+  color: var(--fd-color-main-alt);
+  font-weight: 700;
+  font-size: var(--fd-font-size-14);
+  line-height: var(--fd-line-height-20);
+}
+
+.actions {
+  width: 100%;
+}
+
+.actionButton {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--fd-radius-pill);
+  background-color: var(--fd-color-main-alt);
+  color: var(--fd-color-white);
+  font-size: var(--fd-font-size-14);
+  font-weight: var(--fd-font-weight-bold);
+  line-height: var(--fd-line-height-20);
+  text-transform: uppercase;
+  border: none;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionButton:hover:not(:disabled) {
+  background-color: #000000;
+}
+
+.actionButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (min-width: 768px) {
+  .wrapper {
+    max-width: 394px;
+    margin: 0 auto;
+  }
+
+  .card {
+    padding: 39px 0px;
+    border: 1px solid var(--fd-color-main);
+  }
+
+  .avatarContainer {
+    width: 120px;
+    height: 120px;
+  }
+
+  .uploadBtn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .iconWrapper {
+    width: 18px;
+    height: 18px;
+  }
+
+  .userName {
+    font-size: var(--fd-font-size-20);
+    margin: 20px 0;
+  }
+
+  .label {
+    font-size: var(--fd-font-size-14);
+    line-height: var(--fd-line-height-20);
+  }
+
+  .value {
+    font-size: var(--fd-font-size-16);
+    line-height: var(--fd-line-height-24);
+  }
+  .actionButton {
+    padding: 16px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .card {
+    border: 1px solid var(--fd-color-muted);
+  }
+}

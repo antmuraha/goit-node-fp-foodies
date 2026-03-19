@@ -7,17 +7,96 @@ const DEFAULT_LIMIT = 20;
 const MAX_LIMIT = 100;
 const { fn, col, literal } = db.Sequelize;
 
+const toRecipeModelPayload = (data = {}) => {
+  const payload = { ...data };
+
+  if (typeof payload.name === "string") {
+    payload.title = payload.name;
+  }
+
+  delete payload.name;
+  delete payload.servings;
+
+  return payload;
+};
+
+const toIngredientMeasure = (quantity, unit) => {
+  const safeQuantity = quantity === null || quantity === undefined ? "" : String(quantity).trim();
+  const safeUnit = typeof unit === "string" ? unit.trim() : "";
+
+  if (!safeUnit) {
+    return safeQuantity;
+  }
+
+  if (!safeQuantity) {
+    return safeUnit;
+  }
+
+  const separator = safeUnit.length > 2 ? " " : "";
+  return `${safeQuantity}${separator}${safeUnit}`;
+};
+
+const parseIngredientMeasure = (ingredient) => {
+  const measureSource =
+    typeof ingredient.measure === "string"
+      ? ingredient.measure
+      : typeof ingredient.quantity === "string"
+        ? ingredient.quantity
+        : String(ingredient.quantity ?? "");
+
+  const measure = measureSource.trim();
+
+  if (!measure) {
+    return { quantity: "", unit: null };
+  }
+
+  const match = measure.match(/^(\d+(?:[.,]\d+)?)\s*(.*)$/);
+
+  if (!match) {
+    return { quantity: measure, unit: null };
+  }
+
+  const [, quantityRaw, unitRaw] = match;
+  const quantity = quantityRaw.replace(",", ".");
+  const unit = unitRaw?.trim() ? unitRaw.trim() : null;
+
+  return { quantity, unit };
+};
+
+const normalizeRecipeDetail = (recipeInstance) => {
+  if (!recipeInstance) {
+    return null;
+  }
+
+  const recipe = recipeInstance.toJSON();
+  const ingredients = Array.isArray(recipe.Ingredients)
+    ? recipe.Ingredients.map((ingredient) => ({
+        id: ingredient.id,
+        measure: toIngredientMeasure(ingredient.RecipeIngredient?.quantity, ingredient.RecipeIngredient?.unit),
+        name: ingredient.name,
+        image: ingredient.image,
+      }))
+    : [];
+
+  const { Ingredients, ...restRecipe } = recipe;
+
+  return {
+    ...restRecipe,
+    ingredients,
+  };
+};
+
 export const searchRecipes = async ({ categoryId, ingredientId, areaId, search, limit, offset }) => {
   const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
   const safeOffset = Math.max(Number(offset) || 0, 0);
 
   const where = {};
   if (categoryId) where.categoryId = Number(categoryId);
-  if (search) where.name = { [Op.iLike]: `%${search}%` };
+  if (search) where.title = { [Op.iLike]: `%${search}%` };
 
   const include = [
-    { model: Category, attributes: ["id", "name", "image"] },
-    { model: User, as: "author", attributes: ["id", "name", "avatarURL"] },
+    { model: Category, as: "category", attributes: ["id", "name", "image"] },
+    { model: User, as: "author", attributes: ["id", "name", "avatar"] },
   ];
 
   if (ingredientId) {
@@ -33,6 +112,7 @@ export const searchRecipes = async ({ categoryId, ingredientId, areaId, search, 
   if (areaId) {
     include.push({
       model: Area,
+      as: "areas",
       through: { attributes: [] },
       where: { id: Number(areaId) },
       required: true,
@@ -73,7 +153,7 @@ TODO: Temporary commented for testing without favorites.
   const recipes = await Recipe.findAll({
     where: { id: recipeIds },
     include: [
-      { model: Category, attributes: ["id", "name", "image"] },
+      { model: Category, as: "category", attributes: ["id", "name", "image"] },
       { model: User, as: "author", attributes: ["id", "name", "avatar"] },
     ],
   });
@@ -82,8 +162,8 @@ TODO: Temporary commented for testing without favorites.
 
   // TODO: START TEMPORARY BLOCK
   const include = [
-    { model: Category, attributes: ["id", "name", "image"] },
-    { model: User, as: "author", attributes: ["id", "name", "avatarURL"] },
+    { model: Category, as: "category", attributes: ["id", "name", "image"] },
+    { model: User, as: "author", attributes: ["id", "name", "avatar"] },
   ];
 
   const { count, rows } = await Recipe.findAndCountAll({
@@ -100,11 +180,13 @@ TODO: Temporary commented for testing without favorites.
   return recipeIds.map((id) => recipes.find((r) => r.id === id));
 };
 
-export const getRecipeById = async (id) => {
-  return Recipe.findByPk(id, {
+export const getRecipeById = async (id, options = {}) => {
+  const { transaction } = options;
+
+  const recipe = await Recipe.findByPk(id, {
     include: [
-      { model: Category, attributes: ["id", "name", "image"] },
-      { model: User, as: "author", attributes: ["id", "name", "avatarURL"] },
+      { model: Category, as: "category", attributes: ["id", "name", "image"] },
+      { model: User, as: "author", attributes: ["id", "name", "avatar"] },
       {
         model: Ingredient,
         through: { attributes: ["quantity", "unit"] },
@@ -112,20 +194,25 @@ export const getRecipeById = async (id) => {
       },
       {
         model: Area,
+        as: "areas",
         through: { attributes: [] },
         attributes: ["id", "name"],
       },
     ],
+    transaction,
   });
+
+  return normalizeRecipeDetail(recipe);
 };
 
 export const createRecipe = async (userId, data) => {
   const { ingredients, areas, ...recipeData } = data;
+  const normalizedRecipeData = toRecipeModelPayload(recipeData);
 
   return db.sequelize.transaction(async (t) => {
     const recipe = await Recipe.create(
       {
-        ...recipeData,
+        ...normalizedRecipeData,
         userId,
       },
       { transaction: t },
@@ -134,9 +221,9 @@ export const createRecipe = async (userId, data) => {
     if (ingredients?.length) {
       await RecipeIngredient.bulkCreate(
         ingredients.map((i) => ({
+          ...parseIngredientMeasure(i),
           recipeId: recipe.id,
           ingredientId: i.ingredientId,
-          quantity: i.quantity,
         })),
         { transaction: t },
       );
@@ -152,7 +239,66 @@ export const createRecipe = async (userId, data) => {
       );
     }
 
-    return getRecipeById(recipe.id);
+    return getRecipeById(recipe.id, { transaction: t });
+  });
+};
+
+export const updateRecipe = async (id, userId, data) => {
+  const { ingredients, areas, ...recipeData } = data;
+  const normalizedRecipeData = toRecipeModelPayload(recipeData);
+
+  return db.sequelize.transaction(async (t) => {
+    const recipe = await Recipe.findByPk(id, { transaction: t });
+
+    if (!recipe) {
+      const err = new Error("Recipe not found");
+      err.status = 404;
+      throw err;
+    }
+
+    if (recipe.userId !== userId) {
+      const err = new Error("Not authorized");
+      err.status = 403;
+      throw err;
+    }
+
+    if (Object.keys(normalizedRecipeData).length > 0) {
+      await recipe.update(normalizedRecipeData, { transaction: t });
+    }
+
+    if (Array.isArray(ingredients)) {
+      await RecipeIngredient.destroy({
+        where: { recipeId: id },
+        transaction: t,
+      });
+
+      if (ingredients.length > 0) {
+        await RecipeIngredient.bulkCreate(
+          ingredients.map((ingredientItem) => ({
+            ...parseIngredientMeasure(ingredientItem),
+            recipeId: id,
+            ingredientId: ingredientItem.ingredientId,
+          })),
+          { transaction: t },
+        );
+      }
+    }
+
+    if (Array.isArray(areas)) {
+      await RecipeArea.destroy({
+        where: { recipeId: id },
+        transaction: t,
+      });
+
+      if (areas.length > 0) {
+        await RecipeArea.bulkCreate(
+          areas.map((areaId) => ({ recipeId: id, areaId })),
+          { transaction: t },
+        );
+      }
+    }
+
+    return getRecipeById(id, { transaction: t });
   });
 };
 
@@ -163,15 +309,15 @@ export const getOwnRecipes = async (userId, { limit, offset }) => {
   const { count, rows } = await Recipe.findAndCountAll({
     where: { userId },
     include: [
-      { model: Category, attributes: ["id", "name", "image"] },
-      { model: User, as: "author", attributes: ["id", "name", "avatarURL"] },
+      { model: Category, as: "category", attributes: ["id", "name", "image"] },
+      { model: User, as: "author", attributes: ["id", "name", "avatar"] },
     ],
     limit: safeLimit,
     offset: safeOffset,
     distinct: true,
     order: [["createdAt", "DESC"]],
   });
-  return { total: count, limit: safeLimit, offset: safeOffset, recipes: rows };
+  return { total: count, limit: safeLimit, offset: safeOffset, data: rows };
 };
 
 export const deleteRecipe = async (id, userId) => {
@@ -231,6 +377,11 @@ export const removeFavoriteService = async (userId, recipeId) => {
   await favorite.destroy();
 };
 
+export const getFavoriteStatusService = async (userId, recipeId) => {
+  const favorite = await Favorite.findOne({ where: { userId, recipeId } });
+  return { recipeId, isFavorite: Boolean(favorite) };
+};
+
 export const listFavoritesService = async (userId, { limit, offset }) => {
   const safeLimit = Math.min(Math.max(Number(limit) || DEFAULT_LIMIT, 1), MAX_LIMIT);
   const safeOffset = Math.max(Number(offset) || 0, 0);
@@ -241,12 +392,8 @@ export const listFavoritesService = async (userId, { limit, offset }) => {
       {
         model: Recipe,
         include: [
-          { model: Category, attributes: ["id", "name", "image"] },
-          {
-            model: User,
-            as: "author",
-            attributes: ["id", "name", "avatarURL"],
-          },
+          { model: Category, as: "category", attributes: ["id", "name", "image"] },
+          { model: User, as: "author", attributes: ["id", "name", "avatar"] },
         ],
       },
     ],
@@ -259,6 +406,6 @@ export const listFavoritesService = async (userId, { limit, offset }) => {
     total: count,
     limit: safeLimit,
     offset: safeOffset,
-    recipes: rows.map((f) => f.Recipe),
+    data: rows.map((f) => f.Recipe),
   };
 };

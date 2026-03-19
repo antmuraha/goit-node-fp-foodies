@@ -1,9 +1,14 @@
 import type { ReactElement } from "react";
-import { useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useMemo } from "react";
+import { NavLink, useParams } from "react-router-dom";
 import { useDataRecipe } from "../../shared/hooks";
-import { RecipeIngredientDetails } from "../../entities/ingredient/types";
 import PopularRecipesList from "../../shared/ui/popular-recipes-list";
+import RecipeIngredientsPanel from "../../features/recipe/ui/RecipeIngredientsPanel";
+import RecipeInstructionsPanel from "../../features/recipe/ui/RecipeInstructionsPanel";
+import { useUserFavorites } from "../../shared/helpers/useUserFavorites";
+import { Button } from "../../shared/ui";
+import useIsOwnEntity from "../../shared/helpers/useIsOwnEntity";
+import styles from "./RecipePage.module.css";
 
 export const RecipePage = (): ReactElement => {
   const { id } = useParams();
@@ -13,38 +18,81 @@ export const RecipePage = (): ReactElement => {
   }, [id]);
 
   const { recipe, isLoading, error } = useDataRecipe(recipeId);
+  const ownRecipe = useIsOwnEntity(recipe?.author.id);
+  const { isFavorite, toggleFavorite, isPending, ensureFavoriteStatus } = useUserFavorites();
+
+  useEffect(() => {
+    if (recipeId) {
+      void ensureFavoriteStatus(recipeId);
+    }
+  }, [recipeId, ensureFavoriteStatus]);
 
   return (
     <>
-      <main>
-        <h1>Recipe page</h1>
-        {isLoading && <p>Loading recipe...</p>}
-        {error && <p>Recipe error: {error}</p>}
+      <main className={styles.page}>
+        {isLoading && <p className={styles.state}>Loading recipe...</p>}
+        {error && <p className={styles.state}>Recipe error: {error}</p>}
         {!isLoading && !error && recipe && (
-          <section>
-            <h2>{recipe.title}</h2>
-            <img src={recipe.image ?? recipe.thumbnail ?? undefined} alt={recipe.title} width={300} />
-            <p>{recipe.description ?? "No description yet"}</p>
-            {recipe.author && <p>Author: {recipe.author.name}</p>}
-            <p>Cooking time: {recipe.cookingTime} minutes</p>
-            <p>Category: {recipe.Category.name}</p>
-            <h3>Ingredients:</h3>
-            <ul>
-              {recipe.Ingredients.map((ingredient: RecipeIngredientDetails) => (
-                <li key={ingredient.id}>
-                  {ingredient.name} -{" "}
-                  {ingredient.image ? <img src={ingredient.image} alt={ingredient.name} width={50} /> : "No image"}
-                  <br />
-                  Quantity: {ingredient.RecipeIngredient.quantity} {ingredient.RecipeIngredient.unit ?? ""}
-                </li>
-              ))}
-            </ul>
-            <h3>Instructions:</h3>
-            <p>{recipe.instructions}</p>
+          <section className={styles.content}>
+            {/* Left column: recipe image */}
+            <div className={styles.imageWrapper}>
+              <img className={styles.image} src={recipe.image ?? recipe.thumbnail ?? undefined} alt={recipe.title} />
+            </div>
+
+            {/* Right column: all recipe details */}
+            <div className={styles.details}>
+              {/* Title, tags, description, author */}
+              <div className={styles.header}>
+                <h1 className={styles.title}>{recipe.title}</h1>
+
+                <div className={styles.tags}>
+                  <span className={styles.tag}>{recipe.category.name}</span>
+                  <span className={styles.tag}>{recipe.cookingTime} min</span>
+                </div>
+
+                <p className={styles.description}>{recipe.description ?? "No description yet"}</p>
+
+                <NavLink className={styles.author} to={`/user/${recipe.author.id}`}>
+                  {recipe.author.avatar ? (
+                    <img className={styles.authorAvatar} src={recipe.author.avatar} alt={recipe.author.name} />
+                  ) : (
+                    <div className={styles.authorAvatar} aria-hidden="true" />
+                  )}
+                  <div className={styles.authorMeta}>
+                    <span className={styles.authorLabel}>Created by:</span>
+                    <span className={styles.authorName}>{recipe.author.name}</span>
+                  </div>
+                </NavLink>
+              </div>
+
+              {/* Ingredients */}
+              <RecipeIngredientsPanel ingredients={recipe.ingredients} />
+
+              {/* Instructions */}
+              <RecipeInstructionsPanel instructions={recipe.instructions} />
+
+              {/* Actions */}
+              <div className={styles.actions}>
+                <Button
+                  disabled={isPending(recipe.id)}
+                  onClick={() => {
+                    void toggleFavorite(recipe.id);
+                  }}
+                >
+                  {isFavorite(recipe.id) ? "Remove from Favorites" : "Add to Favorites"}
+                </Button>
+
+                {ownRecipe && <NavLink to={`/recipe/${recipe.id}/edit`}>Edit Recipe</NavLink>}
+              </div>
+            </div>
           </section>
         )}
       </main>
-      <PopularRecipesList />
+
+      {/* Popular recipes — outside the main, separate section with the top margin */}
+      <div className={styles.popularSection}>
+        <PopularRecipesList />
+      </div>
     </>
   );
 };

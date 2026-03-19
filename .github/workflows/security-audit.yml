@@ -1,12 +1,11 @@
 name: Security Audit (npm -> SARIF)
 
 on:
-  push:
-    # Run workflow when commits are pushed to main branch
-    branches: [main]
   pull_request:
-    # Run workflow on pull requests targeting main
-    branches: [main]
+  push:
+    branches:
+      - main
+      - master
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -27,6 +26,8 @@ jobs:
     steps:
       # Checkout repository code
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       # Setup Node.js runtime for project commands
       - name: Setup Node.js

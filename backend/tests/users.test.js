@@ -182,101 +182,66 @@ describe("DELETE /api/users/:id/follow", () => {
   });
 });
 
-describe("PATCH /api/users/avatar", () => {
-  let user;
+describe("GET /api/users/:id/follow/status", () => {
+  let follower;
+  let following;
   let authHeader;
-  let authCookie;
 
   beforeEach(async () => {
     const password = await bcrypt.hash("password123", 10);
-    user = await db.User.create({
-      name: `Avatar User ${Date.now()}`,
-      email: `avatar-user-${Date.now()}@example.com`,
+    follower = await db.User.create({
+      name: `Follower Status ${Date.now()}`,
+      email: `follower-status-${Date.now()}@example.com`,
       password,
       verify: true,
     });
-    const token = await createAuthToken(user);
-    authHeader = createAuthHeader(token);
-    authCookie = createAuthCookie(token);
+    following = await db.User.create({
+      name: `Following Status ${Date.now()}`,
+      email: `following-status-${Date.now()}@example.com`,
+      password,
+      verify: true,
+    });
+    authHeader = await createAuthHeader(follower);
   });
 
   afterEach(async () => {
-    if (user?.id) {
-      await fs.unlink(path.join(AVATARS_DIR, `${user.id}.png`)).catch(() => null);
-    }
-
+    await db.Follow.destroy({ where: {} });
     await db.User.destroy({
       where: {
-        id: [user?.id].filter(Boolean),
+        id: [follower?.id, following?.id].filter(Boolean),
       },
       force: true,
     });
   });
 
-  it("uploads avatar via multipart/form-data and returns 200", async () => {
-    const res = await request(app)
-      .patch("/api/users/avatar")
-      .set("Authorization", authHeader)
-      .attach("avatar", TEST_PNG_BUFFER, "avatar.png");
+  it("returns isFollowing=false when follow relation does not exist", async () => {
+    const res = await request(app).get(`/api/users/${following.id}/follow/status`).set("Authorization", authHeader);
 
     expect(res.status).toBe(200);
-    expect(res.body.user).toHaveProperty("avatarURL");
-    expect(res.body.user.avatarURL).toBe(`/avatars/${user.id}.png`);
-
-    const avatarFileExists = await fs
-      .access(path.join(AVATARS_DIR, `${user.id}.png`))
-      .then(() => true)
-      .catch(() => false);
-
-    expect(avatarFileExists).toBe(true);
+    expect(res.body).toEqual({ userId: following.id, isFollowing: false });
   });
 
-  it("prioritizes file upload when both file and avatarURL are provided", async () => {
-    const res = await request(app)
-      .patch("/api/users/avatar")
-      .set("Authorization", authHeader)
-      .field("avatarURL", "https://example.com/should-not-be-used.png")
-      .attach("avatar", TEST_PNG_BUFFER, "avatar.png");
+  it("returns isFollowing=true when follow relation exists", async () => {
+    await db.Follow.create({ followerId: follower.id, followingId: following.id });
+
+    const res = await request(app).get(`/api/users/${following.id}/follow/status`).set("Authorization", authHeader);
 
     expect(res.status).toBe(200);
-    expect(res.body.user).toHaveProperty("avatarURL", `/avatars/${user.id}.png`);
+    expect(res.body).toEqual({ userId: following.id, isFollowing: true });
   });
 
-  it("updates avatarURL via JSON and returns 200", async () => {
-    const avatarURL = "https://example.com/avatar.png";
+  it("returns 404 for a non-existent target user", async () => {
+    const res = await request(app).get("/api/users/999999/follow/status").set("Authorization", authHeader);
 
-    const res = await request(app).patch("/api/users/avatar").set("Authorization", authHeader).send({ avatarURL });
-
-    expect(res.status).toBe(200);
-    expect(res.body.user).toHaveProperty("avatarURL", avatarURL);
+    expect(res.status).toBe(404);
+    expect(res.body).toEqual({ message: "User not found" });
   });
 
   it("returns 401 without authentication", async () => {
-    const res = await request(app).patch("/api/users/avatar").send({
-      avatarURL: "https://example.com/avatar.png",
-    });
+    const res = await request(app).get(`/api/users/${following.id}/follow/status`);
 
     expect(res.status).toBe(401);
     expect(res.body).toEqual({ message: "Not authorized" });
-  });
-
-  it("accepts authentication via token cookie", async () => {
-    const avatarURL = "https://example.com/avatar-cookie.png";
-
-    const res = await request(app).patch("/api/users/avatar").set("Cookie", authCookie).send({ avatarURL });
-
-    expect(res.status).toBe(200);
-    expect(res.body.user).toHaveProperty("avatarURL", avatarURL);
-  });
-
-  it("returns 400 for invalid avatarURL", async () => {
-    const res = await request(app)
-      .patch("/api/users/avatar")
-      .set("Authorization", authHeader)
-      .send({ avatarURL: "not-a-url" });
-
-    expect(res.status).toBe(400);
-    expect(res.body).toEqual({ message: "Avatar must be a valid URL" });
   });
 });
 

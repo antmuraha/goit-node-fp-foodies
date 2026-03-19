@@ -1,11 +1,6 @@
 import HttpError from "../helpers/HttpError.js";
 import db from "../models/index.js";
 
-const maskEmail = (email) => {
-  const [local, domain] = email.split("@");
-  return `${local[0]}***@${domain}`;
-};
-
 export const getFollowersList = async (userId, { page, limit }) => {
   const offset = (page - 1) * limit;
   const { count, rows } = await db.Follow.findAndCountAll({
@@ -21,7 +16,7 @@ export const getFollowersList = async (userId, { page, limit }) => {
     limit,
     offset,
   });
-  return { followers: rows.map((f) => f.follower), total: count, page, limit };
+  return { data: rows.map((f) => f.follower), total: count, page, limit };
 };
 
 /**
@@ -86,7 +81,28 @@ export const getFollowingList = async (userId, { page, limit }) => {
     limit,
     offset,
   });
-  return { following: rows.map((f) => f.following), total: count, page, limit };
+  return { data: rows.map((f) => f.following), total: count, page, limit };
+};
+
+export const getFollowStatus = async (followerId, followingId) => {
+  if (followerId === followingId) {
+    return { userId: followingId, isFollowing: false };
+  }
+
+  const targetUser = await db.User.findByPk(followingId);
+
+  if (!targetUser) {
+    throw HttpError(404, "User not found");
+  }
+
+  const follow = await db.Follow.findOne({
+    where: { followerId, followingId },
+  });
+
+  return {
+    userId: followingId,
+    isFollowing: Boolean(follow),
+  };
 };
 
 export const getOtherUserProfile = async (targetId) => {
@@ -103,13 +119,13 @@ export const getOtherUserProfile = async (targetId) => {
     db.Follow.count({ where: { followingId: targetId } }),
   ]);
 
-  const { id, name, email, avatarURL, createdAt } = user.toJSON();
+  const { id, name, email, avatar, createdAt } = user.toJSON();
 
   return {
     id,
     name,
-    email: maskEmail(email),
-    avatarURL,
+    email,
+    avatar,
     createdAt,
     recipesCreated,
     followersCount,

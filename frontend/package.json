@@ -10,7 +10,10 @@
     "format": "biome format --write .",
     "format:check": "biome format .",
     "lint": "biome lint --write .",
-    "lint:check": "biome lint ."
+    "lint:check": "biome lint .",
+    "gen:icons-types": "node scripts/genTypesForIcons.js",
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.11.2",
@@ -23,11 +26,16 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.6",
+    "@spiriit/vite-plugin-svg-spritemap": "^6.0.0",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^25.4.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.4",
+    "jsdom": "^29.0.0",
     "typescript": "^5.9.3",
-    "vite": "^7.3.1"
+    "vite": "^7.3.1",
+    "vitest": "^4.1.0"
   }
 }

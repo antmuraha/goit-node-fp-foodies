@@ -1,31 +1,24 @@
-import { ReactElement, useEffect } from "react";
+import { type ReactElement } from "react";
 import { useParams } from "react-router-dom";
-import { useDataRecipes } from "../../shared/hooks";
-import RecipeCard from "../../shared/ui/recipe-card";
+import { CategoryRecipesGrid } from "../../features/category-recipes-grid";
+import { CategoryFilterPanel } from "../../features/category-filters";
+import styles from "./CategoryPage.module.css";
 
 export const CategoryPage = (): ReactElement => {
   const { id: categoryId } = useParams();
-  console.log({ categoryId });
-  const { recipes, isLoading, error, loadRecipes } = useDataRecipes({ categoryId: Number(categoryId) });
-
-  useEffect(() => {
-    loadRecipes();
-  }, []);
 
   return (
     <>
       <header>
         <h1>Category page</h1>
       </header>
-      <main>
-        <aside>
-          <h2>Category filters</h2>
-          <p>Here you can place category filters, sorting options, or a list of subcategories.</p>
+      <main className={styles.main}>
+        <aside className={styles.aside}>
+          <CategoryFilterPanel />
         </aside>
-        <section>
-          {isLoading && <p>Loading category...</p>}
-          {error && <p>Category error: {error}</p>}
-          {!isLoading && !error && recipes.map((recipe) => <RecipeCard key={recipe.id} {...recipe} />)}
+        <section className={styles.section}>
+          {/* TODO: FE-CATEGORY-03 — pass pagination prop once ready */}
+          <CategoryRecipesGrid categoryId={Number(categoryId)} />
         </section>
       </main>
     </>

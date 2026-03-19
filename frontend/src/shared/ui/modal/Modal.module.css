@@ -1,0 +1,142 @@
+@keyframes fadeInOverlay {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideInModal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  animation: fadeInOverlay 0.2s ease;
+}
+
+.modal {
+  position: relative;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  width: 100%;
+  max-width: 343px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 60px 30px;
+  gap: 40px;
+  animation: slideInModal 0.3s ease-out;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.title {
+  margin: 0;
+  font-family: "Mulish", sans-serif;
+  font-weight: 800;
+  font-size: 28px;
+  line-height: 32px;
+  text-transform: uppercase;
+  color: #000;
+  letter-spacing: -0.02em;
+}
+
+.titleCentered {
+  width: 100%;
+  text-align: center;
+}
+
+.titleTablet {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .titleMobile {
+    display: none;
+  }
+
+  .titleTablet {
+    display: inline;
+  }
+}
+
+.closeButton {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #000;
+  transition: opacity 0.2s;
+  z-index: 1010;
+}
+
+.closeButton:hover {
+  opacity: 0.6;
+}
+
+.modalContent {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+@media (min-width: 768px) {
+  .modal {
+    border-radius: 30px;
+    max-width: 561px;
+    max-height: 570px;
+    padding: 80px;
+  }
+
+  .title {
+    font-size: 32px;
+    line-height: 40px;
+  }
+
+  .modalContent {
+    gap: 40px;
+  }
+
+  .closeButton {
+    top: 20px;
+    right: 20px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .modal {
+    max-height: none;
+  }
+}

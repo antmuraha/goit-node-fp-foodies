@@ -3,7 +3,7 @@ import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class Recipe extends Model {
     static associate(models) {
-      Recipe.belongsTo(models.Category, { foreignKey: "categoryId" });
+      Recipe.belongsTo(models.Category, { foreignKey: "categoryId", as: "category" });
       Recipe.belongsTo(models.User, { as: "author", foreignKey: "userId" });
       Recipe.belongsToMany(models.Ingredient, {
         through: models.RecipeIngredient,
@@ -14,6 +14,7 @@ export default (sequelize, DataTypes) => {
         through: models.RecipeArea,
         foreignKey: "recipeId",
         otherKey: "areaId",
+        as: "areas",
       });
       Recipe.belongsToMany(models.User, {
         through: models.Favorite,

@@ -108,7 +108,7 @@ describe("GET /api/recipes/:id", () => {
     expect(res.body).toHaveProperty("name");
     expect(res.body).toHaveProperty("instructions");
     expect(Array.isArray(res.body.Ingredients)).toBe(true);
-    expect(Array.isArray(res.body.Areas)).toBe(true);
+    expect(Array.isArray(res.body.areas)).toBe(true);
   });
 
   it("sets Cache-Control header for detail", async () => {

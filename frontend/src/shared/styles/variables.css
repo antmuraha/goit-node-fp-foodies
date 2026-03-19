@@ -63,6 +63,7 @@
 
   /* Spacing */
   --fd-space-4: 4px;
+  --fd-space-6: 6px;
   --fd-space-8: 8px;
   --fd-space-12: 12px;
   --fd-space-14: 14px;
@@ -71,8 +72,12 @@
   --fd-space-24: 24px;
   --fd-space-28: 28px;
   --fd-space-30: 30px;
+  --fd-space-32: 32px;
   --fd-space-40: 40px;
+  --fd-space-72: 72px;
   --fd-space-80: 80px;
+  --fd-space-100: 100px;
+  --fd-space-120: 120px;
 
   /* Control sizes */
   --fd-control-height-sm: 40px;
@@ -161,6 +166,14 @@
   --fd-form-field-bg: transparent;
   --fd-form-field-border: var(--fd-border-default);
   --fd-form-support-text: var(--fd-text-muted);
+
+  /* Container tokens (FE-SHARED-04) */
+  --fd-container-max-width: 1280px;
+  --fd-container-max-width-narrow: 768px;
+
+  --fd-container-px-mobile: var(--fd-space-16); /* 16px */
+  --fd-container-px-tablet: 32px; /* no --fd-space-32 token exists */
+  --fd-container-px-desktop: var(--fd-space-80); /* 80px */
 }
 
 [data-theme="dark"] {

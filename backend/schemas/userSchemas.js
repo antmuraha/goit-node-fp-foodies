@@ -1,7 +1,7 @@
 import Joi from "joi";
 
 export const avatarUpdateSchema = Joi.object({
-  avatarURL: Joi.string().uri().allow(null, "").messages({
+  avatar: Joi.string().uri().allow(null, "").messages({
     "string.uri": "Avatar must be a valid URL",
   }),
 });

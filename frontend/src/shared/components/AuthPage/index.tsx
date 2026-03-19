@@ -7,8 +7,12 @@ type AuthPageProps = {
 };
 
 const AuthPage = ({ children }: AuthPageProps) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isProfileLoading } = useAuth();
   const location = useLocation();
+
+  if (isProfileLoading) {
+    return <p>Loading profile...</p>;
+  }
 
   if (!isAuthenticated) {
     return <Navigate to={APP_ROUTES.HOME} state={{ openSignIn: true, returnTo: location.pathname }} replace />;

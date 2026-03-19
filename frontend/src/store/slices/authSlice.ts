@@ -1,21 +1,29 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { authApi } from "../../api/endpoints/authApi";
-import type { UserProfile } from "../../entities/user";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
 import { sessionStorageAdapter } from "../../shared/services/sessionStorage";
+import { MeProfile } from "../../entities/user/model/types";
 
 export type LoginCredentials = {
   email: string;
   password: string;
 };
 
+export type RegisterCredentials = {
+  name: string;
+  email: string;
+  password: string;
+};
+
 type AuthState = {
   token: string | null;
-  currentUser: UserProfile | null;
+  currentUser: MeProfile | null;
   profileStatus: AsyncStatus;
   profileError: string | null;
   loginStatus: AsyncStatus;
   loginError: string | null;
+  registerStatus: AsyncStatus;
+  registerError: string | null;
 };
 
 const initialState: AuthState = {
@@ -25,6 +33,8 @@ const initialState: AuthState = {
   profileError: null,
   loginStatus: "idle",
   loginError: null,
+  registerStatus: "idle",
+  registerError: null,
 };
 
 const getErrorMessage = (error: unknown): string => {
@@ -35,20 +45,56 @@ const getErrorMessage = (error: unknown): string => {
   return "Unexpected request error";
 };
 
-export const login = createAsyncThunk<{ token: string; user: UserProfile }, LoginCredentials, { rejectValue: string }>(
+const isUnauthorizedError = (error: unknown): error is ApiError => {
+  return typeof error === "object" && error !== null && "status" in error && error.status === 401;
+};
+
+export const login = createAsyncThunk<{ token: string; user: MeProfile }, LoginCredentials, { rejectValue: string }>(
   "auth/login",
   async (credentials, thunkApi) => {
     try {
       const response = await authApi.login(credentials);
+      const me = await authApi.getProfile(response.token);
       sessionStorageAdapter.save(response.token);
-      return response;
+      return { ...response, user: me };
     } catch (error) {
       return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
     }
   },
 );
 
-export const fetchProfile = createAsyncThunk<UserProfile, void, { state: { auth: AuthState }; rejectValue: string }>(
+export const register = createAsyncThunk<
+  { token: string; user: MeProfile },
+  RegisterCredentials,
+  { rejectValue: string }
+>("auth/register", async (credentials, thunkApi) => {
+  try {
+    await authApi.register(credentials);
+    const response = await authApi.login({ email: credentials.email, password: credentials.password });
+    const me = await authApi.getProfile(response.token);
+    sessionStorageAdapter.save(response.token);
+    return { ...response, user: me };
+  } catch (error) {
+    return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
+  }
+});
+
+export const logout = createAsyncThunk<void, void, { state: { auth: AuthState }; rejectValue: string }>(
+  "auth/logout",
+  async (_, thunkApi) => {
+    const token = thunkApi.getState().auth.token;
+    if (token) {
+      try {
+        await authApi.logout(token);
+      } catch {
+        // proceed with local cleanup even if server logout fails
+      }
+    }
+    thunkApi.dispatch(clearAuthSession());
+  },
+);
+
+export const fetchProfile = createAsyncThunk<MeProfile, void, { state: { auth: AuthState }; rejectValue: string }>(
   "auth/fetchProfile",
   async (_, thunkApi) => {
     const token = thunkApi.getState().auth.token;
@@ -60,6 +106,10 @@ export const fetchProfile = createAsyncThunk<UserProfile, void, { state: { auth:
     try {
       return await authApi.getProfile(token);
     } catch (error) {
+      if (isUnauthorizedError(error)) {
+        thunkApi.dispatch(clearAuthSession());
+      }
+
       return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
     }
   },
@@ -69,7 +119,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuthSession: (state, action: PayloadAction<{ token: string; user?: UserProfile }>) => {
+    setAuthSession: (state, action: PayloadAction<{ token: string; user?: MeProfile }>) => {
       state.token = action.payload.token;
       sessionStorageAdapter.save(action.payload.token);
       if (action.payload.user) {
@@ -87,7 +137,25 @@ const authSlice = createSlice({
       state.profileError = null;
       state.loginStatus = "idle";
       state.loginError = null;
+      state.registerStatus = "idle";
+      state.registerError = null;
       sessionStorageAdapter.clear();
+    },
+    adjustFollowingCount: (state, action: PayloadAction<number>) => {
+      if (!state.currentUser) {
+        return;
+      }
+
+      const nextCount = state.currentUser.followingCount + action.payload;
+      state.currentUser.followingCount = Math.max(0, nextCount);
+    },
+    adjustFavoritesCount: (state, action: PayloadAction<number>) => {
+      if (!state.currentUser) {
+        return;
+      }
+
+      const nextCount = state.currentUser.favoritesCount + action.payload;
+      state.currentUser.favoritesCount = Math.max(0, nextCount);
     },
   },
   extraReducers: (builder) => {
@@ -105,6 +173,19 @@ const authSlice = createSlice({
         state.loginStatus = "failed";
         state.loginError = action.payload ?? "Login failed";
       })
+      .addCase(register.pending, (state) => {
+        state.registerStatus = "loading";
+        state.registerError = null;
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        state.registerStatus = "succeeded";
+        state.token = action.payload.token;
+        state.currentUser = action.payload.user;
+      })
+      .addCase(register.rejected, (state, action) => {
+        state.registerStatus = "failed";
+        state.registerError = action.payload ?? "Registration failed";
+      })
       .addCase(fetchProfile.pending, (state) => {
         state.profileStatus = "loading";
         state.profileError = null;
@@ -114,11 +195,16 @@ const authSlice = createSlice({
         state.currentUser = action.payload;
       })
       .addCase(fetchProfile.rejected, (state, action) => {
+        if (!state.token) {
+          return;
+        }
+
         state.profileStatus = "failed";
         state.profileError = action.payload ?? "Unable to load profile";
       });
   },
 });
 
-export const { setAuthSession, rehydrateSession, clearAuthSession } = authSlice.actions;
+export const { setAuthSession, rehydrateSession, clearAuthSession, adjustFollowingCount, adjustFavoritesCount } =
+  authSlice.actions;
 export const authReducer = authSlice.reducer;
