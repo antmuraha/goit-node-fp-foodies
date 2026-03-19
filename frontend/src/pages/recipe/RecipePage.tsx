@@ -74,6 +74,7 @@ export const RecipePage = (): ReactElement => {
               {/* Actions */}
               <div className={styles.actions}>
                 <Button
+                  variant="secondary"
                   disabled={isPending(recipe.id)}
                   onClick={() => {
                     void toggleFavorite(recipe.id);
