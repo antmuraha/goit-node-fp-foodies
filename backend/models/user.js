@@ -61,7 +61,7 @@ export default (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      avatarURL: {
+      avatar: {
         type: DataTypes.TEXT,
         allowNull: true,
         field: "avatar",

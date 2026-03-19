@@ -27,18 +27,18 @@ export const getCurrentUser = async (req, res, next) => {
 export const updateAvatar = async (req, res, next) => {
   try {
     const userId = req.user.id;
-    let avatarUrl;
+    let avatar;
 
     if (req.file) {
-      avatarUrl = await saveAvatar(userId, req.file);
-    } else if (req.body.avatarURL !== undefined) {
+      avatar = await saveAvatar(userId, req.file);
+    } else if (req.body.avatar !== undefined) {
       await validateAvatarUrl(req.body.avatarURL);
-      avatarUrl = req.body.avatarURL || null;
+      avatar = req.body.avatarURL || null;
     } else {
       throw HttpError(400, "Avatar file or URL required");
     }
 
-    await db.User.update({ avatarURL: avatarUrl }, { where: { id: userId } });
+    await db.User.update({ avatar }, { where: { id: userId } });
 
     const user = await db.User.findByPk(userId, {
       attributes: { exclude: ["password", "token"] },
