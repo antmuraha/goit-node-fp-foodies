@@ -95,7 +95,6 @@ const RecipeCard = ({
           )}
         </div>
 
-
         <NavLink to={`/recipe/${id}`} className={styles.descriptionLink}>
           <p className={styles.description}>{description || "No description available"}</p>
         </NavLink>
@@ -114,7 +113,6 @@ const RecipeCard = ({
                 <div className={styles.avatar} style={{ backgroundImage: `url(${author?.avatar || defaultAvatar})` }} />
                 <span className={styles.authorName}>{author?.name || "Anonymous"}</span>
               </NavLink>
-              
             </button>
 
             <div className={styles.actions}>
