@@ -75,7 +75,7 @@ export const AddRecipePage = (): ReactElement => {
       name: values.name.trim(),
       description: values.description.trim(),
       instructions: values.instructions.trim(),
-      image: values.image.trim(),
+      image: typeof values.image === "string" ? values.image.trim() : null,
       cookingTime: Number(values.cookingTime),
       categoryId: Number(values.categoryId),
       ingredients: values.ingredients.map((ingredientItem) => ({

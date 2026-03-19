@@ -1,7 +1,6 @@
 import { Link, UIMatch, useMatches } from "react-router-dom";
 import { RouteHandle } from "../../types/routeHandle";
 import styles from "./Breadcrumb.module.css";
-import { clsx } from "clsx";
 
 export const Breadcrumb = () => {
   const matches = useMatches() as UIMatch<unknown, RouteHandle>[];
@@ -29,7 +28,7 @@ export const Breadcrumb = () => {
                 {title}
               </Link>
             ) : (
-              <span className={clsx(styles.breadcrumbItem, styles.breadcrumbCurrent)}>{title}</span>
+              <span className={styles.breadcrumbItem + " " + styles.breadcrumbCurrent}>{title}</span>
             )}
             {!isLast && <span className={styles.separator}>/</span>}
           </li>

@@ -3,13 +3,13 @@ import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth, useDataUser } from "../../shared/hooks";
 import UserInfo from "../../shared/components/UserInfo";
-import TabsList from "../../shared/components/TabsList";
 import { TabsListTab, useTabsList } from "../../shared/components/TabsList/useTabsList";
 import MyFavoritesList from "../../shared/components/MyFavoritesList";
 import FollowingList from "../../shared/components/FollowingList";
 import { APP_ROUTES } from "../../shared/constants/routes";
 import UserRecipesList from "../../shared/components/UserRecipesList";
 import UserFollowersList from "../../shared/components/UserFollowersList";
+import { ProfileTabsNavigation } from "../../entities/user/index";
 
 export const UserPage = (): ReactNode => {
   const { id } = useParams();
@@ -63,7 +63,7 @@ export const UserPage = (): ReactNode => {
           favoritesCount={currentUser.favoritesCount}
           followingCount={currentUser.followingCount}
         />
-        <TabsList isOwnProfile={isOwnProfile} />
+        <ProfileTabsNavigation isOwnProfile={isOwnProfile} />
         {content}
       </aside>
       {isLoading && <p>Loading user profile...</p>}

@@ -9,7 +9,7 @@ export type RecipeEditorFormValues = {
   name: string;
   description: string;
   instructions: string;
-  image: string;
+  image: string | File;
   cookingTime: number;
   categoryId: string;
   ingredients: RecipeIngredientFormValue[];
@@ -46,7 +46,15 @@ export const recipeEditorSchema: Yup.ObjectSchema<RecipeEditorFormValues> = Yup.
   instructions: Yup.string()
     .min(10, "Instructions must be at least 10 characters")
     .required("Instructions are required"),
-  image: Yup.string().url("Image must be a valid URL").required("Image URL is required"),
+  image: Yup.mixed<string | File>()
+    .test("fileSize", "File size must be less than 5 MB", (value) => {
+      if (value instanceof File) {
+        return value.size <= 5 * 1024 * 1024; // 5 MB
+      }
+      // If it's not a file, skip validation (e.g., when it's a URL string)
+      return true;
+    })
+    .default(""),
   cookingTime: Yup.number()
     .typeError("Cooking time must be a number")
     .integer("Cooking time must be a whole number")

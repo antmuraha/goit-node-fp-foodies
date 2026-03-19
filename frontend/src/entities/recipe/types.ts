@@ -57,7 +57,7 @@ export type CreateRecipePayload = {
   name: string;
   description?: string;
   instructions: string;
-  image?: string;
+  image?: string | null;
   cookingTime: number;
   categoryId: number;
   ingredients: RecipeIngredientPayload[];
