@@ -23,20 +23,22 @@ export const ProfileRecipeCard = ({ id, title, instructions, image }: ProfileRec
                     <img src={FALLBACK_IMAGE} alt={title} className={styles.image} />
                 )}
             </NavLink>
-            <div className={styles.content}>
-                <p className={styles.title}>{title}</p>
-                <p className={styles.instructions}>{instructions}</p>
+                <div className={styles.content}>
+                    <p className={styles.title}>{title}</p>
+                    {/* <NavLink to={`/recipe/${id}`}> */}
+                    <p className={styles.instructions}>{instructions}</p>
+                    {/* </NavLink> */}
+                </div>
+                <div className={styles.btnWrapper}>
+                    <NavLink to={`/recipe/${id}`} className={styles.linkArrowUp}>
+                        <div className={styles.iconWrapper}>
+                            <Icon name="arrow-up-right" color="text-primary" size={18} />
+                        </div>
+                    </NavLink>
+                    <div className={styles.iconWrapper}>
+                        <Icon name="trash" color="text-primary" size={18} />
+                    </div>
             </div>
-            <NavLink to={`/recipe/${id}`} className={styles.linkArrowUp}>
-                <div className={styles.iconWrapper}>
-                    <Icon name="arrow-up-right" color="text-primary" size={18} />
-                </div>
-            </NavLink>
-            <button type="button" className={styles.btnTrash} disabled>
-                <div className={styles.iconWrapper}>
-                    <Icon name="trash" color="text-primary" size={18} />
-                </div>
-            </button>
         </div>
     );
 };
