@@ -1,5 +1,5 @@
-import { NavLink } from "react-router-dom";
 import { useDataUserRecipes } from "../../hooks/useDataUsers";
+import { ProfileRecipeCard } from "../../ui/profile-recipe-card";
 
 type UserRecipesListProps = {
   user: string;
@@ -16,9 +16,13 @@ const UserRecipesList = ({ user }: UserRecipesListProps) => {
       ) : (
         <ul>
           {data.map((recipe) => (
-            <NavLink to={`/recipe/${recipe.id}`} key={recipe.id}>
-              <li>{recipe.title}</li>
-            </NavLink>
+            <ProfileRecipeCard
+              key={recipe.id}
+              id={recipe.id}
+              title={recipe.title}
+              instructions={recipe.instructions}
+              image={recipe.image}
+            />
           ))}
         </ul>
       )}
