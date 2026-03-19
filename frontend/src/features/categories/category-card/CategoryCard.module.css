@@ -28,7 +28,7 @@
   position: absolute;
   inset: 0;
   background-color: rgba(5, 5, 5, 0.2);
-  border-radius: 20px;
+  border-radius: inherit;
   pointer-events: none;
 }
 
@@ -67,4 +67,30 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* ── Tablet ── */
+@media (min-width: 768px) {
+  .categoryCard {
+    height: 369px;
+    border-radius: var(--fd-radius-pill); /* 30px */
+  }
+
+  .content {
+    bottom: 24px;
+    left: 24px;
+  }
+
+  .titleWrapper {
+    padding: 10px 14px;
+  }
+
+  .title {
+    font-size: var(--fd-font-size-20); /* 20px */
+    letter-spacing: -0.4px;
+  }
+
+  .iconWrapper {
+    padding: 13px;
+  }
 }
