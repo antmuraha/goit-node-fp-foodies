@@ -75,13 +75,10 @@ export const AddRecipePage = (): ReactElement => {
 
     let imageUrl: string | null = null;
 
-    // Upload image if it's a File
     if (values.image instanceof File) {
       imageUrl = await uploadImage(values.image);
-      if (!imageUrl) {
-        return; // Image upload failed, error is already in imageUploadError
-      }
-    } else if (typeof values.image === "string") {
+      if (!imageUrl) return;
+    } else {
       imageUrl = values.image.trim();
     }
 
@@ -115,30 +112,34 @@ export const AddRecipePage = (): ReactElement => {
 
   return (
     <main className={styles.page}>
-      <section className={styles.card}>
+      {/* Page header — matches Figma title + subtitle block */}
+      <div className={styles.header}>
         <h1 className={styles.title}>{isEdit ? "Edit recipe" : "Add recipe"}</h1>
+        <p className={styles.subtitle}>
+          Reveal your culinary art, share your favorite recipe and create gastronomic masterpieces with us.
+        </p>
+      </div>
 
-        {isEdit && isRecipeLoading && <p>Loading recipe data...</p>}
-        {isEdit && recipeError && <p>Unable to load recipe: {recipeError}</p>}
-        {catalogError && <p>Unable to load catalog data: {catalogError}</p>}
+      {isEdit && isRecipeLoading && <p>Loading recipe data...</p>}
+      {isEdit && recipeError && <p>Unable to load recipe: {recipeError}</p>}
+      {catalogError && <p>Unable to load catalog data: {catalogError}</p>}
 
-        {(!isEdit || recipe) && (
-          <RecipeEditorForm
-            isEdit={Boolean(isEdit)}
-            categories={categories}
-            ingredientsOptions={ingredients}
-            areas={areas}
-            initialValues={initialValues}
-            isCatalogLoading={isCatalogLoading}
-            isSubmitting={editorSubmitStatus === "loading" || isImageUploading}
-            submitError={editorSubmitError ?? imageUploadError}
-            isImageUploading={isImageUploading}
-            imageUploadError={imageUploadError}
-            onSubmit={handleSubmit}
-            onCancel={handleCancel}
-          />
-        )}
-      </section>
+      {(!isEdit || recipe) && (
+        <RecipeEditorForm
+          isEdit={Boolean(isEdit)}
+          categories={categories}
+          ingredientsOptions={ingredients}
+          areas={areas}
+          initialValues={initialValues}
+          isCatalogLoading={isCatalogLoading}
+          isSubmitting={editorSubmitStatus === "loading" || isImageUploading}
+          submitError={editorSubmitError ?? imageUploadError}
+          isImageUploading={isImageUploading}
+          imageUploadError={imageUploadError}
+          onSubmit={handleSubmit}
+          onCancel={handleCancel}
+        />
+      )}
     </main>
   );
 };
