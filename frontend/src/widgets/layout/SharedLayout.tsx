@@ -3,28 +3,32 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { APP_ROUTES } from "../../shared/constants/routes";
 import { AUTH_NOTIFICATIONS } from "../../shared/constants/notifications";
 import { notificationService } from "../../shared/services/notifications";
-import { Modal, Toaster } from "../../shared/ui";
-import { SignInForm, SignUpForm, LogOutModal } from "../../features/auth";
+import { Toaster } from "../../shared/ui";
+import { AuthModalShell, LogOutModal } from "../../features/auth";
 import { Footer } from "../footer/Footer";
 import { Breadcrumb } from "../../shared/ui/breadcrumb";
+
+type AuthView = "signIn" | "signUp";
 
 export const SharedLayout = (): ReactElement => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  const [isSignInOpen, setIsSignInOpen] = useState(false);
-  const [isSignUpOpen, setIsSignUpOpen] = useState(false);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [authView, setAuthView] = useState<AuthView>("signIn");
   const [isLogOutOpen, setIsLogOutOpen] = useState(false);
   const [returnTo, setReturnTo] = useState<string>(APP_ROUTES.HOME);
 
   useEffect(() => {
     if (location.state?.openSignIn) {
       setReturnTo(location.state.returnTo ?? location.pathname);
-      setIsSignInOpen(true);
+      setAuthView("signIn");
+      setIsAuthOpen(true);
       navigate(location.pathname, { replace: true, state: {} });
     } else if (location.state?.openSignUp) {
       setReturnTo(location.state.returnTo ?? location.pathname);
-      setIsSignUpOpen(true);
+      setAuthView("signUp");
+      setIsAuthOpen(true);
       navigate(location.pathname, { replace: true, state: {} });
     } else if (location.state?.openLogOut) {
       setIsLogOutOpen(true);
@@ -33,25 +37,15 @@ export const SharedLayout = (): ReactElement => {
   }, [location.state?.openSignIn, location.state?.openSignUp, location.state?.openLogOut]);
 
   const handleSignInSuccess = (): void => {
-    setIsSignInOpen(false);
+    setIsAuthOpen(false);
     notificationService.success(AUTH_NOTIFICATIONS.SIGN_IN_SUCCESS);
     navigate(returnTo, { replace: true });
   };
 
   const handleSignUpSuccess = (): void => {
-    setIsSignUpOpen(false);
+    setIsAuthOpen(false);
     notificationService.success(AUTH_NOTIFICATIONS.SIGN_UP_SUCCESS);
     navigate(returnTo, { replace: true });
-  };
-
-  const switchToSignUp = (): void => {
-    setIsSignInOpen(false);
-    setIsSignUpOpen(true);
-  };
-
-  const switchToSignIn = (): void => {
-    setIsSignUpOpen(false);
-    setIsSignInOpen(true);
   };
 
   return (
@@ -59,12 +53,13 @@ export const SharedLayout = (): ReactElement => {
       <Breadcrumb />
       <Outlet />
       <Footer />
-      <Modal isOpen={isSignInOpen} title="Sign in" onClose={() => setIsSignInOpen(false)}>
-        <SignInForm onSuccess={handleSignInSuccess} onCreateAccount={switchToSignUp} />
-      </Modal>
-      <Modal isOpen={isSignUpOpen} title="Sign up" onClose={() => setIsSignUpOpen(false)}>
-        <SignUpForm onSuccess={handleSignUpSuccess} onSignIn={switchToSignIn} />
-      </Modal>
+      <AuthModalShell
+        isOpen={isAuthOpen}
+        initialView={authView}
+        onClose={() => setIsAuthOpen(false)}
+        onSignInSuccess={handleSignInSuccess}
+        onSignUpSuccess={handleSignUpSuccess}
+      />
       <LogOutModal isOpen={isLogOutOpen} onClose={() => setIsLogOutOpen(false)} />
       <Toaster />
     </div>
