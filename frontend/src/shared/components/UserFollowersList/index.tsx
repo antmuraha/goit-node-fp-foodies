@@ -1,17 +1,13 @@
 import { NavLink } from "react-router-dom";
 import { useDataProfileFollowers } from "../../hooks";
-import { useEffect } from "react";
+
 
 type UserFollowersListProps = {
   user: string;
 };
 
 const UserFollowersList = ({ user }: UserFollowersListProps) => {
-  const { data, loadFollowers } = useDataProfileFollowers(user);
-
-  useEffect(() => {
-    loadFollowers();
-  }, [loadFollowers]);
+  const { data } = useDataProfileFollowers(user);
 
   return (
     <div>
