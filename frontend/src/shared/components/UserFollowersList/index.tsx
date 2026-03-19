@@ -1,23 +1,19 @@
 import { NavLink } from "react-router-dom";
 import { useDataProfileFollowers } from "../../hooks";
-import { useEffect } from "react";
+import { EmptyState } from "../../ui";
 
 type UserFollowersListProps = {
   user: string;
 };
 
 const UserFollowersList = ({ user }: UserFollowersListProps) => {
-  const { data, loadFollowers } = useDataProfileFollowers(user);
-
-  useEffect(() => {
-    loadFollowers();
-  }, [loadFollowers]);
+  const { data } = useDataProfileFollowers(user);
 
   return (
     <div>
       <h2>Followers</h2>
       {data.length === 0 ? (
-        <p>You have no followers yet.</p>
+        <EmptyState message="There are currently no followers on your account." />
       ) : (
         <ul>
           {data.map((user) => (

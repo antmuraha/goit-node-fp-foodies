@@ -2,6 +2,7 @@ import { NavLink } from "react-router-dom";
 import { useDataProfileFollowing } from "../../hooks";
 import { Button } from "../../ui";
 import { useUserFollowing } from "../../helpers/useUserFollowing";
+import { EmptyState } from "../../ui";
 
 const FollowingList = () => {
   const { data } = useDataProfileFollowing();
@@ -11,7 +12,7 @@ const FollowingList = () => {
     <div>
       <h2>Following</h2>
       {data.length === 0 ? (
-        <p>You have no users following yet.</p>
+        <EmptyState message="Your account currently has no subscriptions to other users." />
       ) : (
         <ul>
           {data.map((user) => (

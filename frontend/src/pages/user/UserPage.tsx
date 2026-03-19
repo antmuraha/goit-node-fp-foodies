@@ -2,13 +2,9 @@ import type { ReactNode } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth, useDataUser } from "../../shared/hooks";
 import UserInfo from "../../shared/components/UserInfo";
-import { TabsListTab, useTabsList } from "../../shared/components/TabsList/useTabsList";
-import MyFavoritesList from "../../shared/components/MyFavoritesList";
-import FollowingList from "../../shared/components/FollowingList";
 import { APP_ROUTES } from "../../shared/constants/routes";
-import UserRecipesList from "../../shared/components/UserRecipesList";
-import UserFollowersList from "../../shared/components/UserFollowersList";
 import { ProfileTabsNavigation } from "../../entities/user/index";
+import { ProfileContentList } from "../../features/profile/profile-content-list";
 
 export const UserPage = (): ReactNode => {
   const { id } = useParams();
@@ -33,20 +29,6 @@ export const UserPage = (): ReactNode => {
 
   const isOwnProfile = user.id === currentUser.id;
 
-  const { content } = useTabsList(
-    isOwnProfile
-      ? [TabsListTab.RECIPES, TabsListTab.FAVORITES, TabsListTab.FOLLOWERS, TabsListTab.FOLLOWING]
-      : [TabsListTab.RECIPES, TabsListTab.FOLLOWERS],
-    isOwnProfile
-      ? [
-          <UserRecipesList key={`recipes-${id}`} user={id} />,
-          <MyFavoritesList key="favorites" />,
-          <UserFollowersList key={`followers-${id}`} user={id} />,
-          <FollowingList key="following" />,
-        ]
-      : [<UserRecipesList key={`recipes-${id}`} user={id} />, <UserFollowersList key={`followers-${id}`} user={id} />],
-  );
-
   return (
     <main>
       <h1>User page</h1>
@@ -59,7 +41,7 @@ export const UserPage = (): ReactNode => {
           followingCount={currentUser.followingCount}
         />
         <ProfileTabsNavigation isOwnProfile={isOwnProfile} />
-        {content}
+        <ProfileContentList userId={userId} isOwnProfile={isOwnProfile} />
       </aside>
       {isLoading && <p>Loading user profile...</p>}
       {error && <p>User error: {error}</p>}

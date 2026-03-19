@@ -1,5 +1,6 @@
-import { NavLink } from "react-router-dom";
 import { useDataUserRecipes } from "../../hooks/useDataUsers";
+import { ProfileRecipeCard } from "../../ui/profile-recipe-card";
+import { EmptyState } from "../../ui";
 
 type UserRecipesListProps = {
   user: string;
@@ -10,15 +11,18 @@ const UserRecipesList = ({ user }: UserRecipesListProps) => {
 
   return (
     <div>
-      <h2>My Recipes</h2>
       {data.length === 0 ? (
-        <p>You have no recipes yet.</p>
+        <EmptyState message="Nothing has been added to your recipes list yet." />
       ) : (
         <ul>
           {data.map((recipe) => (
-            <NavLink to={`/recipe/${recipe.id}`} key={recipe.id}>
-              <li>{recipe.title}</li>
-            </NavLink>
+            <ProfileRecipeCard
+              key={recipe.id}
+              id={recipe.id}
+              title={recipe.title}
+              instructions={recipe.instructions}
+              image={recipe.image}
+            />
           ))}
         </ul>
       )}
