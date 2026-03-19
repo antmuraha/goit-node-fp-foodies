@@ -1,0 +1,165 @@
+.container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 122px;
+  height: 32px;
+  padding: 0;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  background-color: #1a1a1a;
+  border-radius: var(--fd-radius-pill);
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  color: var(--fd-text-primary, #333);
+  transition: all 0.2s ease;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--fd-radius-pill);
+  object-fit: cover;
+  flex-shrink: 0;
+  background-color: var(--fd-color-muted);
+  overflow: hidden;
+  display: block;
+  text-indent: -9999px;
+}
+
+.buttonPart {
+  display: flex;
+  align-items: center;
+  padding: 7px 6px;
+  gap: 4px;
+}
+
+.name {
+  color: var(--fd-action-primary-text);
+  margin: 0;
+  text-transform: uppercase;
+  font-size: var(--fd-font-size-12);
+  font-weight: var(--fd-font-weight-bold);
+  line-height: var(--fd-line-height-18);
+  letter-spacing: -2%;
+  width: 56px;
+  min-width: 56px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  transition: transform 0.2s ease;
+}
+
+.chevronOpen {
+  transform: rotate(180deg);
+}
+
+.menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+
+  width: 122px;
+  height: 72px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 4px;
+
+  margin: 0;
+  padding: 16px;
+  list-style: none;
+  background: #050505;
+  border-radius: 12px;
+
+  box-shadow: inset 0 0 0 1px #bfbebe;
+  z-index: 1000;
+  animation: slideDown 0.2s ease;
+}
+
+.menuLi {
+  width: 100%;
+}
+
+.menuItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 2px;
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+
+  color: var(--fd-action-primary-text);
+  text-transform: uppercase;
+  font-family: inherit;
+  font-size: var(--fd-font-size-12);
+  font-weight: var(--fd-font-weight-bold);
+  line-height: var(--fd-line-height-18);
+  transition: opacity 0.2s ease;
+}
+
+.logOutItem {
+  justify-content: flex-start;
+  gap: 2px;
+}
+
+.menuItem .chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin: 0;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    width: 148px;
+    height: 50px;
+  }
+  .avatar {
+    width: 50px;
+    height: 50px;
+  }
+
+  .buttonPart {
+    padding: 16px 6px;
+  }
+
+  .menu {
+    width: 148px;
+    height: 74px;
+    gap: 6px;
+  }
+}

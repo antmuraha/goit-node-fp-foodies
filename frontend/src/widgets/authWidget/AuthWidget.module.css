@@ -1,0 +1,48 @@
+.authLinks {
+  display: flex;
+  align-items: center;
+  width: 156px;
+  height: 38px;
+  background-color: var(--fd-bg-canvas);
+  border-radius: var(--fd-radius-pill);
+  overflow: hidden;
+  padding: 0;
+  border: none;
+}
+
+.link {
+  flex: 1;
+  height: 100%;
+  background: none;
+  border: none;
+  text-transform: uppercase;
+  font-size: var(--fd-font-size-12);
+  font-weight: var(--fd-font-weight-bold);
+  color: var(--fd-action-secondary-text);
+  transition: all 0.2s ease;
+  cursor: pointer;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.active {
+  color: var(--fd-action-secondary-bg);
+  background-color: var(--fd-color-main-alt);
+  border-radius: var(--fd-radius-pill);
+  box-shadow: inset 0 0 0 1px var(--fd-border-default);
+}
+
+.active:hover {
+  background-color: #050505;
+}
+
+@media (min-width: 768px) {
+  .authLinks {
+    width: 208px;
+    height: 46px;
+  }
+}
