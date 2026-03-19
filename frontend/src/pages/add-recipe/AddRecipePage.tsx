@@ -59,12 +59,12 @@ export const AddRecipePage = (): ReactElement => {
       cookingTime: recipe.cookingTime ?? 30,
       categoryId: String(recipe.categoryId),
       ingredients:
-          recipe.ingredients.length > 0
-              ? recipe.ingredients.map((ingredientItem) => ({
-                ingredientId: ingredientItem.id,
-                measure: ingredientItem.measure,
-              }))
-              : DEFAULT_RECIPE_FORM_VALUES.ingredients,
+        recipe.ingredients.length > 0
+          ? recipe.ingredients.map((ingredientItem) => ({
+              ingredientId: ingredientItem.id,
+              measure: ingredientItem.measure,
+            }))
+          : DEFAULT_RECIPE_FORM_VALUES.ingredients,
       areas: recipe.areas.map((areaItem) => areaItem.id),
       pendingIngredient: DEFAULT_RECIPE_FORM_VALUES.pendingIngredient,
     };
@@ -97,9 +97,9 @@ export const AddRecipePage = (): ReactElement => {
     };
 
     const result =
-        isEdit && recipeId
-            ? await dispatch(updateRecipe({ id: recipeId, payload }))
-            : await dispatch(createRecipe(payload));
+      isEdit && recipeId
+        ? await dispatch(updateRecipe({ id: recipeId, payload }))
+        : await dispatch(createRecipe(payload));
 
     if (createRecipe.fulfilled.match(result) || updateRecipe.fulfilled.match(result)) {
       navigate(APP_ROUTES.RECIPE_DETAILS.replace(":id", String(result.payload.id)));
@@ -111,35 +111,35 @@ export const AddRecipePage = (): ReactElement => {
   };
 
   return (
-      <main className={styles.page}>
-        {/* Page header — matches Figma title + subtitle block */}
-        <div className={styles.header}>
-          <h1 className={styles.title}>{isEdit ? "Edit recipe" : "Add recipe"}</h1>
-          <p className={styles.subtitle}>
-            Reveal your culinary art, share your favorite recipe and create gastronomic masterpieces with us.
-          </p>
-        </div>
+    <main className={styles.page}>
+      {/* Page header — matches Figma title + subtitle block */}
+      <div className={styles.header}>
+        <h1 className={styles.title}>{isEdit ? "Edit recipe" : "Add recipe"}</h1>
+        <p className={styles.subtitle}>
+          Reveal your culinary art, share your favorite recipe and create gastronomic masterpieces with us.
+        </p>
+      </div>
 
-        {isEdit && isRecipeLoading && <p>Loading recipe data...</p>}
-        {isEdit && recipeError && <p>Unable to load recipe: {recipeError}</p>}
-        {catalogError && <p>Unable to load catalog data: {catalogError}</p>}
+      {isEdit && isRecipeLoading && <p>Loading recipe data...</p>}
+      {isEdit && recipeError && <p>Unable to load recipe: {recipeError}</p>}
+      {catalogError && <p>Unable to load catalog data: {catalogError}</p>}
 
-        {(!isEdit || recipe) && (
-            <RecipeEditorForm
-                isEdit={Boolean(isEdit)}
-                categories={categories}
-                ingredientsOptions={ingredients}
-                areas={areas}
-                initialValues={initialValues}
-                isCatalogLoading={isCatalogLoading}
-                isSubmitting={editorSubmitStatus === "loading" || isImageUploading}
-                submitError={editorSubmitError ?? imageUploadError}
-                isImageUploading={isImageUploading}
-                imageUploadError={imageUploadError}
-                onSubmit={handleSubmit}
-                onCancel={handleCancel}
-            />
-        )}
-      </main>
+      {(!isEdit || recipe) && (
+        <RecipeEditorForm
+          isEdit={Boolean(isEdit)}
+          categories={categories}
+          ingredientsOptions={ingredients}
+          areas={areas}
+          initialValues={initialValues}
+          isCatalogLoading={isCatalogLoading}
+          isSubmitting={editorSubmitStatus === "loading" || isImageUploading}
+          submitError={editorSubmitError ?? imageUploadError}
+          isImageUploading={isImageUploading}
+          imageUploadError={imageUploadError}
+          onSubmit={handleSubmit}
+          onCancel={handleCancel}
+        />
+      )}
+    </main>
   );
 };
