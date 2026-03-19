@@ -26,10 +26,8 @@ usersRouter.get("/:id/recipes", authenticate, validateParams(followParamsSchema)
 usersRouter.post("/:id/follow", authenticate, validateParams(followParamsSchema), followUser);
 usersRouter.delete("/:id/follow", authenticate, validateParams(followParamsSchema), unfollowUser);
 usersRouter.get("/:id", authenticate, getOtherUser);
-
-// PATCH /api/users/avatar - accepts both multipart file upload and JSON URL update
 usersRouter.patch(
-  "/avatar",
+  "/me/avatar",
   authenticate,
   upload.single("avatar"),
   validateBody(avatarUpdateSchema, true),

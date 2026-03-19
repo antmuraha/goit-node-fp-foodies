@@ -3,6 +3,7 @@ import { UserDetailsResponse } from "../../../entities/user/model/types";
 import { useUserFollowing } from "../../helpers/useUserFollowing";
 import { Button, ImageInput } from "../../ui";
 import { useAuth } from "../../hooks/useAuth";
+import { useDataUser } from "../../hooks/useDataUser";
 import { Icon } from "../../../shared/components/Icon";
 import styles from "./UserInfo.module.css";
 
@@ -17,6 +18,15 @@ const UserInfo = (props: UserInfoProps) => {
   const { isOwnProfile, user, favoritesCount, followingCount } = props;
   const { ensureFollowingStatus, isFollowing, isPending, toggleFollowing } = useUserFollowing();
   const { signOut } = useAuth();
+  const { uploadAvatar, isAvatarUpdating, avatarUpdateError } = useDataUser();
+
+  const handleAvatarSelect = (file: File | null): void => {
+    if (!file) {
+      return;
+    }
+
+    void uploadAvatar(file);
+  };
 
   useEffect(() => {
     if (isOwnProfile) {
@@ -35,6 +45,10 @@ const UserInfo = (props: UserInfoProps) => {
             label=""
             initialImageUrl={user.avatar ?? undefined}
             accept="image/*"
+            disabled={isOwnProfile ? isAvatarUpdating : true}
+            onFileSelect={handleAvatarSelect}
+            hasError={isOwnProfile && Boolean(avatarUpdateError)}
+            error={isOwnProfile ? (avatarUpdateError ?? undefined) : undefined}
             elementTrigger={
               isOwnProfile ? (
                 <Button
@@ -43,12 +57,15 @@ const UserInfo = (props: UserInfoProps) => {
                   isIconOnly
                   className={styles.uploadBtn}
                   aria-label="Upload new avatar"
+                  disabled={isAvatarUpdating}
                 >
                   <div className={styles.iconWrapper}>
                     <Icon name="close" color="action-secondary-bg" size={24} />
                   </div>
                 </Button>
-              ) : undefined
+              ) : (
+                false
+              )
             }
           />
         </div>

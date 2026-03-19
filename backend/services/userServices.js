@@ -125,7 +125,7 @@ export const getOtherUserProfile = async (targetId) => {
     id,
     name,
     email,
-    avatar,
+    avatar: `${process.env.BASE_IMAGE_URL}${user.avatar}`,
     createdAt,
     recipesCreated,
     followersCount,
@@ -150,6 +150,7 @@ export const getUserProfileWithMetrics = async (userId) => {
 
   return {
     ...user.toJSON(),
+    avatar: `${process.env.BASE_IMAGE_URL}${user.avatar}`,
     recipesCreated,
     favoritesCount,
     followersCount,

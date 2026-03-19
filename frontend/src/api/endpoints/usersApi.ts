@@ -31,6 +31,10 @@ type FollowStatusResponse = {
   isFollowing: boolean;
 };
 
+type UpdateAvatarResponse = {
+  user: UserDetailsResponse;
+};
+
 const buildProfileUsersQuery = (query?: UserListQuery): { limit?: number; page?: number } | undefined => {
   if (!query) {
     return undefined;
@@ -100,4 +104,13 @@ export const usersApi = {
     apiClient.get<FollowStatusResponse>(API_ROUTES.USERS.FOLLOW_STATUS(id), {
       headers: getAuthHeaders(token),
     }),
+  updateAvatar: (token: string, file: File): Promise<UpdateAvatarResponse> => {
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    return apiClient.patch<UpdateAvatarResponse>(API_ROUTES.USERS.ME_AVATAR, {
+      headers: getAuthHeaders(token),
+      body: formData,
+    });
+  },
 };

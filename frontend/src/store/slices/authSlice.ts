@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { authApi } from "../../api/endpoints/authApi";
+import { usersApi } from "../../api/endpoints/usersApi";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
 import { sessionStorageAdapter } from "../../shared/services/sessionStorage";
 import { MeProfile } from "../../entities/user/model/types";
@@ -24,6 +25,8 @@ type AuthState = {
   loginError: string | null;
   registerStatus: AsyncStatus;
   registerError: string | null;
+  avatarUpdateStatus: AsyncStatus;
+  avatarUpdateError: string | null;
 };
 
 const initialState: AuthState = {
@@ -35,6 +38,8 @@ const initialState: AuthState = {
   loginError: null,
   registerStatus: "idle",
   registerError: null,
+  avatarUpdateStatus: "idle",
+  avatarUpdateError: null,
 };
 
 const getErrorMessage = (error: unknown): string => {
@@ -115,6 +120,24 @@ export const fetchProfile = createAsyncThunk<MeProfile, void, { state: { auth: A
   },
 );
 
+export const updateAvatar = createAsyncThunk<string, File, { state: { auth: AuthState }; rejectValue: string }>(
+  "auth/updateAvatar",
+  async (file, thunkApi) => {
+    const token = thunkApi.getState().auth.token;
+
+    if (!token) {
+      return thunkApi.rejectWithValue("Missing auth token for avatar update request");
+    }
+
+    try {
+      const response = await usersApi.updateAvatar(token, file);
+      return response.user.avatar ?? "";
+    } catch (error) {
+      return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
+    }
+  },
+);
+
 const authSlice = createSlice({
   name: "auth",
   initialState,
@@ -139,6 +162,8 @@ const authSlice = createSlice({
       state.loginError = null;
       state.registerStatus = "idle";
       state.registerError = null;
+      state.avatarUpdateStatus = "idle";
+      state.avatarUpdateError = null;
       sessionStorageAdapter.clear();
     },
     adjustFollowingCount: (state, action: PayloadAction<number>) => {
@@ -201,6 +226,23 @@ const authSlice = createSlice({
 
         state.profileStatus = "failed";
         state.profileError = action.payload ?? "Unable to load profile";
+      })
+      .addCase(updateAvatar.pending, (state) => {
+        state.avatarUpdateStatus = "loading";
+        state.avatarUpdateError = null;
+      })
+      .addCase(updateAvatar.fulfilled, (state, action) => {
+        state.avatarUpdateStatus = "succeeded";
+
+        if (!state.currentUser) {
+          return;
+        }
+
+        state.currentUser.avatar = action.payload || null;
+      })
+      .addCase(updateAvatar.rejected, (state, action) => {
+        state.avatarUpdateStatus = "failed";
+        state.avatarUpdateError = action.payload ?? "Unable to update avatar";
       });
   },
 });
