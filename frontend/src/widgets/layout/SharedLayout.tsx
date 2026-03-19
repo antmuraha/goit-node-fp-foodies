@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo, type ReactElement } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useScrollToTop } from "../../shared/hooks";
 import { APP_ROUTES } from "../../shared/constants/routes";
 import { AUTH_NOTIFICATIONS } from "../../shared/constants/notifications";
 import { notificationService } from "../../shared/services/notifications";
@@ -12,6 +13,8 @@ import { Breadcrumb } from "../../shared/ui/breadcrumb";
 type AuthView = "signIn" | "signUp";
 
 export const SharedLayout = (): ReactElement => {
+  useScrollToTop();
+
   const location = useLocation();
   const navigate = useNavigate();
 
