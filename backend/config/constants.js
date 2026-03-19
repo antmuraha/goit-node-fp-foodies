@@ -1,0 +1,1 @@
+export const baseImageUrl = process.env.BASE_IMAGE_URL || "http://localhost:3000";
