@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useDataCategories } from "../../hooks/useDataCategories";
 import { CategoryCard } from "../../../features/categories/category-card";
 import styles from "./CategoriesGrid.module.css";
@@ -31,9 +31,9 @@ const CategoriesGrid = (): ReactElement => {
           ))}
 
         {!isLoading && !error && categories.length > 0 && (
-          <NavLink to="/categories" className={styles.allCard} aria-label="Browse all categories">
+          <Link to="/" className={styles.allCard} aria-label="Browse all categories">
             <span className={styles.allCardLabel}>All categories</span>
-          </NavLink>
+          </Link>
         )}
       </div>
     </section>

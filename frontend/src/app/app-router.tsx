@@ -9,7 +9,6 @@ import { UiKitPage } from "../pages/ui-kit/UiKitPage";
 import { NotFoundPage } from "../pages/not-found/NotFoundPage";
 import { SignInPage } from "../pages/sign-in/SignInPage";
 import AuthPage from "../shared/components/AuthPage";
-import { CategoryPage } from "../pages/category/CategoryPage";
 import { routeHandle } from "../shared/helpers/routeHandle";
 
 export const appRouter = createBrowserRouter([
@@ -18,11 +17,6 @@ export const appRouter = createBrowserRouter([
     handle: routeHandle({ breadcrumb: { title: "Home" } }),
     children: [
       { index: true, element: <HomePage /> },
-      {
-        path: APP_ROUTES.CATEGORY,
-        element: <CategoryPage />,
-        handle: routeHandle({ breadcrumb: { title: "Category" } }),
-      },
       {
         path: APP_ROUTES.RECIPE_DETAILS,
         element: <RecipePage />,
