@@ -50,4 +50,13 @@ export const recipesApi = {
       headers: getAuthHeaders(token),
       body: payload,
     }),
+  uploadRecipeImage: (token: string, file: File): Promise<{ image: string }> => {
+    const formData = new FormData();
+    formData.append("image", file);
+
+    return apiClient.post<{ image: string }, FormData>(API_ROUTES.RECIPES.UPLOAD_IMAGE, {
+      headers: getAuthHeaders(token),
+      body: formData,
+    });
+  },
 };

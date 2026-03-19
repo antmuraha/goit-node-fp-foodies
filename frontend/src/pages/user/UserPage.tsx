@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { useMemo } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth, useDataUser } from "../../shared/hooks";
 import UserInfo from "../../shared/components/UserInfo";
@@ -14,14 +13,10 @@ import { ProfileTabsNavigation } from "../../entities/user/index";
 export const UserPage = (): ReactNode => {
   const { id } = useParams();
   const navigate = useNavigate();
-
-  const userId = useMemo(() => {
-    const numericId = Number(id);
-    return Number.isInteger(numericId) && numericId > 0 ? numericId : undefined;
-  }, [id]);
-
+  const userId = Number(id);
   const { currentUser } = useAuth();
   const { user, isLoading, error } = useDataUser(userId);
+
   if (isLoading) {
     return (
       <main>
@@ -30,7 +25,7 @@ export const UserPage = (): ReactNode => {
     );
   }
 
-  if (!currentUser || !userId || !user || !id) {
+  if (!currentUser || !id || !userId || !user) {
     console.warn("User not found or invalid ID", { userId, user, currentUser });
     navigate(APP_ROUTES.NOT_FOUND);
     return null;

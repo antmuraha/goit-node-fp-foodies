@@ -18,7 +18,7 @@ type ImageInputProps = {
   hasError?: boolean;
   error?: string;
   onFileSelect?: (file: File | null) => void;
-  elementTrigger?: ReactElement<TriggerElementProps>;
+  elementTrigger?: ReactElement<TriggerElementProps> | false;
   showFileName?: boolean;
   maxSize?: number;
   targetWidth?: number;
@@ -120,17 +120,19 @@ export const ImageInput = ({
       ) : (
         <div className={styles.placeholder}>Select an image to see preview</div>
       )}
-      <FileInput
-        ref={fileInputRef}
-        id={id}
-        accept={accept}
-        onFileSelect={handleFileSelect}
-        disabled={disabled}
-        hint={showFileName ? selectedImageName || "Selected image is used for local preview only" : undefined}
-        hasError={hasError}
-        error={error}
-        className={elementTrigger ? styles.hiddenInput : undefined}
-      />
+      {elementTrigger !== false && (
+        <FileInput
+          ref={fileInputRef}
+          id={id}
+          accept={accept}
+          onFileSelect={handleFileSelect}
+          disabled={disabled}
+          hint={showFileName ? selectedImageName || "Selected image is used for local preview only" : undefined}
+          hasError={hasError}
+          error={error}
+          className={elementTrigger ? styles.hiddenInput : undefined}
+        />
+      )}
       {renderedTrigger}
     </div>
   );

@@ -50,15 +50,22 @@ const request = async <TResponse, TBody = unknown>(
 
   const headers = new Headers(config?.headers);
   const hasBody = config?.body !== undefined;
+  const isFormDataBody = hasBody && config?.body instanceof FormData;
 
-  if (hasBody && !headers.has("Content-Type")) {
+  if (hasBody && !isFormDataBody && !headers.has("Content-Type")) {
     headers.set("Content-Type", "application/json");
   }
+
+  const requestBody: BodyInit | undefined = hasBody
+    ? isFormDataBody
+      ? (config?.body as FormData)
+      : JSON.stringify(config?.body)
+    : undefined;
 
   const response = await fetch(url, {
     method,
     headers,
-    body: hasBody ? JSON.stringify(config?.body) : undefined,
+    body: requestBody,
   });
 
   if (!response.ok) {

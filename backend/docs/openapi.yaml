@@ -13,7 +13,7 @@ info:
 servers:
   - url: http://localhost:3000
     description: Development server
-  - url: https://api.foodies.example.com
+  - url: https://goit-node-fp-foodies.cloud.muraha.dev/api
     description: Production server
 
 tags:
@@ -538,6 +538,14 @@ components:
         isFollowing:
           type: boolean
           example: false
+
+    ImageUploadResponse:
+      type: object
+      properties:
+        image:
+          type: string
+          description: URL to the uploaded/provided image
+          example: https://goit-node-fp-foodies.cloud.muraha.dev/images/recipe-abc123.jpg
 
     Error:
       type: object
@@ -1156,6 +1164,55 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+  /api/recipes/upload/image:
+    post:
+      tags: [Recipes]
+      summary: Upload a recipe image
+      description: |
+        Uploads an image file or accepts a URL for a recipe.
+        Either `multipart/form-data` with `image` file OR `application/json` with `avatar` URL is required.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: Image file to upload
+          application/json:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: uri
+                  description: Image URL
+                  example: https://example.com/image.jpg
+      responses:
+        '200':
+          description: Image uploaded or URL validated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageUploadResponse'
+        '400':
+          description: Missing or invalid image — must provide either file or valid URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: Image file or URL required
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
   /api/recipes/{id}/favorite:
     get:
       tags: [Recipes]
@@ -1312,6 +1369,55 @@ paths:
           $ref: '#/components/responses/UnauthorizedError'
         '404':
           $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /api/users/me/avatar:
+    patch:
+      tags: [Users]
+      summary: Update the current user's avatar
+      description: |
+        Updates the authenticated user's avatar with an uploaded image or URL.
+        Either `multipart/form-data` with `image` file OR `application/json` with URL is required.
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+                  description: Avatar image file to upload
+          application/json:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: uri
+                  description: Avatar image URL
+                  example: https://gravatar.com/avatar/user123
+      responses:
+        '200':
+          description: Avatar updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ImageUploadResponse'
+        '400':
+          description: Missing or invalid avatar — must provide either file or valid URL
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                message: Image file or URL required
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
         '500':
           $ref: '#/components/responses/ServerError'
 

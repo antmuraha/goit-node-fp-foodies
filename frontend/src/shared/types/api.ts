@@ -4,7 +4,7 @@ export type HttpMethod = "GET" | "POST" | "PATCH" | "PUT" | "DELETE";
 
 export type RequestConfig<TBody = unknown> = {
   query?: Record<string, QueryValue>;
-  body?: TBody;
+  body?: TBody | FormData;
   headers?: Record<string, string>;
 };
 

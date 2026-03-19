@@ -1,3 +1,5 @@
+import HttpError from "../helpers/HttpError.js";
+import validateUrl from "../helpers/validateUrl.js";
 import {
   searchRecipes,
   getRecipeById as findRecipeById,
@@ -11,6 +13,7 @@ import {
   listFavoritesService,
   getFavoriteStatusService,
 } from "../services/recipesServices.js";
+import { saveImage } from "../services/uploadServices.js";
 
 export const getRecipes = async (req, res, next) => {
   try {
@@ -101,6 +104,25 @@ export const deleteRecipe = async (req, res, next) => {
     await deleteRecipeService(id, req.user.id);
 
     res.json({ message: "Recipe deleted successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const uploadRecipeImage = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    let image;
+
+    if (req.file) {
+      image = await saveImage(`recipe-${Date.now()}`, req.file);
+    } else if (req.body.avatar !== undefined) {
+      await validateUrl(req.body.avatar);
+      image = req.body.avatar || null;
+    } else {
+      throw HttpError(400, "Image file or URL required");
+    }
+    res.status(200).json({ image: `${process.env.BASE_IMAGE_URL}${image}` });
   } catch (err) {
     next(err);
   }

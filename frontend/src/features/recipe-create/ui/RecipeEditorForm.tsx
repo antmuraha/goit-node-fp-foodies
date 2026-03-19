@@ -18,6 +18,8 @@ type RecipeEditorFormProps = {
   isCatalogLoading: boolean;
   isSubmitting: boolean;
   submitError: string | null;
+  isImageUploading?: boolean;
+  imageUploadError?: string | null;
   onSubmit: (values: RecipeEditorFormValues) => Promise<void>;
   onCancel?: () => void;
 };
@@ -43,6 +45,8 @@ export const RecipeEditorForm = ({
   isCatalogLoading,
   isSubmitting,
   submitError,
+  isImageUploading = false,
+  imageUploadError,
   onSubmit,
   onCancel,
 }: RecipeEditorFormProps): ReactElement => {
@@ -182,9 +186,13 @@ export const RecipeEditorForm = ({
               formik.setFieldValue("image", file);
             }
           }}
-          disabled={isSubmitting}
-          hasError={Boolean(formik.touched.image && formik.errors.image)}
-          error={formik.touched.image && formik.errors.image ? formik.errors.image : undefined}
+          disabled={isSubmitting || isImageUploading}
+          hasError={Boolean(formik.touched.image && formik.errors.image) || Boolean(imageUploadError)}
+          error={
+            (formik.touched.image && formik.errors.image) || imageUploadError
+              ? (imageUploadError ?? (formik.touched.image ? formik.errors.image : undefined))
+              : undefined
+          }
         />
       </div>
 
