@@ -5,7 +5,6 @@ import { Button, ImageInput } from "../../ui";
 import { useAuth } from "../../hooks/useAuth";
 import { useDataUser } from "../../hooks/useDataUser";
 import { Icon } from "../../../shared/components/Icon";
-import defaultAvatar from "../../../assets/images/defaultAvatar.svg";
 import styles from "./UserInfo.module.css";
 
 type UserInfoProps = {
@@ -41,22 +40,6 @@ const UserInfo = (props: UserInfoProps) => {
     <div className={styles.wrapper}>
       <div className={styles.card}>
         <div className={styles.avatarContainer}>
-          <img src={user.avatar || defaultAvatar} alt={user.name} className={styles.avatar} />
-
-          {isOwnProfile && (
-            <button
-              className={styles.uploadBtn}
-              aria-label="Upload new avatar"
-              type="button"
-              onClick={() => {
-                alert("add this functional");
-              }}
-            >
-              <div className={styles.iconWrapper}>
-                <Icon name="close" color="action-secondary-bg" size={24} />
-              </div>
-            </button>
-          )}
           <ImageInput
             id="profile-avatar-file"
             label=""
