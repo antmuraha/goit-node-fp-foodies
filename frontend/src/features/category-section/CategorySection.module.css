@@ -33,6 +33,10 @@
   text-transform: uppercase;
 }
 
+.backBtn svg {
+  transform: rotate(225deg);
+}
+
 .backBtn:focus-visible {
   outline: 2px solid var(--fd-text-primary);
   outline-offset: 2px;
@@ -71,17 +75,14 @@
   }
 }
 
-/* ── Desktop (1280px) — wider padding only ── */
+/* ── Desktop (1280px) — wider padding + sidebar layout ── */
 @media (min-width: 1280px) {
   .section {
     padding: 0 var(--fd-container-px-desktop);
     margin-top: 120px;
     margin-bottom: 120px;
   }
-}
 
-/* ── Desktop (1440px) — sidebar layout ── */
-@media (min-width: 1440px) {
   .content {
     flex-direction: row;
     align-items: flex-start;

@@ -78,8 +78,8 @@
   }
 }
 
-/* Desktop: 1440px — back to vertical column (sidebar layout) */
-@media (min-width: 1440px) {
+/* Desktop: 1280px — back to vertical column (sidebar layout) */
+@media (min-width: 1280px) {
   .panel {
     flex-direction: column;
     width: 330px;
