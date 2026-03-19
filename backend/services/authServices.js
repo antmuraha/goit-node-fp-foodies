@@ -9,9 +9,19 @@ export const register = async ({ name, email, password }) => {
   }
 
   const hashedPassword = await bcrypt.hash(password, 10);
-  const user = await db.User.create({ name, email, password: hashedPassword, verify: true });
+  const user = await db.User.create({
+    name,
+    email,
+    password: hashedPassword,
+    verify: true,
+  });
 
-  return { id: user.id, name: user.name, email: user.email, avatar: user.avatar };
+  return {
+    id: user.id,
+    name: user.name,
+    email: user.email,
+    avatar: user.avatar,
+  };
 };
 
 export const login = async ({ email, password }) => {
@@ -34,7 +44,12 @@ export const login = async ({ email, password }) => {
 
   return {
     token,
-    user: { id: user.id, name: user.name, email: user.email, avatar: user.avatar },
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      avatar: user.avatar,
+    },
   };
 };
 
