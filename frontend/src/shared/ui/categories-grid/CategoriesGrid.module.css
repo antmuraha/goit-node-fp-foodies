@@ -96,7 +96,7 @@
   }
 
   .title {
-    font-size: var(--fd-type-h2-size);   /* 40px */
+    font-size: var(--fd-type-h2-size); /* 40px */
     line-height: var(--fd-type-h2-height); /* 44px */
     letter-spacing: -0.8px;
   }
