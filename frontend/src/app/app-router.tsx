@@ -17,52 +17,61 @@ export const appRouter = createBrowserRouter([
     element: <SharedLayout />,
     handle: routeHandle({ breadcrumb: { title: "Home" } }),
     children: [
-      { index: true, element: <HomePage /> },
+      { index: true, element: <HomePage />, handle: routeHandle({ overrides: { layoutHeaderShown: false } }) },
       {
-        path: APP_ROUTES.CATEGORY,
-        element: <CategoryPage />,
-        handle: routeHandle({}),
+        handle: routeHandle({ overrides: { layoutHeaderShown: true } }),
+        children: [
+          {
+            path: APP_ROUTES.CATEGORY,
+            element: <CategoryPage />,
+            handle: routeHandle({ overrides: { layoutHeaderShown: false } }),
+          },
+          {
+            path: APP_ROUTES.RECIPE_DETAILS,
+            element: <RecipePage />,
+            handle: routeHandle({ breadcrumb: { title: "Recipe Details" } }),
+          },
+          {
+            path: APP_ROUTES.RECIPE_ADD,
+            element: (
+              <AuthPage>
+                <AddRecipePage />
+              </AuthPage>
+            ),
+            handle: routeHandle({ breadcrumb: { title: "Add Recipe" } }),
+          },
+          {
+            path: APP_ROUTES.RECIPE_EDIT,
+            element: (
+              <AuthPage>
+                <AddRecipePage />
+              </AuthPage>
+            ),
+            handle: routeHandle({ breadcrumb: { title: "Edit Recipe" } }),
+          },
+          {
+            path: APP_ROUTES.USER,
+            element: (
+              <AuthPage>
+                <UserPage />
+              </AuthPage>
+            ),
+            handle: routeHandle({ breadcrumb: { title: "User" } }),
+          },
+          { path: APP_ROUTES.UI_KIT, element: <UiKitPage />, handle: routeHandle({ breadcrumb: { title: "UI Kit" } }) },
+          {
+            path: APP_ROUTES.SIGN_IN,
+            element: <SignInPage />,
+            handle: routeHandle({ breadcrumb: { title: "Sign In" } }),
+          },
+          {
+            path: APP_ROUTES.NOT_FOUND,
+            element: <NotFoundPage />,
+            handle: routeHandle({ breadcrumb: { title: "Not Found" } }),
+          },
+          { path: "*", element: <Navigate to={APP_ROUTES.NOT_FOUND} replace /> },
+        ],
       },
-      {
-        path: APP_ROUTES.RECIPE_DETAILS,
-        element: <RecipePage />,
-        handle: routeHandle({ breadcrumb: { title: "Recipe Details" } }),
-      },
-      {
-        path: APP_ROUTES.RECIPE_ADD,
-        element: (
-          <AuthPage>
-            <AddRecipePage />
-          </AuthPage>
-        ),
-        handle: routeHandle({ breadcrumb: { title: "Add Recipe" } }),
-      },
-      {
-        path: APP_ROUTES.RECIPE_EDIT,
-        element: (
-          <AuthPage>
-            <AddRecipePage />
-          </AuthPage>
-        ),
-        handle: routeHandle({ breadcrumb: { title: "Edit Recipe" } }),
-      },
-      {
-        path: APP_ROUTES.USER,
-        element: (
-          <AuthPage>
-            <UserPage />
-          </AuthPage>
-        ),
-        handle: routeHandle({ breadcrumb: { title: "User" } }),
-      },
-      { path: APP_ROUTES.UI_KIT, element: <UiKitPage />, handle: routeHandle({ breadcrumb: { title: "UI Kit" } }) },
-      { path: APP_ROUTES.SIGN_IN, element: <SignInPage />, handle: routeHandle({ breadcrumb: { title: "Sign In" } }) },
-      {
-        path: APP_ROUTES.NOT_FOUND,
-        element: <NotFoundPage />,
-        handle: routeHandle({ breadcrumb: { title: "Not Found" } }),
-      },
-      { path: "*", element: <Navigate to={APP_ROUTES.NOT_FOUND} replace /> },
     ],
   },
 ]);

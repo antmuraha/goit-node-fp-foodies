@@ -1,0 +1,29 @@
+.burgerMenu {
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  position: fixed;
+  background: black;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 38px;
+  padding: 24px 24px 0 24px;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  row-gap: 24px;
+  min-width: 111px;
+  max-width: 130px;
+  margin-top: 196px;
+}

@@ -23,6 +23,7 @@ type UseAuthReturn = {
   signIn: (credentials: LoginCredentials) => Promise<boolean>;
   signUp: (credentials: RegisterCredentials) => Promise<boolean>;
   signOut: () => Promise<void>;
+  isLoggedIn: boolean;
 };
 
 export const useAuth = (): UseAuthReturn => {
@@ -56,6 +57,8 @@ export const useAuth = (): UseAuthReturn => {
     await dispatch(logout());
   }, [dispatch]);
 
+  const isLoggedIn = !!currentUser;
+
   return {
     isAuthenticated,
     currentUser,
@@ -67,5 +70,6 @@ export const useAuth = (): UseAuthReturn => {
     signIn,
     signUp,
     signOut,
+    isLoggedIn,
   };
 };
