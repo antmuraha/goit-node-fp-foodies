@@ -1,5 +1,6 @@
 export const APP_ROUTES = {
   HOME: "/",
+  CATEGORY: "/category/:id",
   UI_KIT: "/ui-kit",
   SIGN_IN: "/sign-in",
   RECIPE_DETAILS: "/recipe/:id",

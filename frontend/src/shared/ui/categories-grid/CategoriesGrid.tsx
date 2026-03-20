@@ -1,14 +1,21 @@
-import type { ReactElement } from "react";
+import { useState, type ReactElement } from "react";
 import { Link } from "react-router-dom";
 import { useDataCategories } from "../../hooks/useDataCategories";
 import { CategoryCard } from "../../../features/categories/category-card";
 import styles from "./CategoriesGrid.module.css";
 
+const CATEGORIES_START_COUNT = 11;
 const CATEGORIES_DESCRIPTION =
   "Discover a limitless world of culinary possibilities and enjoy exquisite recipes that combine taste, style and the warm atmosphere of the kitchen.";
 
 const CategoriesGrid = (): ReactElement => {
   const { categories, isLoading, error } = useDataCategories();
+  const [showAllCategories, setShowAllCategories] = useState(false);
+  const displayedCategories = showAllCategories ? categories : categories.slice(0, CATEGORIES_START_COUNT);
+
+  const handleShowAll = (): void => {
+    setShowAllCategories(true);
+  };
 
   return (
     <section className={styles.section}>
@@ -24,14 +31,14 @@ const CategoriesGrid = (): ReactElement => {
 
         {!isLoading &&
           !error &&
-          categories.map((category) => (
+          displayedCategories.map((category) => (
             <div key={category.id} role="listitem">
               <CategoryCard id={category.id} name={category.name} image={category.image} />
             </div>
           ))}
 
-        {!isLoading && !error && categories.length > 0 && (
-          <Link to="/" className={styles.allCard} aria-label="Browse all categories">
+        {!isLoading && !error && categories.length > 0 && !showAllCategories && (
+          <Link to="#" className={styles.allCard} aria-label="Browse all categories" onClick={handleShowAll}>
             <span className={styles.allCardLabel}>All categories</span>
           </Link>
         )}

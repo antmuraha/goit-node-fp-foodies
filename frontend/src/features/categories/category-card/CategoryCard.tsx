@@ -14,7 +14,7 @@ interface CategoryCardProps {
 export const CategoryCard = ({ id, name, image }: CategoryCardProps): ReactElement => {
   return (
     <div className={styles.categoryCard}>
-      <Link to={`?categoryId=${id}`} className={styles.link} aria-label={`Browse ${name} recipes`}>
+      <Link to={`/category/${id}`} className={styles.link} aria-label={`Browse ${name} recipes`}>
         <img src={image ?? FALLBACK_IMAGE} alt={name} className={styles.image} loading="lazy" />
         <div className={styles.overlay} aria-hidden="true" />
         <div className={styles.content}>
