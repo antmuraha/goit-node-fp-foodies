@@ -10,9 +10,18 @@ interface ProfileRecipeCardProps {
   title: string;
   instructions: string;
   image?: string | null;
+  onDelete?: () => void;
+  isDeleting?: boolean;
 }
 
-export const ProfileRecipeCard = ({ id, title, instructions, image }: ProfileRecipeCardProps): ReactElement => {
+export const ProfileRecipeCard = ({
+  id,
+  title,
+  instructions,
+  image,
+  onDelete,
+  isDeleting,
+}: ProfileRecipeCardProps): ReactElement => {
   return (
     <div className={styles.card}>
       <NavLink to={`/recipe/${id}`}>
@@ -25,9 +34,7 @@ export const ProfileRecipeCard = ({ id, title, instructions, image }: ProfileRec
       <div className={styles.section}>
         <div>
           <p className={styles.title}>{title}</p>
-          {/* <NavLink to={`/recipe/${id}`}> */}
           <p className={styles.instructions}>{instructions}</p>
-          {/* </NavLink> */}
         </div>
         <div className={styles.btnWrapper}>
           <NavLink to={`/recipe/${id}`}>
@@ -35,9 +42,14 @@ export const ProfileRecipeCard = ({ id, title, instructions, image }: ProfileRec
               <Icon name="arrow-up-right" color="text-primary" size={18} />
             </div>
           </NavLink>
-          <div className={styles.iconWrapper}>
+          <button
+            className={styles.iconWrapper}
+            onClick={onDelete}
+            disabled={isDeleting}
+            aria-label="Remove from recipes"
+          >
             <Icon name="trash" color="text-primary" size={18} />
-          </div>
+          </button>
         </div>
       </div>
     </div>

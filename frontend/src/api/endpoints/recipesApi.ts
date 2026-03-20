@@ -50,6 +50,10 @@ export const recipesApi = {
       headers: getAuthHeaders(token),
       body: payload,
     }),
+  deleteRecipe: (token: string, recipeId: number | string): Promise<void> =>
+    apiClient.delete<void>(API_ROUTES.RECIPES.BY_ID(recipeId), {
+      headers: getAuthHeaders(token),
+    }),
   uploadRecipeImage: (token: string, file: File): Promise<{ image: string }> => {
     const formData = new FormData();
     formData.append("image", file);

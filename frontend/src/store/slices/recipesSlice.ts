@@ -194,6 +194,25 @@ export const updateRecipe = createAsyncThunk<
   }
 });
 
+export const deleteRecipe = createAsyncThunk<
+  number | string,
+  number | string,
+  { state: AuthTokenState; rejectValue: string }
+>("recipes/deleteRecipe", async (recipeId, thunkApi) => {
+  const token = thunkApi.getState().auth.token;
+
+  if (!token) {
+    return thunkApi.rejectWithValue("Missing auth token for recipe delete request");
+  }
+
+  try {
+    await recipesApi.deleteRecipe(token, recipeId);
+    return recipeId;
+  } catch (error) {
+    return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
+  }
+});
+
 export const uploadRecipeImage = createAsyncThunk<string, File, { state: AuthTokenState; rejectValue: string }>(
   "recipes/uploadRecipeImage",
   async (file, thunkApi) => {
@@ -374,6 +393,12 @@ const recipesSlice = createSlice({
       .addCase(updateRecipe.rejected, (state, action) => {
         state.editorSubmitStatus = "failed";
         state.editorSubmitError = action.payload ?? "Unable to update recipe";
+      })
+      .addCase(deleteRecipe.fulfilled, (state, action) => {
+        const id = action.payload;
+        state.ownRecipes.data = state.ownRecipes.data.filter((r) => String(r.id) !== String(id));
+        state.ownRecipes.total = Math.max(0, state.ownRecipes.total - 1);
+        state.list = state.list.filter((r) => String(r.id) !== String(id));
       })
       .addCase(uploadRecipeImage.pending, (state) => {
         state.imageUploadStatus = "loading";
