@@ -1,3 +1,4 @@
+import { baseImageUrl } from "../config/constants.js";
 import HttpError from "../helpers/HttpError.js";
 import validateUrl from "../helpers/validateUrl.js";
 import {
@@ -122,7 +123,7 @@ export const uploadRecipeImage = async (req, res, next) => {
     } else {
       throw HttpError(400, "Image file or URL required");
     }
-    res.status(200).json({ image: `${process.env.BASE_IMAGE_URL}${image}` });
+    res.status(200).json({ image: image ? `${baseImageUrl}${image}` : null });
   } catch (err) {
     next(err);
   }

@@ -111,8 +111,6 @@ export const ProfileDropdownMenu = ({ user, onLogout }: ProfileDropdownMenuProps
 
   const avatarContent = <img src={user.avatar || defaultAvatar} alt={user.name} className={styles.avatar} />;
 
-  console.log(user);
-
   return (
     <div className={styles.container}>
       <button

@@ -27,7 +27,7 @@ type ImageInputProps = {
 
 export const ImageInput = ({
   id,
-  label = "Image",
+  label,
   initialImageUrl,
   accept = "image/*",
   disabled = false,
@@ -46,18 +46,13 @@ export const ImageInput = ({
 
   useEffect(() => {
     return () => {
-      if (previewUrl) {
-        URL.revokeObjectURL(previewUrl);
-      }
+      if (previewUrl) URL.revokeObjectURL(previewUrl);
     };
   }, [previewUrl]);
 
   const handleFileSelect = async (file: File | null): Promise<void> => {
-    if (!file) {
-      return;
-    }
+    if (!file) return;
 
-    // Validate file size if maxSize is provided
     if (maxSize !== undefined) {
       const sizeValidation = validateFileSize(file, maxSize);
       if (!sizeValidation.valid) {
@@ -66,13 +61,10 @@ export const ImageInput = ({
       }
     }
 
-    if (previewUrl) {
-      URL.revokeObjectURL(previewUrl);
-    }
+    if (previewUrl) URL.revokeObjectURL(previewUrl);
 
     let fileToProcess = file;
 
-    // Resize image via canvas if target dimensions are provided
     if (targetWidth !== undefined && targetHeight !== undefined) {
       try {
         fileToProcess = await canvasCoverResize(file, targetWidth, targetHeight);
@@ -92,10 +84,7 @@ export const ImageInput = ({
   const imageSrc = previewUrl || initialImageUrl || "";
 
   const handleTriggerClick = (): void => {
-    if (disabled) {
-      return;
-    }
-
+    if (disabled) return;
     fileInputRef.current?.click();
   };
 
@@ -103,10 +92,7 @@ export const ImageInput = ({
     ? cloneElement(elementTrigger, {
         onClick: (event: MouseEvent<HTMLElement>) => {
           elementTrigger.props.onClick?.(event);
-
-          if (!event.defaultPrevented) {
-            handleTriggerClick();
-          }
+          if (!event.defaultPrevented) handleTriggerClick();
         },
         disabled: elementTrigger.props.disabled ?? disabled,
       })
@@ -115,11 +101,53 @@ export const ImageInput = ({
   return (
     <div className={styles.wrapper}>
       {label && <label className={styles.label}>{label}</label>}
+
       {imageSrc ? (
-        <img src={imageSrc} alt="Preview" className={styles.preview} />
+        /* Uploaded image — click to replace */
+        <button
+          type="button"
+          className={styles.previewBtn}
+          onClick={handleTriggerClick}
+          disabled={disabled}
+          aria-label="Change image"
+        >
+          <img src={imageSrc} alt="Preview" className={styles.preview} />
+        </button>
       ) : (
-        <div className={styles.placeholder}>Select an image to see preview</div>
+        /* Empty state — Figma: camera icon + "Upload a photo" */
+        <button
+          type="button"
+          className={[styles.placeholder, hasError && styles.placeholderError].filter(Boolean).join(" ")}
+          onClick={handleTriggerClick}
+          disabled={disabled}
+          aria-label="Upload a photo"
+        >
+          {/* Camera icon from Figma node 22:730 */}
+          <svg
+            className={styles.cameraIcon}
+            width="64"
+            height="64"
+            viewBox="0 0 64 64"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <rect x="8" y="18" width="48" height="36" rx="6" stroke="#bfbebe" strokeWidth="2.5" fill="none" />
+            <path
+              d="M22 18l4-8h12l4 8"
+              stroke="#bfbebe"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              fill="none"
+            />
+            <circle cx="32" cy="36" r="8" stroke="#bfbebe" strokeWidth="2.5" fill="none" />
+            <circle cx="50" cy="26" r="2" fill="#bfbebe" />
+          </svg>
+          <span className={styles.placeholderText}>Upload a photo</span>
+        </button>
       )}
+
       {elementTrigger !== false && (
         <FileInput
           ref={fileInputRef}
@@ -130,9 +158,11 @@ export const ImageInput = ({
           hint={showFileName ? selectedImageName || "Selected image is used for local preview only" : undefined}
           hasError={hasError}
           error={error}
+          /* Hide native input when a custom trigger is provided — original logic preserved */
           className={elementTrigger ? styles.hiddenInput : undefined}
         />
       )}
+
       {renderedTrigger}
     </div>
   );

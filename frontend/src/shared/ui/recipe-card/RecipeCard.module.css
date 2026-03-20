@@ -120,6 +120,11 @@
   }
 }
 
+.titleLink,
+.descriptionLink {
+  text-decoration: none;
+}
+
 .list {
   flex-direction: row;
   align-items: flex-start;
@@ -219,6 +224,8 @@
   border: none;
   padding: 0;
   cursor: pointer;
+  text-decoration: none;
+  color: inherit;
 }
 
 .avatar {

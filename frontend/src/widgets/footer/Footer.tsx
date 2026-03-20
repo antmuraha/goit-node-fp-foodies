@@ -27,7 +27,12 @@ export const Footer = (): ReactElement => {
     <footer className={styles.footer}>
       <div className={styles.inner}>
         <div className={styles.top}>
-          <Link to={APP_ROUTES.HOME} className={styles.logo} aria-label="Foodies — go to home page">
+          <Link
+            to={APP_ROUTES.HOME}
+            className={styles.logo}
+            aria-label="Foodies — go to home page"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          >
             foodies
           </Link>
           <ul className={styles.socialList}>

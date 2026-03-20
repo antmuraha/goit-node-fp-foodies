@@ -1,81 +1,127 @@
+/* Figma: desktop 14:613 / tablet 108:4206 / mobile 114:4798 */
+
+/* ── Mobile first: single column ── */
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--fd-space-20);
+  gap: 20px;
+}
+
+/* Image block — full width on mobile/tablet */
+.imageCol {
+  width: 100%;
+}
+
+/* All form fields stacked */
+.fieldsCol {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .group {
   display: flex;
   flex-direction: column;
-  gap: var(--fd-space-8);
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: var(--fd-space-16);
+  gap: 16px;
 }
 
 .label {
-  color: var(--fd-text-primary);
-  font-size: var(--fd-font-size-14);
-  font-weight: var(--fd-font-weight-medium);
+  font-family: "Mulish", sans-serif;
+  /* Figma: Mulish ExtraBold, 20px, uppercase — matches H4 token */
+  font-weight: 800;
+  font-size: 20px;
+  line-height: 24px;
+  letter-spacing: -0.4px;
+  text-transform: uppercase;
+  color: #050505;
 }
 
-.areas {
+/* Category + Cooking time: side by side on tablet+ */
+.categoryTimeRow {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: var(--fd-space-8);
+  grid-template-columns: 1fr;
+  gap: 16px;
 }
 
-.ingredientEditor {
-  display: flex;
-  flex-direction: column;
-  gap: var(--fd-space-12);
-}
-
+/* Ingredient pending row: select + quantity */
 .ingredientEditorRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--fd-space-12);
+  gap: 12px;
 }
 
+/* Added ingredient tiles */
 .ingredientTiles {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: var(--fd-space-12);
+  gap: 12px;
 }
 
 .ingredientTile {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: var(--fd-space-12);
-  padding: var(--fd-space-12);
-  border: var(--fd-border-width-hairline) solid var(--fd-border-default);
-  border-radius: var(--fd-radius-sm);
-  background-color: var(--fd-bg-muted);
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid #bfbebe;
+  border-radius: 15px;
 }
 
 .ingredientTileName {
   margin: 0;
-  font-weight: var(--fd-font-weight-bold);
-  color: var(--fd-text-primary);
+  font-family: "Mulish", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.32px;
+  color: #050505;
 }
 
 .ingredientTileMeasure {
-  margin: var(--fd-space-4) 0 0;
-  color: var(--fd-text-secondary);
-  font-size: var(--fd-font-size-14);
+  margin: 4px 0 0;
+  font-family: "Mulish", sans-serif;
+  font-size: 14px;
+  line-height: 18px;
+  color: #bfbebe;
 }
 
+/* Trash icon + Publish */
 .actions {
   display: flex;
-  gap: var(--fd-space-12);
-  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
 }
 
-@media (max-width: 767px) {
+/* ── Tablet (768px) ── */
+@media (min-width: 768px) {
+  /* Category + time side by side */
+  .categoryTimeRow {
+    grid-template-columns: 1fr auto;
+    align-items: end;
+    gap: 20px;
+  }
+}
+
+/* ── Desktop (1280px): image left, fields right ── */
+@media (min-width: 1280px) {
+  .form {
+    display: grid;
+    /* Figma: 551px image + 80px gap + rest for fields */
+    grid-template-columns: 551px 1fr;
+    column-gap: 80px;
+    align-items: start;
+  }
+
+  /* Image stays sticky while scrolling form */
+  .imageCol {
+    position: sticky;
+    top: 32px;
+  }
+}
+
+/* ── Mobile narrow overrides ── */
+@media (max-width: 480px) {
   .ingredientEditorRow {
     grid-template-columns: 1fr;
   }

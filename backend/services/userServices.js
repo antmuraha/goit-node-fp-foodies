@@ -1,3 +1,4 @@
+import { baseImageUrl } from "../config/constants.js";
 import HttpError from "../helpers/HttpError.js";
 import db from "../models/index.js";
 
@@ -125,7 +126,7 @@ export const getOtherUserProfile = async (targetId) => {
     id,
     name,
     email,
-    avatar: `${process.env.BASE_IMAGE_URL}${user.avatar}`,
+    avatar: user.avatar ? `${baseImageUrl}${user.avatar}` : null,
     createdAt,
     recipesCreated,
     followersCount,
@@ -150,7 +151,7 @@ export const getUserProfileWithMetrics = async (userId) => {
 
   return {
     ...user.toJSON(),
-    avatar: `${process.env.BASE_IMAGE_URL}${user.avatar}`,
+    avatar: user.avatar ? `${baseImageUrl}${user.avatar}` : null,
     recipesCreated,
     favoritesCount,
     followersCount,
