@@ -9,7 +9,6 @@ export type IconName =
   | "arrow-up-right"
   | "burger-menu"
   | "camera"
-  | "capture"
   | "chevron-down"
   | "close"
   | "eye-off"
