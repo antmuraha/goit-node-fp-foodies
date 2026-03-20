@@ -1,0 +1,39 @@
+.profileCard {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    /* gap: 75px; */
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+}
+
+.avatar {
+    width: 85px;
+    height: 85px;
+}
+
+.user {
+    display: flex;
+    flex-direction: column;
+    width: 116px;
+    gap: 8px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.name {
+    margin: 0;
+    padding: 0;
+}
+
+.ownRecipes {
+    margin: 0;
+}
