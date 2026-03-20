@@ -4,6 +4,8 @@ import { Icon } from "../../../shared/components/Icon";
 import { Link } from "react-router-dom";
 import { APP_ROUTES } from "../../../shared/constants/routes";
 import { HeaderNavLink } from "../HeaderNavLink";
+import heroFoodMain from "../../../assets/images/hero-food-main.webp";
+import heroFoodSmall from "../../../assets/images/hero-food-small.webp";
 
 type ButtonMenuProps = {
   variant: "light" | "dark";
@@ -31,6 +33,10 @@ export const BurgerMenu = ({ variant }: ButtonMenuProps) => {
             <div className={styles.menu}>
               <HeaderNavLink fullWidth label="Home" path={APP_ROUTES.HOME} variant="dark" />
               <HeaderNavLink fullWidth label="Add Recipe" path={APP_ROUTES.RECIPE_ADD} variant="dark" />
+            </div>
+            <div className={styles.images} aria-hidden="true">
+              <img src={heroFoodMain} alt="" className={styles.imageMain} />
+              <img src={heroFoodSmall} alt="" className={styles.imageSmall} />
             </div>
           </Dialog.Content>
         </Dialog.Overlay>
