@@ -1,10 +1,17 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-export const useScrollToTop = (): void => {
+export const useScrollToTop = (selector?: string): void => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    if (selector) {
+      const element = document.querySelector(selector);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+        return;
+      }
+    }
+    document.body.scrollIntoView({ behavior: "smooth" });
   }, [pathname]);
 };

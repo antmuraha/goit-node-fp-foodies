@@ -3,13 +3,14 @@ import { NavLink, useParams, useSearchParams } from "react-router-dom";
 import { CategoryRecipesGrid } from "../../features/category-recipes-grid";
 import { CategoryFilterPanel } from "../../features/category-filters";
 import { HeroSection } from "../../shared/ui";
-import { useDataRecipes } from "../../shared/hooks";
+import { useDataRecipes, useScrollToTop } from "../../shared/hooks";
 import { TestimonialsSection } from "../../shared/ui/testimonials-section";
 import styles from "./CategoryPage.module.css";
 import { APP_ROUTES } from "../../shared/constants/routes";
 import { Icon } from "../../shared/components/Icon";
 
 const PAGE_LIMIT = 9;
+const SCROLL_TO_CLASS = "scroll-to-top-trigger";
 
 const MOCK_CATEGORY_DESCRIPTION =
   "Experience the art of taste, where every dish embodies creativity and every flavor is crafted with intention.";
@@ -18,6 +19,7 @@ export const CategoryPage = (): ReactElement => {
   const { id: categoryId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const isFirstRender = useRef(true);
+  useScrollToTop(`.${SCROLL_TO_CLASS}`);
 
   const page = Math.max(1, Number(searchParams.get("page") ?? 1));
   const ingredientId = searchParams.get("ingredientId") ? Number(searchParams.get("ingredientId")) : undefined;
@@ -76,7 +78,7 @@ export const CategoryPage = (): ReactElement => {
   return (
     <>
       <HeroSection />
-      <header className={styles.header}>
+      <header className={styles.header + " " + SCROLL_TO_CLASS}>
         <NavLink to={APP_ROUTES.HOME} className={styles.backLink}>
           <Icon name="arrow-up-right" size={16} color="text-primary" />
           <span>Back</span>

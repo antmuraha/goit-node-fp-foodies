@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import { useEffect, useMemo } from "react";
 import { NavLink, useParams } from "react-router-dom";
-import { useDataRecipe } from "../../shared/hooks";
+import { useDataRecipe, useScrollToTop } from "../../shared/hooks";
 import PopularRecipesList from "../../shared/ui/popular-recipes-list";
 import RecipeIngredientsPanel from "../../features/recipe/ui/RecipeIngredientsPanel";
 import RecipeInstructionsPanel from "../../features/recipe/ui/RecipeInstructionsPanel";
@@ -11,6 +11,7 @@ import useIsOwnEntity from "../../shared/helpers/useIsOwnEntity";
 import styles from "./RecipePage.module.css";
 
 export const RecipePage = (): ReactElement => {
+  useScrollToTop();
   const { id } = useParams();
   const recipeId = useMemo(() => {
     const numericId = Number(id);
