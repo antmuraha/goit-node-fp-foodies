@@ -70,6 +70,11 @@ components:
             favoritesCount:
               type: integer
               example: 5
+            favoriteRecipeIds:
+              type: array
+              items:
+                type: integer
+              example: [12, 27, 41]
             followersCount:
               type: integer
               example: 20
@@ -734,6 +739,37 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Category'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /api/categories/{id}:
+    get:
+      tags: [Catalog]
+      summary: Get a recipe category by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+          description: Category ID (positive integer)
+      responses:
+        '200':
+          description: Category found
+          headers:
+            Cache-Control:
+              schema:
+                type: string
+              example: public, max-age=3600, stale-while-revalidate=86400
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
         '500':
           $ref: '#/components/responses/ServerError'
 
