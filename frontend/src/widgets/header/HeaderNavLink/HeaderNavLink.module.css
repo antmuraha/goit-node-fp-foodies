@@ -1,0 +1,20 @@
+.navLink {
+  padding: 14px;
+  border-radius: 30px;
+  color: var(--fd-color-white);
+  text-decoration: none;
+  text-transform: uppercase;
+  flex: none;
+}
+
+.light {
+  color: var(--fd-color-main);
+}
+
+.navLink.active {
+  border: 1px solid var(--fd-border-contrast);
+}
+
+.navLink.light.active {
+  border: 1px solid var(--fd-color-muted);
+}

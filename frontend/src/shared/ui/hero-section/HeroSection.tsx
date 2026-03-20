@@ -4,6 +4,7 @@ import heroFoodMain from "../../../assets/images/hero-food-main.webp";
 import heroFoodSmall from "../../../assets/images/hero-food-small.webp";
 import { APP_ROUTES } from "../../constants/routes";
 import styles from "./HeroSection.module.css";
+import { Header } from "../../../widgets/header";
 
 const HERO_TITLE = "Improve Your Culinary Talents";
 const HERO_SUBTITLE =
@@ -12,6 +13,9 @@ const HERO_SUBTITLE =
 export const HeroSection = (): ReactElement => {
   return (
     <section className={styles.hero} aria-label="Hero">
+      <div className={styles.headerWrapper}>
+        <Header variant="dark" />
+      </div>
       <div className={styles.content}>
         <h1 className={styles.title}>{HERO_TITLE}</h1>
         <p className={styles.subtitle}>{HERO_SUBTITLE}</p>
