@@ -36,10 +36,6 @@ export const recipesApi = {
     apiClient.delete<void>(API_ROUTES.RECIPES.FAVORITE_BY_ID(recipeId), {
       headers: getAuthHeaders(token),
     }),
-  getFavoriteStatus: (token: string, recipeId: number | string): Promise<{ recipeId: number; isFavorite: boolean }> =>
-    apiClient.get<{ recipeId: number; isFavorite: boolean }>(API_ROUTES.RECIPES.FAVORITE_BY_ID(recipeId), {
-      headers: getAuthHeaders(token),
-    }),
   createRecipe: (token: string, payload: CreateRecipePayload): Promise<RecipeDetails> =>
     apiClient.post<RecipeDetails, CreateRecipePayload>(API_ROUTES.RECIPES.ROOT, {
       headers: getAuthHeaders(token),

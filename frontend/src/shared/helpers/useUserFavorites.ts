@@ -6,12 +6,7 @@ import { FAVORITE_NOTIFICATIONS } from "../constants/notifications";
 import { notificationService } from "../services/notifications";
 import { useAppDispatch, useAppSelector } from "../hooks/reduxHooks";
 import { adjustFavoritesCount } from "../../store/slices/authSlice";
-import {
-  addFavoriteRecipe,
-  fetchFavoriteStatusByRecipeId,
-  optimisticFavoriteStatus,
-  removeFavoriteRecipe,
-} from "../../store/slices/favoritesSlice";
+import { addFavoriteRecipe, optimisticFavoriteStatus, removeFavoriteRecipe } from "../../store/slices/favoritesSlice";
 import {
   optimisticAddFavorite,
   optimisticRemoveFavorite,
@@ -20,7 +15,6 @@ import {
 } from "../../store/slices/recipesSlice";
 import {
   selectFavoriteStatusCache,
-  selectFavoriteStatusRequestState,
   selectIsFavoriteFromCache,
   selectResolvedIsFavorite,
 } from "../../store/slices/favoritesSelectors";
@@ -56,40 +50,13 @@ export const useUserFavorites = () => {
 
       return selectIsFavoriteFromCache(store.getState(), recipeId) ?? false;
     },
-    // favoriteStatusCache subscription ensures re-render when cache is updated by fetchFavoriteStatusByRecipeId
+    // favoriteStatusCache subscription keeps card/detail UI in sync with profile hydration and optimistic updates
     [favoriteRecipes, favoriteStatusCache, store],
   );
 
   const isPending = useCallback(
     (recipeId: number | string): boolean => pendingRecipeIds.has(toKey(recipeId)),
     [pendingRecipeIds],
-  );
-
-  const ensureFavoriteStatus = useCallback(
-    async (recipeId: number | string): Promise<boolean | undefined> => {
-      const status = getFavoriteStatus(recipeId);
-
-      if (typeof status === "boolean") {
-        return status;
-      }
-
-      if (!hasToken) {
-        return undefined;
-      }
-
-      if (selectFavoriteStatusRequestState(store.getState(), recipeId) === "loading") {
-        return undefined;
-      }
-
-      const result = await dispatch(fetchFavoriteStatusByRecipeId({ recipeId }));
-
-      if (fetchFavoriteStatusByRecipeId.fulfilled.match(result)) {
-        return result.payload.isFavorite;
-      }
-
-      return undefined;
-    },
-    [dispatch, getFavoriteStatus, hasToken, store],
   );
 
   const findRecipeSummaryById = useCallback(
@@ -143,11 +110,7 @@ export const useUserFavorites = () => {
       }
 
       const knownStatus = typeof isCurrentlyFavorite === "boolean" ? isCurrentlyFavorite : getFavoriteStatus(recipeId);
-      const resolvedStatus = typeof knownStatus === "boolean" ? knownStatus : await ensureFavoriteStatus(recipeId);
-
-      if (typeof resolvedStatus !== "boolean") {
-        return false;
-      }
+      const resolvedStatus = typeof knownStatus === "boolean" ? knownStatus : false;
 
       trackPendingRecipe(recipeId);
 
@@ -201,20 +164,10 @@ export const useUserFavorites = () => {
       releasePendingRecipe(recipeId);
       return true;
     },
-    [
-      dispatch,
-      ensureFavoriteStatus,
-      findRecipeSummaryById,
-      getFavoriteStatus,
-      hasToken,
-      isPending,
-      releasePendingRecipe,
-      trackPendingRecipe,
-    ],
+    [dispatch, findRecipeSummaryById, getFavoriteStatus, hasToken, isPending, releasePendingRecipe, trackPendingRecipe],
   );
 
   return {
-    ensureFavoriteStatus,
     getFavoriteStatus,
     isFavorite,
     isPending,
