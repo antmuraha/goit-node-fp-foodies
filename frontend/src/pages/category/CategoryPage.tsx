@@ -8,12 +8,10 @@ import { TestimonialsSection } from "../../shared/ui/testimonials-section";
 import styles from "./CategoryPage.module.css";
 import { APP_ROUTES } from "../../shared/constants/routes";
 import { Icon } from "../../shared/components/Icon";
+import { useDataCategory } from "../../shared/hooks/useDataCategories";
 
 const PAGE_LIMIT = 9;
 const SCROLL_TO_CLASS = "scroll-to-top-trigger";
-
-const MOCK_CATEGORY_DESCRIPTION =
-  "Experience the art of taste, where every dish embodies creativity and every flavor is crafted with intention.";
 
 export const CategoryPage = (): ReactElement => {
   const { id: categoryId } = useParams();
@@ -25,6 +23,7 @@ export const CategoryPage = (): ReactElement => {
   const ingredientId = searchParams.get("ingredientId") ? Number(searchParams.get("ingredientId")) : undefined;
   const areaId = searchParams.get("areaId") ? Number(searchParams.get("areaId")) : undefined;
 
+  const { category } = useDataCategory(categoryId);
   const { recipes, total, isLoading, error, loadRecipes } = useDataRecipes({
     categoryId,
     ingredientId,
@@ -33,16 +32,6 @@ export const CategoryPage = (): ReactElement => {
     offset: (page - 1) * PAGE_LIMIT,
   });
   const totalPages = useMemo(() => Math.ceil((total ?? 0) / PAGE_LIMIT), [total]);
-
-  const category = useMemo(() => {
-    if (!categoryId) return { title: "Category", description: "Loading category details..." };
-    return recipes.length
-      ? {
-          title: recipes[0].category.name,
-          description: MOCK_CATEGORY_DESCRIPTION,
-        }
-      : { title: "Category", description: "Loading category details..." };
-  }, [recipes, categoryId]);
 
   const handlePageChange = useCallback(
     (newPage: number) => {
@@ -83,8 +72,8 @@ export const CategoryPage = (): ReactElement => {
           <Icon name="arrow-up-right" size={16} color="text-primary" />
           <span>Back</span>
         </NavLink>
-        <h1>{category.title}</h1>
-        <p>{category.description}</p>
+        <h1>{category?.name || "Category"}</h1>
+        <p>{category?.description || "Loading category details..."}</p>
       </header>
       <main className={styles.main}>
         <aside className={styles.aside}>

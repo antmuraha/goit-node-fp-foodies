@@ -22,6 +22,10 @@ export default (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
+      description: {
+        type: DataTypes.TEXT,
+        allowNull: true,
+      },
       image: {
         type: DataTypes.TEXT,
         allowNull: true,

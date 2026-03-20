@@ -5,7 +5,9 @@ import { loadCSV } from "../helpers/parseCSV.js";
 export default {
   async up(queryInterface) {
     const now = new Date();
-    const rows = /** @type {Array<{ name: string; image?: string }>} */ (loadCSV("categories.csv"));
+    const rows = /** @type {Array<{ name: string; image?: string; description?: string }>} */ (
+      loadCSV("categories.csv")
+    );
     const [existingCategories] = /** @type {[Array<{ id: number; name: string }>, unknown]} */ (
       await queryInterface.sequelize.query("SELECT id, name FROM categories")
     );
@@ -15,12 +17,14 @@ export default {
     const rowsToUpdate = [];
 
     for (const row of rows) {
+      const description = row.description || null;
       const image = row.image || null;
       const existingId = existingCategoryIdByName.get(row.name);
 
       if (existingId) {
         rowsToUpdate.push({
           id: existingId,
+          description,
           image,
         });
         continue;
@@ -29,6 +33,7 @@ export default {
       rowsToInsert.push({
         name: row.name,
         image,
+        description,
         createdAt: now,
         updatedAt: now,
       });
@@ -43,6 +48,7 @@ export default {
         "categories",
         {
           image: row.image,
+          description: row.description,
           updatedAt: now,
         },
         { id: row.id },
