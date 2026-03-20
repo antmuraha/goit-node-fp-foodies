@@ -32,7 +32,7 @@ export type RecipeDetails = RecipeSummary & {
 };
 
 export type RecipeSearchParams = {
-  categoryId?: number;
+  categoryId?: number | string;
   ingredientId?: number;
   areaId?: number;
   search?: string;

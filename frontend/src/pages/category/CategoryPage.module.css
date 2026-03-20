@@ -1,4 +1,24 @@
 /* Mobile: filters on top, grid below */
+.header {
+  .backLink {
+    text-transform: capitalize;
+    text-decoration: none;
+    svg {
+      transform: rotate(-135deg) translateY(-3px);
+    }
+  }
+
+  h1 {
+    text-transform: capitalize;
+    color: #050505;
+    font-size: 40px;
+    font-weight: 800;
+    line-height: 44px;
+    letter-spacing: -0.8px;
+    text-transform: uppercase;
+  }
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -17,14 +37,16 @@
 
 /* Tablet: filters still on top (horizontal row handled by panel itself) */
 @media (min-width: 768px) {
-  .main {
+  .main,
+  .header {
     padding: 40px 32px;
   }
 }
 
 /* Desktop: sidebar layout — filters left, grid right */
 @media (min-width: 1440px) {
-  .main {
+  .main,
+  .header {
     flex-direction: row;
     align-items: flex-start;
     gap: 40px;
