@@ -16,6 +16,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.15",
     "@reduxjs/toolkit": "^2.11.2",
     "formik": "^2.4.9",
     "react": "^19.2.4",

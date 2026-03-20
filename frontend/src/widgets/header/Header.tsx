@@ -4,12 +4,15 @@ import { AuthWidget } from "../authWidget/AuthWidget";
 import styles from "./Header.module.css";
 import { APP_ROUTES } from "../../shared/constants/routes";
 import { HeaderNavLink } from "./HeaderNavLink";
+import { BurgerMenu } from "./BurgerMenu";
+import { useAuth } from "../../shared/hooks";
 
 type HeaderProps = {
   variant: "light" | "dark";
 };
 
 export const Header = ({ variant }: HeaderProps) => {
+  const { isLoggedIn } = useAuth();
   return (
     <header
       className={styles.header}
@@ -28,6 +31,11 @@ export const Header = ({ variant }: HeaderProps) => {
       </div>
       <div className={styles.actions}>
         <AuthWidget />
+        {isLoggedIn && (
+          <div className={styles.breakPointGuardBurgerMenu}>
+            <BurgerMenu variant={variant} />
+          </div>
+        )}
       </div>
     </header>
   );

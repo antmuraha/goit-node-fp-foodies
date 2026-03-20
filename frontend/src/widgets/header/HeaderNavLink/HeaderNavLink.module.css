@@ -5,6 +5,9 @@
   text-decoration: none;
   text-transform: uppercase;
   flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .light {
@@ -17,4 +20,8 @@
 
 .navLink.light.active {
   border: 1px solid var(--fd-color-muted);
+}
+
+.fullWidth {
+  width: 100%;
 }
