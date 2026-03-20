@@ -26,7 +26,9 @@ const UserRecipesList = ({ user }: UserRecipesListProps) => {
               title={recipe.title}
               instructions={recipe.instructions}
               image={recipe.image}
-              onDelete={() => { if (token) void dispatch(deleteRecipe(recipe.id)); }}
+              onDelete={() => {
+                if (token) void dispatch(deleteRecipe(recipe.id));
+              }}
             />
           ))}
         </ul>

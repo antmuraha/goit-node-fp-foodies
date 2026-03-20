@@ -14,7 +14,14 @@ interface ProfileRecipeCardProps {
   isDeleting?: boolean;
 }
 
-export const ProfileRecipeCard = ({ id, title, instructions, image, onDelete, isDeleting }: ProfileRecipeCardProps): ReactElement => {
+export const ProfileRecipeCard = ({
+  id,
+  title,
+  instructions,
+  image,
+  onDelete,
+  isDeleting,
+}: ProfileRecipeCardProps): ReactElement => {
   return (
     <div className={styles.card}>
       <NavLink to={`/recipe/${id}`}>

@@ -1,7 +1,6 @@
-import { useDataProfileFollowing, } from "../../hooks";
+import { useDataProfileFollowing } from "../../hooks";
 import { EmptyState } from "../../ui";
 import { ProfileFollowerCard } from "../../ui/profile-follower-card";
-
 
 const FollowingList = () => {
   const { data } = useDataProfileFollowing();
@@ -13,12 +12,7 @@ const FollowingList = () => {
       ) : (
         <ul>
           {data.map((user) => (
-            <ProfileFollowerCard
-              key={user.id}
-              id={user.id}
-              name={user.name}
-              avatar={user.avatar}
-              />
+            <ProfileFollowerCard key={user.id} id={user.id} name={user.name} avatar={user.avatar} />
           ))}
         </ul>
       )}

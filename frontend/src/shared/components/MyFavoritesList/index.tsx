@@ -20,7 +20,9 @@ const MyFavoritesList = () => {
               title={recipe.title}
               instructions={recipe.instructions}
               image={recipe.image}
-              onDelete={() => { void toggleFavorite(recipe.id, true); }}
+              onDelete={() => {
+                void toggleFavorite(recipe.id, true);
+              }}
               isDeleting={isPending(recipe.id)}
             />
           ))}

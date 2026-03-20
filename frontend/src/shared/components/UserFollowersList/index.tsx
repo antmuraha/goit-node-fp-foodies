@@ -16,12 +16,7 @@ const UserFollowersList = ({ user }: UserFollowersListProps) => {
       ) : (
         <ul>
           {data.map((user) => (
-            <ProfileFollowerCard
-              key={user.id}
-              id={user.id}
-              name={user.name}
-              avatar={user.avatar}
-            />
+            <ProfileFollowerCard key={user.id} id={user.id} name={user.name} avatar={user.avatar} />
           ))}
         </ul>
       )}
