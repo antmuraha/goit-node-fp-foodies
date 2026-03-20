@@ -50,40 +50,7 @@
   gap: 12px;
 }
 
-/* Added ingredient tiles */
-.ingredientTiles {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 12px;
-}
-
-.ingredientTile {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  padding: 12px;
-  border: 1px solid #bfbebe;
-  border-radius: 15px;
-}
-
-.ingredientTileName {
-  margin: 0;
-  font-family: "Mulish", sans-serif;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 24px;
-  letter-spacing: -0.32px;
-  color: #050505;
-}
-
-.ingredientTileMeasure {
-  margin: 4px 0 0;
-  font-family: "Mulish", sans-serif;
-  font-size: 14px;
-  line-height: 18px;
-  color: #bfbebe;
-}
+/* Added ingredient tiles rendered via RecipeIngredientsPanel — no custom styles needed */
 
 /* Trash icon + Publish */
 .actions {
