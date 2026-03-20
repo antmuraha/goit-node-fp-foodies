@@ -1,32 +1,59 @@
 .card {
   display: flex;
-  flex-direction: row;
-  align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 10px;
 }
 
+@media (min-width:768px) {
+  .card {
+  gap: 16px;
+}}
+
 .image {
-  width: 100px;
-  height: 100px;
+  width: 75px;
+  height: 75px;
   border-radius: 15px;
 }
 
+@media (min-width:768px) {
+  .image {
+  width: 100px;
+  height: 100px;
+}}
+
 .section {
   flex: 1;
+  display: flex;
+  gap: 16px;
+}
+
+@media (min-width:768px) {
+  .section {
   gap: 32px;
-  position: relative;
+}}
+
+.content {
+  max-width: 610px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .title {
   font-size: 20px;
+  margin: 0;
   font-weight: var(--fd-font-weight-extrabold);
   text-transform: uppercase;
 }
 
+@media (min-width:768px) {
+  .title {
+}}
+
 .instructions {
-  font-size: ;
+  margin: 0;
   font-weight: var(--fd-font-weight-medium);
+  color: var(--fd-color-muted);
 
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -37,19 +64,31 @@
 
 .btnWrapper {
   display: flex;
-  flex-direction: row;
   gap: 4px;
-  position: absolute;
   top: 0;
   right: 0;
 }
 
 .iconWrapper {
+  width: 36px;
+  height: 36px;
   flex-shrink: 0;
   border-radius: var(--fd-radius-pill);
   border: 1px solid var(--fd-button-muted-bg);
-  padding: 12px;
+  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
+
+  color: inherit;                                                                              
+  background: transparent;                                                              
+  cursor: pointer; 
+}
+
+@media (min-width: 768px) {
+  .iconWrapper {
+    width: 42px;
+    height: 42px;
+    padding: 12px;
+  }
 }

@@ -32,7 +32,7 @@ export const ProfileRecipeCard = ({
         )}
       </NavLink>
       <div className={styles.section}>
-        <div>
+        <div className={styles.content}>
           <p className={styles.title}>{title}</p>
           <p className={styles.instructions}>{instructions}</p>
         </div>
