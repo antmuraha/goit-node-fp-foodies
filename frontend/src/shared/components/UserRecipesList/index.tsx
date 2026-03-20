@@ -12,7 +12,8 @@ type UserRecipesListProps = {
 const UserRecipesList = ({ user }: UserRecipesListProps) => {
   const { data } = useDataUserRecipes(user);
   const dispatch = useAppDispatch();
-  const token = useAppSelector((state) => state.auth.token);
+  const currentUser = useAppSelector((state) => state.auth.currentUser);
+  const isOwner = currentUser && String(currentUser.id) === String(user);
 
   return (
     <div>
@@ -27,9 +28,7 @@ const UserRecipesList = ({ user }: UserRecipesListProps) => {
               title={recipe.title}
               instructions={recipe.instructions}
               image={recipe.image}
-              onDelete={() => {
-                if (token) void dispatch(deleteRecipe(recipe.id));
-              }}
+              onDelete={isOwner ? () => { void dispatch(deleteRecipe(recipe.id)); } : undefined}
             />
           ))}
         </ul>

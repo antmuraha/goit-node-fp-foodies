@@ -113,6 +113,14 @@
   .gallery {
     grid-template-columns: repeat(4, 1fr);
   }
+
+  .galleryItem:nth-child(n + 4) {
+    display: revert;
+  }
+
+  .galleryItem:nth-child(n + 5) {
+    display: none;
+  }
 }
 
 .galleryItem {

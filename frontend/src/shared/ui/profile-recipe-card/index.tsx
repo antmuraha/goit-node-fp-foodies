@@ -44,14 +44,16 @@ export const ProfileRecipeCard = ({
               <Icon name="arrow-up-right" color="text-primary" size={18} />
             </div>
           </NavLink>
-          <button
-            className={styles.iconWrapper}
-            onClick={onDelete}
-            disabled={isDeleting}
-            aria-label="Remove from recipes"
-          >
-            <Icon name="trash" color="text-primary" size={18} />
-          </button>
+          {onDelete && (
+            <button
+              className={styles.iconWrapper}
+              onClick={onDelete}
+              disabled={isDeleting}
+              aria-label="Remove from recipes"
+            >
+              <Icon name="trash" color="text-primary" size={18} />
+            </button>
+          )}
         </div>
       </div>
     </div>
