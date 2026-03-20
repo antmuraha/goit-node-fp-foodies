@@ -13,7 +13,7 @@ info:
 servers:
   - url: http://localhost:3000
     description: Development server
-  - url: https://goit-node-fp-foodies.cloud.muraha.dev/api
+  - url: https://goit-node-fp-foodies.cloud.muraha.dev
     description: Production server
 
 tags:
