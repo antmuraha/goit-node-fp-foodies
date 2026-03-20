@@ -1,7 +1,8 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--fd-space-12);
+  gap: 12px;
+  width: 100%;
 }
 
 .label {
@@ -9,34 +10,73 @@
   font-weight: var(--fd-font-weight-medium);
   color: var(--fd-input-value);
   line-height: var(--fd-input-text-height);
+}
+
+/* Uploaded image — full width, clickable */
+.previewBtn {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: none;
+  background: none;
   cursor: pointer;
+  border-radius: var(--fd-radius-lg);
+  overflow: hidden;
 }
 
 .preview {
   width: 100%;
-  max-width: 360px;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 551 / 400;
   border-radius: var(--fd-radius-lg);
   object-fit: cover;
-  border: var(--fd-border-width-hairline) solid var(--fd-border-default);
-  background-color: var(--fd-bg-muted);
+  display: block;
 }
 
+/* Empty placeholder — Figma: dashed border, centered camera + text */
 .placeholder {
   width: 100%;
-  max-width: 360px;
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 551 / 400;
   border-radius: var(--fd-radius-lg);
-  border: var(--fd-border-width-hairline) dashed var(--fd-border-default);
-  background-color: var(--fd-bg-muted);
-  color: var(--fd-text-secondary);
+  border: 1.5px dashed #bfbebe;
+  background: transparent;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
-  padding: var(--fd-space-12);
+  gap: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+  padding: 0;
 }
 
+.placeholder:hover:not(:disabled) {
+  border-color: #1a1a1a;
+}
+
+.placeholder:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.placeholderError {
+  border-color: var(--fd-color-danger);
+}
+
+.cameraIcon {
+  display: block;
+  flex-shrink: 0;
+}
+
+.placeholderText {
+  font-family: "Mulish", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 20px;
+  color: #bfbebe;
+  text-decoration: underline;
+}
+
+/* Hidden native file input */
 .hiddenInput {
   position: absolute;
   width: 1px;

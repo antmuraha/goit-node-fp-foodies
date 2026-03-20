@@ -1,42 +1,50 @@
-import { type ReactElement, useEffect, useRef } from "react";
-// Resolved merge conflict: kept useDataRecipes pattern per team lead review
+import { type ReactElement, useEffect, useRef, useMemo, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import RecipeCard from "../../shared/ui/recipe-card";
 import { useDataRecipes } from "../../shared/hooks";
+import { Pagination } from "../../shared/ui";
 import styles from "./CategoryRecipesGrid.module.css";
 
 const PAGE_LIMIT = 9;
 
 interface CategoryRecipesGridProps {
   categoryId: number;
-  /**
-   * TODO: FE-CATEGORY-03
-   * When pagination component is ready, pass it here as a slot.
-   * The grid already tracks ?page=N from URL and converts it to offset.
-   * Pagination component just needs to update ?page param in URL.
-   * Example:
-   *   <CategoryRecipesGrid categoryId={id} pagination={<Pagination />} />
-   */
-  pagination?: ReactElement;
 }
 
-export function CategoryRecipesGrid({ categoryId, pagination }: CategoryRecipesGridProps): ReactElement {
+export function CategoryRecipesGrid({ categoryId }: CategoryRecipesGridProps): ReactElement {
   const [searchParams, setSearchParams] = useSearchParams();
+  const isFirstRender = useRef(true);
 
   const page = Math.max(1, Number(searchParams.get("page") ?? 1));
   const ingredientId = searchParams.get("ingredientId") ? Number(searchParams.get("ingredientId")) : undefined;
   const areaId = searchParams.get("areaId") ? Number(searchParams.get("areaId")) : undefined;
 
-  const { recipes, isLoading, error } = useDataRecipes({
+  const { recipes, total, isLoading, error, loadRecipes } = useDataRecipes({
     categoryId,
     ingredientId,
     areaId,
     limit: PAGE_LIMIT,
     offset: (page - 1) * PAGE_LIMIT,
   });
+  const totalPages = useMemo(() => Math.ceil((total ?? 0) / PAGE_LIMIT), [total]);
 
-  // Reset to page 1 when filters change (skip on first render)
-  const isFirstRender = useRef(true);
+  const handlePageChange = useCallback(
+    (newPage: number) => {
+      setSearchParams((prev) => {
+        prev.set("page", String(newPage));
+        return prev;
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    },
+    [setSearchParams],
+  );
+
+  useEffect(() => {
+    if (typeof loadRecipes === "function") {
+      loadRecipes();
+    }
+  }, [page, categoryId, ingredientId, areaId]);
+
   useEffect(() => {
     if (isFirstRender.current) {
       isFirstRender.current = false;
@@ -49,10 +57,9 @@ export function CategoryRecipesGrid({ categoryId, pagination }: CategoryRecipesG
       },
       { replace: true },
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ingredientId, areaId]);
 
-  if (isLoading) {
+  if (isLoading && (recipes?.length === 0 || !recipes)) {
     return (
       <div className={styles.wrapper}>
         <ul className={styles.grid} aria-busy="true" aria-label="Loading recipes">
@@ -96,8 +103,7 @@ export function CategoryRecipesGrid({ categoryId, pagination }: CategoryRecipesG
         ))}
       </ul>
 
-      {/* TODO: FE-CATEGORY-03 — render pagination slot once ready */}
-      {pagination}
+      {totalPages > 1 && <Pagination currentPage={page} totalPages={totalPages} onPageChange={handlePageChange} />}
     </div>
   );
 }

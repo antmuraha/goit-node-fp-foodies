@@ -39,6 +39,7 @@ const RecipeCard = ({
   const { ensureFavoriteStatus, isFavorite, toggleFavorite } = useUserFavorites();
 
   const handleActionClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     e.stopPropagation();
     toggleFavorite(id, isFavorite(id));
   };
@@ -60,20 +61,23 @@ const RecipeCard = ({
 
       <div className={styles.content}>
         <div className={styles.header}>
-          <h4 className={styles.title}>{title}</h4>
+          <NavLink to={`/recipe/${id}`} className={styles.titleLink}>
+            <h4 className={styles.title}>{title}</h4>
+          </NavLink>
 
           {variant === "list" && (
             <div className={styles.actions}>
-              <Button
-                variant="secondary"
-                isIconOnly
-                className={styles.iconBtn}
-                onClick={handleDetailsClick}
-                aria-label="View details"
-              >
-                <Icon name="arrow-up-right" color="text-primary" size={18} />
-              </Button>
-
+              <NavLink to={`/recipe/${id}`}>
+                <Button
+                  variant="secondary"
+                  isIconOnly
+                  className={styles.iconBtn}
+                  onClick={handleDetailsClick}
+                  aria-label="View details"
+                >
+                  <Icon name="arrow-up-right" color="text-primary" size={18} />
+                </Button>
+              </NavLink>
               <Button
                 variant="secondary"
                 isIconOnly
@@ -91,7 +95,9 @@ const RecipeCard = ({
           )}
         </div>
 
-        <p className={styles.description}>{description || "No description available"}</p>
+        <NavLink to={`/recipe/${id}`} className={styles.descriptionLink}>
+          <p className={styles.description}>{description || "No description available"}</p>
+        </NavLink>
 
         {variant === "grid" && (
           <div className={styles.footer}>
@@ -103,8 +109,10 @@ const RecipeCard = ({
                 onAuthorClick?.(author?.id || "");
               }}
             >
-              <div className={styles.avatar} style={{ backgroundImage: `url(${author?.avatar || defaultAvatar})` }} />
-              <span className={styles.authorName}>{author?.name || "Anonymous"}</span>
+              <NavLink to={`/user/${author?.id}`} className={styles.authorBtn}>
+                <div className={styles.avatar} style={{ backgroundImage: `url(${author?.avatar || defaultAvatar})` }} />
+                <span className={styles.authorName}>{author?.name || "Anonymous"}</span>
+              </NavLink>
             </button>
 
             <div className={styles.actions}>
@@ -118,15 +126,17 @@ const RecipeCard = ({
                 <Icon name="heart" color={isFavorite(id) ? "color-danger" : "text-primary"} size={18} />
               </Button>
 
-              <Button
-                variant="secondary"
-                isIconOnly
-                className={styles.iconBtn}
-                onClick={handleDetailsClick}
-                aria-label="View details"
-              >
-                <Icon name="arrow-up-right" color="text-primary" size={18} />
-              </Button>
+              <NavLink to={`/recipe/${id}`}>
+                <Button
+                  variant="secondary"
+                  isIconOnly
+                  className={styles.iconBtn}
+                  onClick={handleDetailsClick}
+                  aria-label="View details"
+                >
+                  <Icon name="arrow-up-right" color="text-primary" size={18} />
+                </Button>
+              </NavLink>
             </div>
           </div>
         )}

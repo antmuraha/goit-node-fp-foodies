@@ -4,4 +4,8 @@ type EmptyStateProps = {
   message: string;
 };
 
-export const EmptyState = ({ message }: EmptyStateProps) => <p className={styles.message}>{message}</p>;
+export const EmptyState = ({ message }: EmptyStateProps) => (
+  <div className={styles.container}>
+    <p className={styles.message}>{message}</p>
+  </div>
+);
