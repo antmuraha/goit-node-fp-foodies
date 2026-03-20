@@ -22,6 +22,11 @@
   gap: 16px;
 }
 
+.userInfo a {
+  text-decoration: none;
+  color: inherit;
+}
+
 .avatar {
   width: 60px;
   height: 60px;
@@ -52,6 +57,7 @@
   padding: 0;
   font-size: 16px;
   font-weight: var(--fd-font-weight-extrabold);
+  text-decoration: none;
 }
 
 .ownRecipes {
@@ -99,8 +105,8 @@
   }
 
   .galleryItem:nth-child(n + 4) {
-      display: none;
-    }
+    display: none;
+  }
 }
 
 @media (min-width: 1440px) {

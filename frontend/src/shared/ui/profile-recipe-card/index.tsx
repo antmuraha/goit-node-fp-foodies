@@ -33,7 +33,9 @@ export const ProfileRecipeCard = ({
       </NavLink>
       <div className={styles.section}>
         <div className={styles.content}>
-          <p className={styles.title}>{title}</p>
+          <NavLink to={`/recipe/${id}`}>
+            <p className={styles.title}>{title}</p>
+          </NavLink>
           <p className={styles.instructions}>{instructions}</p>
         </div>
         <div className={styles.btnWrapper}>

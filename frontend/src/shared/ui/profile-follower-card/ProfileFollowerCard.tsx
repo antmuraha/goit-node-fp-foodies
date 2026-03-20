@@ -43,7 +43,9 @@ export const ProfileFollowerCard = ({ id, name, avatar }: ProfileFollowerCardPro
         </div>
         <div className={styles.user}>
           <div className={styles.content}>
-            <h4 className={styles.name}>{name}</h4>
+            <NavLink to={`/user/${id}`}>
+              <h4 className={styles.name}>{name}</h4>
+            </NavLink>
             <p className={styles.ownRecipes}>Own recipes: {recipesTotal}</p>
           </div>
           <Button className={styles.followBtn}
