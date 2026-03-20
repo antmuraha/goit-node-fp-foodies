@@ -1,19 +1,37 @@
 .profileCard {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  /* gap: 75px; */
+  gap: 75px;
+  width: 846px;
+}
+
+@media (min-width: 768px) {
+  .profileCard {
+    gap: 60px;
+  }
+}
+
+@media (min-width: 1140px) {
+  .profileCard {
+    gap: 75px;
+  }
 }
 
 .userInfo {
   display: flex;
-  flex-direction: row;
   gap: 16px;
 }
 
 .avatar {
-  width: 85px;
-  height: 85px;
+  width: 60px;
+  height: 60px;
+}
+
+@media (min-width: 1140px) {
+  .avatar {
+    width: 85px;
+    height: 85px;
+  }
 }
 
 .user {
@@ -32,19 +50,63 @@
 .name {
   margin: 0;
   padding: 0;
+  font-size: 16px;
+  font-weight: var(--fd-font-weight-extrabold);
 }
 
 .ownRecipes {
   margin: 0;
+  font-size: 12px;
+  color: var(--fd-color-muted)
+}
+
+@media (min-width: 768px) {
+  .ownRecipes {
+    font-size: 14px;
+  }
+}
+
+.followBtn {
+  padding: 8px 16px;
+  font-size: 14px;
+  background-color: transparent;
+  color: var(--fd-color-main-alt);
+  font-size: 14px;
+  font-weight: var(--fd-font-weight-bold);
+  border: 1px solid var(--fd-color-muted);
+}
+
+@media (min-width: 768px) {
+  .followBtn {
+    width: 116px;
+    padding: 10px 24px;
+    font-size: 16px;
+  }
 }
 
 .gallery {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 12px;
-  list-style: none;
-  padding: 0;
-  margin: 0;
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .galleryItem:nth-child(n + 4) {
+      display: none;
+    }
+}
+
+@media (min-width: 1440px) {
+  .gallery {
+    grid-template-columns: repeat(4, 1fr);
+  }
 }
 
 .galleryItem {
