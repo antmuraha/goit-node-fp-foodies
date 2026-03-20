@@ -14,20 +14,23 @@ interface ProfileFollowerCardProps {
     id: number;
     name: string;
     avatar?: string | null;
-    recipesCounter: number;
 }
 
 const GALLERY_LIMIT = 4;
 
-export const ProfileFollowerCard = ({ id, name, avatar, recipesCounter }: ProfileFollowerCardProps): ReactElement => {
+export const ProfileFollowerCard = ({ id, name, avatar }: ProfileFollowerCardProps): ReactElement => {
     const { isFollowing, isPending, toggleFollowing } = useUserFollowing();
     const token = useAppSelector((state) => state.auth.token);
     const [recipes, setRecipes] = useState<RecipeSummary[]>([]);
+    const [recipesTotal, setRecipesTotal] = useState(0);
 
     useEffect(() => {
         if (!token) return;
         recipesApi.getUserRecipes(token, id, { limit: GALLERY_LIMIT })
-            .then((res) => setRecipes(res.data))
+            .then((res) => {
+                setRecipes(res.data);
+                setRecipesTotal(res.total);
+            })
             .catch(() => setRecipes([]));
     }, [id, token]);
 
@@ -41,7 +44,7 @@ export const ProfileFollowerCard = ({ id, name, avatar, recipesCounter }: Profil
                 <div className={styles.user}>
                     <div className={styles.content}>
                         <h4 className={styles.name}>{name}</h4>
-                        <p className={styles.ownRecipes}>Own recipes: {recipesCounter}</p>
+                        <p className={styles.ownRecipes}>Own recipes: {recipesTotal}</p>
                     </div>
                     <Button
                         disabled={isPending(id)}

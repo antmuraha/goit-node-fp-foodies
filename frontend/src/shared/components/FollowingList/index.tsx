@@ -5,7 +5,6 @@ import { ProfileFollowerCard } from "../../ui/profile-follower-card";
 
 const FollowingList = () => {
   const { data } = useDataProfileFollowing();
-  const total = 12; // TODO: backend -> return total
 
   return (
     <div>
@@ -19,7 +18,7 @@ const FollowingList = () => {
               id={user.id}
               name={user.name}
               avatar={user.avatar}
-              recipesCounter={total} />
+              />
           ))}
         </ul>
       )}
