@@ -38,5 +38,6 @@ export type UserDetailsResponse = {
 
 export type MeProfile = UserDetailsResponse & {
   favoritesCount: number;
+  favoriteRecipeIds: number[];
   followingCount: number;
 };

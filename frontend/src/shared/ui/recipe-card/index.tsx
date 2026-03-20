@@ -1,4 +1,4 @@
-import { useEffect, type ReactElement } from "react";
+import { type ReactElement } from "react";
 import styles from "./RecipeCard.module.css";
 import { Button } from "../button/Button";
 import defaultAvatar from "../../../assets/images/defaultAvatar.svg";
@@ -36,7 +36,7 @@ const RecipeCard = ({
   onAuthorClick,
   onDetailsClick,
 }: RecipeCardProps): ReactElement => {
-  const { ensureFavoriteStatus, isFavorite, toggleFavorite } = useUserFavorites();
+  const { isFavorite, toggleFavorite } = useUserFavorites();
 
   const handleActionClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -48,10 +48,6 @@ const RecipeCard = ({
     e.stopPropagation();
     onDetailsClick?.(id);
   };
-
-  useEffect(() => {
-    ensureFavoriteStatus(id);
-  }, [id]);
 
   return (
     <article className={`${styles.card} ${styles[variant]}`} onClick={() => onDetailsClick?.(id)}>

@@ -1,12 +1,12 @@
 import { createAsyncThunk, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import { recipesApi } from "../../api/endpoints/recipesApi";
-import type { ApiError, AsyncStatus } from "../../shared/types/api";
+import type { ApiError } from "../../shared/types/api";
 import type { RootState } from "../store";
+import { clearAuthSession, fetchProfile, login, register } from "./authSlice";
 import { AUTH_REQUIRED_FAVORITE_REQUEST_ERROR } from "./constants";
 
 type FavoritesState = {
   favoriteStatusByRecipeId: Record<string, boolean>;
-  favoriteStatusRequestByRecipeId: Record<string, AsyncStatus>;
   error: string | null;
 };
 
@@ -21,7 +21,6 @@ type FavoriteStatusPayload = {
 
 const initialState: FavoritesState = {
   favoriteStatusByRecipeId: {},
-  favoriteStatusRequestByRecipeId: {},
   error: null,
 };
 
@@ -39,24 +38,13 @@ const applyFavoriteStatus = (state: FavoritesState, recipeId: number | string, i
   state.favoriteStatusByRecipeId[toRecipeKey(recipeId)] = isFavorite;
 };
 
-export const fetchFavoriteStatusByRecipeId = createAsyncThunk<
-  FavoriteStatusPayload,
-  FavoriteMutationPayload,
-  { state: RootState; rejectValue: string }
->("favorites/fetchFavoriteStatusByRecipeId", async ({ recipeId }, thunkApi) => {
-  const token = thunkApi.getState().auth.token;
+const hydrateFavoriteStatusCache = (state: FavoritesState, favoriteRecipeIds: number[]): void => {
+  state.favoriteStatusByRecipeId = {};
 
-  if (!token) {
-    return thunkApi.rejectWithValue(AUTH_REQUIRED_FAVORITE_REQUEST_ERROR);
-  }
-
-  try {
-    const response = await recipesApi.getFavoriteStatus(token, recipeId);
-    return { recipeId: response.recipeId, isFavorite: response.isFavorite };
-  } catch (error) {
-    return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
-  }
-});
+  favoriteRecipeIds.forEach((recipeId) => {
+    state.favoriteStatusByRecipeId[toRecipeKey(recipeId)] = true;
+  });
+};
 
 export const addFavoriteRecipe = createAsyncThunk<
   FavoriteMutationPayload,
@@ -106,17 +94,18 @@ const favoritesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchFavoriteStatusByRecipeId.pending, (state, action) => {
+      .addCase(login.fulfilled, (state, action) => {
+        hydrateFavoriteStatusCache(state, action.payload.user.favoriteRecipeIds);
+      })
+      .addCase(register.fulfilled, (state, action) => {
+        hydrateFavoriteStatusCache(state, action.payload.user.favoriteRecipeIds);
+      })
+      .addCase(fetchProfile.fulfilled, (state, action) => {
+        hydrateFavoriteStatusCache(state, action.payload.favoriteRecipeIds);
+      })
+      .addCase(clearAuthSession, (state) => {
+        state.favoriteStatusByRecipeId = {};
         state.error = null;
-        state.favoriteStatusRequestByRecipeId[toRecipeKey(action.meta.arg.recipeId)] = "loading";
-      })
-      .addCase(fetchFavoriteStatusByRecipeId.fulfilled, (state, action) => {
-        state.favoriteStatusRequestByRecipeId[toRecipeKey(action.payload.recipeId)] = "succeeded";
-        applyFavoriteStatus(state, action.payload.recipeId, action.payload.isFavorite);
-      })
-      .addCase(fetchFavoriteStatusByRecipeId.rejected, (state, action) => {
-        state.favoriteStatusRequestByRecipeId[toRecipeKey(action.meta.arg.recipeId)] = "failed";
-        state.error = action.payload ?? "Unable to resolve favorite status";
       })
       .addCase(addFavoriteRecipe.pending, (state) => {
         state.error = null;

@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { useDataRecipe, useScrollToTop } from "../../shared/hooks";
 import PopularRecipesList from "../../shared/ui/popular-recipes-list";
@@ -20,13 +20,7 @@ export const RecipePage = (): ReactElement => {
 
   const { recipe, isLoading, error } = useDataRecipe(recipeId);
   const ownRecipe = useIsOwnEntity(recipe?.author.id);
-  const { isFavorite, toggleFavorite, isPending, ensureFavoriteStatus } = useUserFavorites();
-
-  useEffect(() => {
-    if (recipeId) {
-      void ensureFavoriteStatus(recipeId);
-    }
-  }, [recipeId, ensureFavoriteStatus]);
+  const { isFavorite, toggleFavorite, isPending } = useUserFavorites();
 
   return (
     <>

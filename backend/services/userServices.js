@@ -142,18 +142,26 @@ export const getUserProfileWithMetrics = async (userId) => {
     throw { status: 404, message: "User not found" };
   }
 
-  const [recipesCreated, favoritesCount, followersCount, followingCount] = await Promise.all([
+  const [recipesCreated, favoritesCount, followersCount, followingCount, favoriteRelations] = await Promise.all([
     db.Recipe.count({ where: { userId } }),
     db.Favorite.count({ where: { userId } }),
     db.Follow.count({ where: { followingId: userId } }),
     db.Follow.count({ where: { followerId: userId } }),
+    db.Favorite.findAll({
+      where: { userId },
+      attributes: ["recipeId"],
+      raw: true,
+    }),
   ]);
+
+  const favoriteRecipeIds = favoriteRelations.map(({ recipeId }) => recipeId);
 
   return {
     ...user.toJSON(),
     avatar: user.avatar ? `${baseImageUrl}${user.avatar}` : null,
     recipesCreated,
     favoritesCount,
+    favoriteRecipeIds,
     followersCount,
     followingCount,
   };
