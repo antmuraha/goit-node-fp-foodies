@@ -208,6 +208,10 @@ export const UiKitPage = (): ReactElement => {
             <Icon name="instagram" color="action-secondary-text" size={24} />
             <Icon name="youtube" color="action-secondary-text" size={24} />
             <Icon name="facebook" color="action-secondary-text" size={24} />
+            <Icon name="camera" color="action-secondary-text" size={24} />
+            <Icon name="capture" color="action-secondary-text" size={50} />
+            <Icon name="plus" color="action-secondary-text" size={24} />
+            <Icon name="minus" color="action-secondary-text" size={24} />
           </div>
         </article>
         <article className={styles.card}>
