@@ -1,6 +1,8 @@
 import { useDataUserRecipes } from "../../hooks/useDataUsers";
 import { ProfileRecipeCard } from "../../ui/profile-recipe-card";
 import { EmptyState } from "../../ui";
+import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
+import { deleteRecipe } from "../../../store/slices/recipesSlice";
 
 type UserRecipesListProps = {
   user: string;
@@ -8,6 +10,8 @@ type UserRecipesListProps = {
 
 const UserRecipesList = ({ user }: UserRecipesListProps) => {
   const { data } = useDataUserRecipes(user);
+  const dispatch = useAppDispatch();
+  const token = useAppSelector((state) => state.auth.token);
 
   return (
     <div>
@@ -22,6 +26,7 @@ const UserRecipesList = ({ user }: UserRecipesListProps) => {
               title={recipe.title}
               instructions={recipe.instructions}
               image={recipe.image}
+              onDelete={() => { if (token) void dispatch(deleteRecipe(recipe.id)); }}
             />
           ))}
         </ul>
