@@ -2,6 +2,7 @@ import { useDataProfileFavorites } from "../../hooks";
 import { EmptyState } from "../../ui";
 import { ProfileRecipeCard } from "../../ui/profile-recipe-card";
 import { useUserFavorites } from "../../helpers/useUserFavorites";
+import styles from "./MyFavoritesList.module.css";
 
 const MyFavoritesList = () => {
   const { data } = useDataProfileFavorites();
@@ -12,7 +13,7 @@ const MyFavoritesList = () => {
       {data.length === 0 ? (
         <EmptyState message="Nothing has been added to your favorite recipes list yet." />
       ) : (
-        <ul>
+        <ul className={styles.recipeList}>
           {data.map((recipe) => (
             <ProfileRecipeCard
               key={recipe.id}

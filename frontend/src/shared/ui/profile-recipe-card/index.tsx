@@ -32,8 +32,10 @@ export const ProfileRecipeCard = ({
         )}
       </NavLink>
       <div className={styles.section}>
-        <div>
-          <p className={styles.title}>{title}</p>
+        <div className={styles.content}>
+          <NavLink to={`/recipe/${id}`}>
+            <p className={styles.title}>{title}</p>
+          </NavLink>
           <p className={styles.instructions}>{instructions}</p>
         </div>
         <div className={styles.btnWrapper}>
@@ -42,14 +44,16 @@ export const ProfileRecipeCard = ({
               <Icon name="arrow-up-right" color="text-primary" size={18} />
             </div>
           </NavLink>
-          <button
-            className={styles.iconWrapper}
-            onClick={onDelete}
-            disabled={isDeleting}
-            aria-label="Remove from recipes"
-          >
-            <Icon name="trash" color="text-primary" size={18} />
-          </button>
+          {onDelete && (
+            <button
+              className={styles.iconWrapper}
+              onClick={onDelete}
+              disabled={isDeleting}
+              aria-label="Remove from recipes"
+            >
+              <Icon name="trash" color="text-primary" size={18} />
+            </button>
+          )}
         </div>
       </div>
     </div>
