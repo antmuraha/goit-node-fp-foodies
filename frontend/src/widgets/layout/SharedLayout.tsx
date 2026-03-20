@@ -11,6 +11,9 @@ import { Footer } from "../footer/Footer";
 import { Breadcrumb } from "../../shared/ui/breadcrumb";
 import { useAppDispatch } from "../../shared/hooks";
 import { clearAuthSession } from "../../store/slices/authSlice";
+import { Header } from "../header";
+import styles from "./SharedLayout.module.css";
+import { useRouteHandleOverrides } from "../../shared/hooks/useRouteHandleOverrides";
 
 type AuthView = "signIn" | "signUp";
 
@@ -82,9 +85,16 @@ export const SharedLayout = (): ReactElement => {
     [location.pathname],
   );
 
+  const { layoutHeaderShown } = useRouteHandleOverrides();
+
   return (
     <AuthModalContext.Provider value={authModalCtx}>
       <div className="page-shell">
+        {layoutHeaderShown && (
+          <div className={styles.headerWrapper}>
+            <Header variant="light" />
+          </div>
+        )}
         <Breadcrumb />
         <Outlet />
         <Footer />
