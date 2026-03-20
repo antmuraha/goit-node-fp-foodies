@@ -1,0 +1,103 @@
+/* CategorySection — mobile-first, mirrors CategoriesGrid spacing */
+
+.section {
+  padding: 0 var(--fd-container-px-mobile);
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-40);
+  margin-top: 64px;
+  margin-bottom: 64px;
+}
+
+/* ── Heading ── */
+.heading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-20);
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--fd-space-6);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: var(--fd-text-primary);
+  font-family: var(--fd-font-family-base);
+  font-size: var(--fd-font-size-14);
+  font-weight: var(--fd-font-weight-bold);
+  line-height: var(--fd-line-height-18);
+  letter-spacing: -0.28px;
+  text-transform: uppercase;
+}
+
+.backBtn svg {
+  transform: rotate(225deg);
+}
+
+.backBtn:focus-visible {
+  outline: 2px solid var(--fd-text-primary);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.title {
+  margin: 0;
+  font-size: 28px;
+  font-weight: var(--fd-font-weight-extrabold);
+  line-height: 32px;
+  letter-spacing: -0.56px;
+  text-transform: uppercase;
+  color: var(--fd-text-primary);
+}
+
+/* ── Content: filters + grid ── */
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--fd-space-32);
+}
+
+/* ── Tablet (768px) ── */
+@media (min-width: 768px) {
+  .section {
+    padding: 0 var(--fd-container-px-tablet);
+    margin-top: 100px;
+    margin-bottom: 100px;
+  }
+
+  .title {
+    font-size: var(--fd-type-h2-size);
+    line-height: var(--fd-type-h2-height);
+    letter-spacing: -0.8px;
+  }
+}
+
+/* ── Desktop (1280px) — wider padding + sidebar layout ── */
+@media (min-width: 1280px) {
+  .section {
+    padding: 0 var(--fd-container-px-desktop);
+    margin-top: 120px;
+    margin-bottom: 120px;
+  }
+
+  .content {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: var(--fd-space-40);
+  }
+
+  .aside {
+    width: 330px;
+    flex-shrink: 0;
+    position: sticky;
+    top: 32px;
+  }
+
+  .grid {
+    flex: 1;
+    min-width: 0;
+  }
+}

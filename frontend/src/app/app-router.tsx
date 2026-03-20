@@ -9,8 +9,8 @@ import { UiKitPage } from "../pages/ui-kit/UiKitPage";
 import { NotFoundPage } from "../pages/not-found/NotFoundPage";
 import { SignInPage } from "../pages/sign-in/SignInPage";
 import AuthPage from "../shared/components/AuthPage";
-import { CategoryPage } from "../pages/category/CategoryPage";
 import { routeHandle } from "../shared/helpers/routeHandle";
+import { CategoryPage } from "../pages/category/CategoryPage";
 
 export const appRouter = createBrowserRouter([
   {

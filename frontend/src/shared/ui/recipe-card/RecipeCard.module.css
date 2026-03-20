@@ -27,8 +27,6 @@
 .grid {
   flex-direction: column;
   width: 100%;
-  max-width: 343px;
-  margin: 0 auto;
 }
 
 .grid .imageWrapper {
@@ -85,9 +83,6 @@
 }
 
 @media (min-width: 768px) {
-  .grid {
-    max-width: 342px;
-  }
   .grid .imageWrapper {
     height: 275px;
     border-radius: 30px;
@@ -98,21 +93,15 @@
   .grid .description {
     font-size: var(--fd-type-main-desktop-size);
     line-height: var(--fd-type-main-desktop-height);
-    width: 305px;
     height: 48px;
   }
 }
 
 @media (min-width: 1440px) {
-  .grid {
-    max-width: 290px;
-  }
   .grid .imageWrapper {
-    width: 290px;
     height: 275px;
   }
   .grid .description {
-    width: 290px;
     height: 54px;
   }
   .grid .footer {
