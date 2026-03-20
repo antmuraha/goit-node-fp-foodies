@@ -2,10 +2,11 @@
   display: flex;
   flex-direction: column;
   gap: 20px;
+  /* Inherit font to all children — no need to repeat per element */
+  font-family: var(--fd-font-family-base);
 }
 
 .heading {
-  font-family: var(--fd-font-family-base);
   font-weight: var(--fd-font-weight-extrabold);
   font-size: 20px;
   line-height: 24px;
@@ -24,13 +25,37 @@
   gap: 20px;
 }
 
-/* ─── Mobile (< 768px) ─── */
+/* Tile — position relative for the remove button */
 .item {
+  position: relative;
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 10px;
   width: 152px;
+}
+
+/* Remove × button — plain 16×16 icon, no circle, top-right of tile */
+.removeBtn {
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 16px;
+  height: 16px;
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+}
+
+.removeBtn:hover {
+  opacity: 1;
 }
 
 .imageWrapper {
@@ -51,8 +76,20 @@
   object-fit: contain;
 }
 
+.imagePlaceholder {
+  background-color: var(--fd-bg-muted);
+  border-radius: 8px;
+  width: 55px;
+  height: 55px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
 .name {
-  font-family: var(--fd-font-family-base);
   font-weight: var(--fd-font-weight-medium);
   font-size: 14px;
   line-height: 20px;
@@ -61,7 +98,6 @@
 }
 
 .measure {
-  font-family: var(--fd-font-family-base);
   font-weight: var(--fd-font-weight-medium);
   font-size: 14px;
   line-height: 20px;
@@ -69,7 +105,15 @@
   color: #bfbebe;
 }
 
-/* ─── Tablet & Desktop (≥ 768px) ─── */
+.empty {
+  font-weight: var(--fd-font-weight-medium);
+  font-size: 16px;
+  line-height: 24px;
+  color: #bfbebe;
+  margin: 0;
+}
+
+/* ── Tablet & Desktop (≥ 768px) ── */
 @media (min-width: 768px) {
   .item {
     gap: 14px;
@@ -87,39 +131,15 @@
     height: 60px;
   }
 
+  .imagePlaceholder {
+    width: 60px;
+    height: 60px;
+  }
+
   .name,
   .measure {
     font-size: 16px;
     line-height: 24px;
     letter-spacing: -0.32px;
   }
-}
-
-.info {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
-
-.imagePlaceholder {
-  background-color: var(--fd-bg-muted);
-  border-radius: 8px;
-  width: 55px;
-  height: 55px;
-}
-
-@media (min-width: 768px) {
-  .imagePlaceholder {
-    width: 60px;
-    height: 60px;
-  }
-}
-
-.empty {
-  font-family: var(--fd-font-family-base);
-  font-weight: var(--fd-font-weight-medium);
-  font-size: 16px;
-  line-height: 24px;
-  color: #bfbebe;
-  margin: 0;
 }

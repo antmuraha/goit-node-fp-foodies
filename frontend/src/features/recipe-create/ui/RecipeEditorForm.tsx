@@ -2,6 +2,7 @@ import { useFormik } from "formik";
 import { type ReactElement, useEffect } from "react";
 import { Button, FormErrorMessage, ImageInput, Input, Select, TextArea } from "../../../shared/ui";
 import { Icon } from "../../../shared/components/Icon";
+import RecipeIngredientsPanel from "../../recipe/ui/RecipeIngredientsPanel";
 import { DEFAULT_RECIPE_FORM_VALUES, recipeEditorSchema, type RecipeEditorFormValues } from "../validation";
 import { notificationService } from "../../../shared/services/notifications";
 import styles from "./RecipeEditorForm.module.css";
@@ -364,26 +365,20 @@ export const RecipeEditorForm = ({
             Add ingredient +
           </Button>
 
-          <div className={styles.ingredientTiles}>
-            {formik.values.ingredients.map((ingredientItem, index) => (
-              <article key={`ingredient-tile-${index}`} className={styles.ingredientTile}>
-                <div>
-                  <p className={styles.ingredientTileName}>
-                    {ingredientOptionMap[ingredientItem.ingredientId] ?? "Unknown ingredient"}
-                  </p>
-                  <p className={styles.ingredientTileMeasure}>{ingredientItem.measure}</p>
-                </div>
-                <Button
-                  variant="secondary"
-                  size="small"
-                  onClick={() => handleRemoveIngredient(index)}
-                  disabled={isSubmitting}
-                >
-                  Delete
-                </Button>
-              </article>
-            ))}
-          </div>
+          {/* Added ingredient tiles — reuse RecipeIngredientsPanel with onRemove */}
+          {formik.values.ingredients.length > 0 && (
+            <RecipeIngredientsPanel
+              showHeading={false}
+              ingredients={formik.values.ingredients.map((ing) => ({
+                id: ing.ingredientId,
+                name: ingredientOptionMap[String(ing.ingredientId)] ?? "Unknown",
+                measure: ing.measure,
+                // Image not available in reference data — placeholder shown
+                image: null,
+              }))}
+              onRemove={handleRemoveIngredient}
+            />
+          )}
 
           {formik.touched.ingredients && typeof formik.errors.ingredients === "string" && (
             <FormErrorMessage>{formik.errors.ingredients}</FormErrorMessage>
