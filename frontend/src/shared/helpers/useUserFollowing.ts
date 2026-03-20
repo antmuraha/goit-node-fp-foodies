@@ -192,7 +192,7 @@ export const useUserFollowing = () => {
           dispatch(adjustFollowingCount(-1));
           dispatch(adjustSelectedUserFollowersCount({ userId, delta: -1 }));
         }
-        const message  = typeof result.payload === "string" ? result.payload : FOLLOW_NOTIFICATIONS.FOLLOW_ROLLBACK;
+        const message = typeof result.payload === "string" ? result.payload : FOLLOW_NOTIFICATIONS.FOLLOW_ROLLBACK;
         notificationService.error(message);
         releasePendingUser(userId);
         return false;
