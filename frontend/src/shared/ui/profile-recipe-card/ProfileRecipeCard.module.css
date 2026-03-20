@@ -2,11 +2,13 @@
   display: flex;
   justify-content: center;
   gap: 10px;
+  height: 75px;
 }
 
 @media (min-width:768px) {
   .card {
   gap: 16px;
+  height: 100px;
 }}
 
 .image {
