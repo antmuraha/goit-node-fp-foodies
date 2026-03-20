@@ -121,7 +121,7 @@
   --fd-button-secondary-border: var(--fd-border-default);
   --fd-button-secondary-hover-bg: var(--fd-color-surface-soft);
   --fd-button-secondary-hover-text: var(--fd-color-main);
- 
+
   --fd-button-height-small: var(--fd-control-height-md);
   --fd-button-space-small: var(--fd-space-28);
   --fd-button-text-size-small: var(--fd-font-size-12);

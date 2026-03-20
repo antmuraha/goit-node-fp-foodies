@@ -28,7 +28,13 @@ const UserRecipesList = ({ user }: UserRecipesListProps) => {
               title={recipe.title}
               instructions={recipe.instructions}
               image={recipe.image}
-              onDelete={isOwner ? () => { void dispatch(deleteRecipe(recipe.id)); } : undefined}
+              onDelete={
+                isOwner
+                  ? () => {
+                      void dispatch(deleteRecipe(recipe.id));
+                    }
+                  : undefined
+              }
             />
           ))}
         </ul>

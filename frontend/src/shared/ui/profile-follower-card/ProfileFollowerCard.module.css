@@ -63,7 +63,7 @@
 .ownRecipes {
   margin: 0;
   font-size: 12px;
-  color: var(--fd-color-muted)
+  color: var(--fd-color-muted);
 }
 
 @media (min-width: 768px) {

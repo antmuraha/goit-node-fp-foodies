@@ -48,7 +48,8 @@ export const ProfileFollowerCard = ({ id, name, avatar }: ProfileFollowerCardPro
             </NavLink>
             <p className={styles.ownRecipes}>Own recipes: {recipesTotal}</p>
           </div>
-          <Button className={styles.followBtn}
+          <Button
+            className={styles.followBtn}
             disabled={isPending(id)}
             onClick={() => {
               void toggleFollowing(id);
@@ -77,4 +78,4 @@ export const ProfileFollowerCard = ({ id, name, avatar }: ProfileFollowerCardPro
       </NavLink>
     </div>
   );
-}; 
+};
