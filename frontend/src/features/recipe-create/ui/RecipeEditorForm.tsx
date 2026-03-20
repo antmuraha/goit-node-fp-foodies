@@ -1,6 +1,7 @@
 import { useFormik } from "formik";
 import { type ReactElement, useEffect } from "react";
 import { Button, FormErrorMessage, ImageInput, Input, Select, TextArea } from "../../../shared/ui";
+import { NumericStepper } from "../../../shared/ui/numeric-stepper/NumericStepper";
 import { Icon } from "../../../shared/components/Icon";
 import RecipeIngredientsPanel from "../../recipe/ui/RecipeIngredientsPanel";
 import { DEFAULT_RECIPE_FORM_VALUES, recipeEditorSchema, type RecipeEditorFormValues } from "../validation";
@@ -273,17 +274,15 @@ export const RecipeEditorForm = ({
             <label className={styles.label} htmlFor="recipe-cooking-time">
               Cooking time
             </label>
-            <Input
-              id="recipe-cooking-time"
-              name="cookingTime"
-              type="number"
-              value={String(formik.values.cookingTime)}
-              onChange={formik.handleChange}
-              onBlur={formik.handleBlur}
-              hasError={Boolean(formik.touched.cookingTime && formik.errors.cookingTime)}
-              disabled={isSubmitting}
+            <NumericStepper
+              value={Number(formik.values.cookingTime)}
               min={1}
               max={600}
+              step={10}
+              label="Cooking time in minutes"
+              onChange={(next) => {
+                void formik.setFieldValue("cookingTime", next, false);
+              }}
             />
             {formik.touched.cookingTime && formik.errors.cookingTime && (
               <FormErrorMessage>{formik.errors.cookingTime}</FormErrorMessage>
