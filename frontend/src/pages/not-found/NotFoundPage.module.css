@@ -1,4 +1,4 @@
-main {
+.wrapper {
   min-height: calc(50vh);
 
   display: flex;
