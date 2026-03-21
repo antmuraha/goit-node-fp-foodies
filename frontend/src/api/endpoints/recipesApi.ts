@@ -17,7 +17,8 @@ export const recipesApi = {
   getRecipes: (query?: RecipeSearchParams): Promise<RecipeListResponse> =>
     apiClient.get<RecipeListResponse>(API_ROUTES.RECIPES.ROOT, { query }),
   getRecipeById: (id: number): Promise<RecipeDetails> => apiClient.get<RecipeDetails>(API_ROUTES.RECIPES.BY_ID(id)),
-  getPopularRecipes: (): Promise<RecipeListResponse> => apiClient.get<RecipeListResponse>(API_ROUTES.RECIPES.POPULAR),
+  getPopularRecipes: (query?: RecipeListQuery): Promise<RecipeListResponse> =>
+    apiClient.get<RecipeListResponse>(API_ROUTES.RECIPES.POPULAR, { query }),
   getUserRecipes: (token: string, userId: number | string, query?: RecipeListQuery): Promise<RecipeListResponse> =>
     apiClient.get<RecipeListResponse>(API_ROUTES.USERS.RECIPES(userId), {
       query,

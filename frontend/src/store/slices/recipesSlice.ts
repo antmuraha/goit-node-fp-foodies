@@ -112,11 +112,11 @@ export const fetchRecipeById = createAsyncThunk<RecipeDetails, number, { rejectV
 
 export const fetchPopularRecipes = createAsyncThunk<
   { data: RecipeSummary[]; total: number; limit: number; offset: number },
-  void,
+  { limit?: number; offset?: number } | undefined,
   { rejectValue: string }
->("recipes/fetchPopularRecipes", async (_, thunkApi) => {
+>("recipes/fetchPopularRecipes", async (params, thunkApi) => {
   try {
-    return await recipesApi.getPopularRecipes();
+    return await recipesApi.getPopularRecipes(params);
   } catch (error) {
     return thunkApi.rejectWithValue(getErrorMessage(error as ApiError));
   }
