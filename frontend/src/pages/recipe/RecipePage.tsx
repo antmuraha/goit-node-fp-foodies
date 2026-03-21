@@ -1,4 +1,4 @@
-import type { ReactElement } from "react";
+import { useContext, type ReactElement } from "react";
 import { useMemo } from "react";
 import { NavLink, useParams } from "react-router-dom";
 import { useDataRecipe, useScrollToTop } from "../../shared/hooks";
@@ -7,11 +7,15 @@ import RecipeIngredientsPanel from "../../features/recipe/ui/RecipeIngredientsPa
 import RecipeInstructionsPanel from "../../features/recipe/ui/RecipeInstructionsPanel";
 import { useUserFavorites } from "../../shared/helpers/useUserFavorites";
 import { Button } from "../../shared/ui";
+import { useAuth } from "../../shared/hooks";
 import useIsOwnEntity from "../../shared/helpers/useIsOwnEntity";
+import { AuthModalContext } from "../../shared/contexts/AuthModalContext";
 import styles from "./RecipePage.module.css";
 
 export const RecipePage = (): ReactElement => {
   useScrollToTop();
+  const { isAuthenticated } = useAuth();
+  const authModal = useContext(AuthModalContext);
   const { id } = useParams();
   const recipeId = useMemo(() => {
     const numericId = Number(id);
@@ -21,6 +25,25 @@ export const RecipePage = (): ReactElement => {
   const { recipe, isLoading, error } = useDataRecipe(recipeId);
   const ownRecipe = useIsOwnEntity(recipe?.author.id);
   const { isFavorite, toggleFavorite, isPending } = useUserFavorites();
+
+  const handleProtectedAction = (e: React.MouseEvent, action: () => void) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!isAuthenticated) {
+      authModal?.openSignIn();
+      return;
+    }
+
+    action();
+  };
+
+  const handleActionClick = (e: React.MouseEvent) => {
+    if (!recipe) return;
+    handleProtectedAction(e, () => {
+      void toggleFavorite(recipe.id);
+    });
+  };
 
   return (
     <>
@@ -68,13 +91,7 @@ export const RecipePage = (): ReactElement => {
 
               {/* Actions */}
               <div className={styles.actions}>
-                <Button
-                  variant="secondary"
-                  disabled={isPending(recipe.id)}
-                  onClick={() => {
-                    void toggleFavorite(recipe.id);
-                  }}
-                >
+                <Button variant="secondary" disabled={isPending(recipe.id)} onClick={handleActionClick}>
                   {isFavorite(recipe.id) ? "Remove from Favorites" : "Add to Favorites"}
                 </Button>
 

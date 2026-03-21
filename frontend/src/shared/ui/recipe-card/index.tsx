@@ -1,10 +1,12 @@
-import { type ReactElement } from "react";
-import styles from "./RecipeCard.module.css";
+import { type ReactElement, useContext } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "../button/Button";
 import defaultAvatar from "../../../assets/images/defaultAvatar.svg";
-import { NavLink } from "react-router-dom";
 import { Icon } from "../../../shared/components/Icon/index";
 import { useUserFavorites } from "../../helpers/useUserFavorites";
+import { useAuth } from "../../../shared/hooks";
+import { AuthModalContext } from "../../../shared/contexts/AuthModalContext";
+import styles from "./RecipeCard.module.css";
 
 interface Author {
   id: number;
@@ -37,11 +39,36 @@ const RecipeCard = ({
   onDetailsClick,
 }: RecipeCardProps): ReactElement => {
   const { isFavorite, toggleFavorite } = useUserFavorites();
+  const { isAuthenticated } = useAuth();
+  const authModal = useContext(AuthModalContext);
+  const navigate = useNavigate();
 
-  const handleActionClick = (e: React.MouseEvent) => {
+  const handleProtectedAction = (e: React.MouseEvent, action: () => void) => {
     e.preventDefault();
     e.stopPropagation();
-    toggleFavorite(id, isFavorite(id));
+
+    if (!isAuthenticated) {
+      authModal?.openSignIn();
+      return;
+    }
+
+    action();
+  };
+
+  const handleActionClick = (e: React.MouseEvent) => {
+    handleProtectedAction(e, () => {
+      toggleFavorite(id, isFavorite(id));
+    });
+  };
+
+  const handleAuthorClick = (e: React.MouseEvent) => {
+    handleProtectedAction(e, () => {
+      if (onAuthorClick) {
+        onAuthorClick(author.id);
+      } else {
+        navigate(`/user/${author.id}`);
+      }
+    });
   };
 
   const handleDetailsClick = (e: React.MouseEvent) => {
@@ -51,7 +78,7 @@ const RecipeCard = ({
 
   return (
     <article className={`${styles.card} ${styles[variant]}`} onClick={() => onDetailsClick?.(id)}>
-      <NavLink to={`/recipe/${id}`} className={styles.imageWrapper}>
+      <NavLink to={`/recipe/${id}`} className={styles.imageWrapper} onClick={(e) => e.stopPropagation()}>
         <img src={image || "https://placehold.co/600x400?text=Foodies"} alt={title} className={styles.image} />
       </NavLink>
 
@@ -63,17 +90,15 @@ const RecipeCard = ({
 
           {variant === "list" && (
             <div className={styles.actions}>
-              <NavLink to={`/recipe/${id}`}>
-                <Button
-                  variant="secondary"
-                  isIconOnly
-                  className={styles.iconBtn}
-                  onClick={handleDetailsClick}
-                  aria-label="View details"
-                >
-                  <Icon name="arrow-up-right" color="text-primary" size={18} />
-                </Button>
-              </NavLink>
+              <Button
+                variant="secondary"
+                isIconOnly
+                className={styles.iconBtn}
+                onClick={handleDetailsClick}
+                aria-label="View details"
+              >
+                <Icon name="arrow-up-right" color="text-primary" size={18} />
+              </Button>
               <Button
                 variant="secondary"
                 isIconOnly
@@ -91,25 +116,14 @@ const RecipeCard = ({
           )}
         </div>
 
-        <NavLink to={`/recipe/${id}`} className={styles.descriptionLink}>
-          <p className={styles.description}>{description || "No description available"}</p>
-        </NavLink>
+        <p className={styles.description}>{description || "No description available"}</p>
 
         {variant === "grid" && (
           <div className={styles.footer}>
-            <button
-              type="button"
-              className={styles.authorBtn}
-              onClick={(e) => {
-                e.stopPropagation();
-                onAuthorClick?.(author?.id || "");
-              }}
-            >
-              <NavLink to={`/user/${author?.id}`} className={styles.authorBtn}>
-                <div className={styles.avatar} style={{ backgroundImage: `url(${author?.avatar || defaultAvatar})` }} />
-                <span className={styles.authorName}>{author?.name || "Anonymous"}</span>
-              </NavLink>
-            </button>
+            <div className={styles.authorBtn} onClick={handleAuthorClick} role="button" tabIndex={0}>
+              <div className={styles.avatar} style={{ backgroundImage: `url(${author?.avatar || defaultAvatar})` }} />
+              <span className={styles.authorName}>{author?.name || "Anonymous"}</span>
+            </div>
 
             <div className={styles.actions}>
               <Button
@@ -122,7 +136,7 @@ const RecipeCard = ({
                 <Icon name="heart" color={isFavorite(id) ? "color-danger" : "text-primary"} size={18} />
               </Button>
 
-              <NavLink to={`/recipe/${id}`}>
+              <NavLink to={`/recipe/${id}`} className={styles.titleLink}>
                 <Button
                   variant="secondary"
                   isIconOnly

@@ -27,8 +27,8 @@
 }
 
 .success {
-  background-color: var(--fd-color-main);
-  color: var(--fd-color-white);
+  background-color: var(--fd-color-white);
+  color: var(--fd-color-main);
 }
 
 .error {
@@ -53,13 +53,8 @@
   opacity: 1;
 }
 
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+@media (min-width: 768px) {
+  .container {
+    top: var(--fd-space-24);
   }
 }

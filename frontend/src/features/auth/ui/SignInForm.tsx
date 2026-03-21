@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useFormik } from "formik";
 import type { ReactElement } from "react";
 import { Button, FormErrorMessage, Input } from "../../../shared/ui";
 import { useAuth } from "../../../shared/hooks";
 import { Icon } from "../../../shared/components/Icon";
 import { signInSchema, type SignInFormValues } from "../validation";
+import { notificationService } from "../../../shared/services/notifications";
 import styles from "./SignInForm.module.css";
 
 type SignInFormProps = {
@@ -14,6 +15,7 @@ type SignInFormProps = {
 
 export const SignInForm = ({ onSuccess, onCreateAccount }: SignInFormProps): ReactElement => {
   const { signIn, isSigningIn, loginError } = useAuth();
+  const initialErrorRef = useRef(loginError);
   const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik<SignInFormValues>({
@@ -32,6 +34,12 @@ export const SignInForm = ({ onSuccess, onCreateAccount }: SignInFormProps): Rea
   const hasSubmitted = formik.submitCount > 0;
   const emailError = hasSubmitted ? formik.errors.email : undefined;
   const passwordError = hasSubmitted ? formik.errors.password : undefined;
+
+  useEffect(() => {
+    if (loginError && loginError !== initialErrorRef.current) {
+      notificationService.error(loginError);
+    }
+  }, [loginError]);
 
   return (
     <form className={styles.form} onSubmit={formik.handleSubmit} noValidate>
@@ -76,8 +84,6 @@ export const SignInForm = ({ onSuccess, onCreateAccount }: SignInFormProps): Rea
           {passwordError && <FormErrorMessage id="signin-password-error">{passwordError}</FormErrorMessage>}
         </div>
       </div>
-
-      {loginError && <FormErrorMessage variant="form">{loginError}</FormErrorMessage>}
 
       <div className={styles.btns}>
         <Button

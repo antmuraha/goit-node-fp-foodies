@@ -4,7 +4,7 @@ import RecipeCard from "../recipe-card/index";
 import styles from "./PopularRecipesList.module.css";
 
 const PopularRecipesList = (): ReactElement => {
-  const { recipes } = useDataPopularRecipes();
+  const { recipes } = useDataPopularRecipes({ limit: 4 });
 
   if (!recipes || recipes.length === 0) {
     return <div className={styles.loader}>Loading...</div>;

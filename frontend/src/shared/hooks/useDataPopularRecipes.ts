@@ -2,7 +2,7 @@ import { useCallback, useEffect } from "react";
 import { fetchPopularRecipes } from "../../store/slices/recipesSlice";
 import { useAppDispatch, useAppSelector } from "./reduxHooks";
 
-export const useDataPopularRecipes = () => {
+export const useDataPopularRecipes = (params?: { limit?: number }) => {
   const dispatch = useAppDispatch();
   const recipes = useAppSelector((state) => state.recipes.popularList);
   const page = useAppSelector((state) => state.recipes.popularPage);
@@ -10,8 +10,8 @@ export const useDataPopularRecipes = () => {
   const error = useAppSelector((state) => state.recipes.popularListError);
 
   const loadRecipes = useCallback(() => {
-    void dispatch(fetchPopularRecipes());
-  }, [dispatch]);
+    void dispatch(fetchPopularRecipes({ limit: params?.limit }));
+  }, [dispatch, params?.limit]);
 
   useEffect(() => {
     if (status === "idle") {
