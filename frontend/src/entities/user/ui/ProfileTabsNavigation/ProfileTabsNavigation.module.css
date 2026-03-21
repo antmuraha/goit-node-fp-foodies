@@ -1,7 +1,7 @@
 .section {
   width: 100%;
-  padding: 0 var(--fd-space-16);
-  margin-bottom: var(--fd-space-32);
+  padding: 0;
+  margin: 0;
 }
 
 .tabsList {
@@ -23,10 +23,10 @@
   position: relative;
   text-decoration: none !important;
   display: inline-flex;
-  padding-bottom: var(--fd-space-14);
   color: var(--fd-text-muted);
   transition: color 0.3s ease;
   cursor: pointer;
+  margin: 0;
 }
 
 .link:hover {
@@ -81,11 +81,6 @@
 }
 
 @media (min-width: 768px) {
-  .section {
-    padding: 0 var(--fd-space-32);
-    margin-bottom: var(--fd-space-40);
-  }
-
   .tabsList {
     gap: var(--fd-space-40);
   }
@@ -96,12 +91,6 @@
 }
 
 @media (min-width: 1280px) {
-  .section {
-    padding-left: var(--fd-space-80);
-    padding-right: var(--fd-space-40);
-    margin-bottom: var(--fd-space-40);
-  }
-
   .tabsList {
     gap: var(--fd-space-40);
   }

@@ -5,6 +5,7 @@ import UserInfo from "../../shared/components/UserInfo";
 import { APP_ROUTES } from "../../shared/constants/routes";
 import { ProfileTabsNavigation } from "../../entities/user/index";
 import { ProfileContentList } from "../../features/profile/profile-content-list";
+import styles from "./UserPage.module.css";
 
 export const UserPage = (): ReactNode => {
   const { id } = useParams();
@@ -31,17 +32,26 @@ export const UserPage = (): ReactNode => {
 
   return (
     <main>
-      <h1>User page</h1>
-      <aside>
-        <UserInfo
-          key={id}
-          isOwnProfile={isOwnProfile}
-          user={user}
-          favoritesCount={currentUser.favoritesCount}
-          followingCount={currentUser.followingCount}
-        />
-        <ProfileTabsNavigation isOwnProfile={isOwnProfile} />
-        <ProfileContentList userId={userId} isOwnProfile={isOwnProfile} />
+      <aside className={styles.wrapper}>
+        <div className={styles.profile}>
+          <h2 className={styles.title}>Profile</h2>
+          <p className={styles.text}>
+            Reveal your culinary art, share your favorite recipe and create gastronomic masterpieces with us.
+          </p>
+        </div>
+        <div className={styles.userInfoWrapper}>
+          <UserInfo
+            key={id}
+            isOwnProfile={isOwnProfile}
+            user={user}
+            favoritesCount={currentUser.favoritesCount}
+            followingCount={currentUser.followingCount}
+          />
+          <div className={styles.listInfo}>
+            <ProfileTabsNavigation isOwnProfile={isOwnProfile} />
+            <ProfileContentList userId={userId} isOwnProfile={isOwnProfile} />
+          </div>
+        </div>
       </aside>
       {isLoading && <p>Loading user profile...</p>}
       {error && <p>User error: {error}</p>}
