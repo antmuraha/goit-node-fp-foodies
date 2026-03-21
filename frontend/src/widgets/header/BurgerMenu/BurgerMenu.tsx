@@ -1,5 +1,6 @@
 import styles from "./BurgerMenu.module.css";
 import * as Dialog from "@radix-ui/react-dialog";
+import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Icon } from "../../../shared/components/Icon";
 import { Link } from "react-router-dom";
 import { APP_ROUTES } from "../../../shared/constants/routes";
@@ -22,6 +23,10 @@ export const BurgerMenu = ({ variant }: ButtonMenuProps) => {
       <Dialog.Portal>
         <Dialog.Overlay>
           <Dialog.Content onInteractOutside={(e) => e.preventDefault()} className={styles.burgerMenu}>
+            <VisuallyHidden.Root>
+              <Dialog.Title>Мобільне меню</Dialog.Title>
+              <Dialog.Description>Оберіть опцію для навігації</Dialog.Description>
+            </VisuallyHidden.Root>
             <div className={styles.header}>
               <Link to={APP_ROUTES.HOME}>
                 <Icon name="logo" color="color-white" width={69} height={24} />
@@ -31,8 +36,12 @@ export const BurgerMenu = ({ variant }: ButtonMenuProps) => {
               </Dialog.Close>
             </div>
             <div className={styles.menu}>
-              <HeaderNavLink fullWidth label="Home" path={APP_ROUTES.HOME} variant="dark" />
-              <HeaderNavLink fullWidth label="Add Recipe" path={APP_ROUTES.RECIPE_ADD} variant="dark" />
+              <Dialog.Close>
+                <HeaderNavLink fullWidth label="Home" path={APP_ROUTES.HOME} variant="dark" />
+              </Dialog.Close>
+              <Dialog.Close>
+                <HeaderNavLink fullWidth label="Add Recipe" path={APP_ROUTES.RECIPE_ADD} variant="dark" />
+              </Dialog.Close>
             </div>
             <div className={styles.images} aria-hidden="true">
               <img src={heroFoodMain} alt="" className={styles.imageMain} />
