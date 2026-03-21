@@ -200,24 +200,30 @@ export const RecipeEditorForm = ({
         {/*
           Recipe name — Figma node 44:1557 / 108:4618 / 114:5133
           Label: #bfbebe, ExtraBold, 24px desktop / 16px mobile, uppercase
-          Input: underline only (no pill border), placeholder "Enter a description of the dish", counter 0/200
-          Note: Figma shows no separate "description" section — this single field covers it.
+          Input: underline only, placeholder "Enter a description of the dish"
+          Counter: 0/200 inline right — Figma node 22:741
         */}
         <div className={styles.groupName}>
           <label className={styles.labelName} htmlFor="recipe-name">
             The name of the recipe
           </label>
-          <Input
-            id="recipe-name"
-            name="name"
-            value={formik.values.name}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            placeholder="Enter a description of the dish"
-            hasError={Boolean(formik.touched.name && formik.errors.name)}
-            disabled={isSubmitting}
-            className={styles.underlineInput}
-          />
+          <div className={styles.inputWithCounter}>
+            <div className={styles.inputCounterField}>
+              <Input
+                id="recipe-name"
+                name="name"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                placeholder="Enter a description of the dish"
+                hasError={Boolean(formik.touched.name && formik.errors.name)}
+                disabled={isSubmitting}
+                maxLength={200}
+                className={styles.underlineInput}
+              />
+            </div>
+            <span className={styles.counter}>{formik.values.name.length}/200</span>
+          </div>
           {formik.touched.name && formik.errors.name && <FormErrorMessage>{formik.errors.name}</FormErrorMessage>}
         </div>
 
@@ -326,7 +332,7 @@ export const RecipeEditorForm = ({
             </div>
 
             <div>
-              {/* Figma: underline only, not bordered pill — node 92:1890 / 108:4645 / 115:5197 */}
+              {/* Figma: underline only, not bordered pill — node 92:1890 */}
               <Input
                 id="ingredient-pending-measure"
                 value={formik.values.pendingIngredient.measure}
@@ -371,8 +377,13 @@ export const RecipeEditorForm = ({
           )}
         </div>
 
-        {/* Recipe Preparation — Figma node 44:1562, maxLength=3000 per task requirement */}
-        <div className={styles.group}>
+        {/*
+          Recipe Preparation — Figma node 44:1562
+          gap label→input: 40px (groupRecipePrep)
+          Empty state: 1 line only (rows=1, min-height override via instructionsTextarea)
+          maxLength: 3000 per task requirement
+        */}
+        <div className={styles.groupRecipePrep}>
           <label className={styles.label} htmlFor="recipe-instructions">
             Recipe Preparation
           </label>
@@ -385,8 +396,9 @@ export const RecipeEditorForm = ({
             placeholder="Enter recipe"
             hasError={Boolean(formik.touched.instructions && formik.errors.instructions)}
             disabled={isSubmitting}
-            rows={6}
+            rows={1}
             maxLength={3000}
+            className={styles.instructionsTextarea}
           />
           {formik.touched.instructions && formik.errors.instructions && (
             <FormErrorMessage>{formik.errors.instructions}</FormErrorMessage>

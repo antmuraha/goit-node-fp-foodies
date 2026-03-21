@@ -83,6 +83,15 @@
 }
 
 /*
+ * Recipe Preparation outer group — Figma node 44:1562: gap 40px label→input
+ */
+.groupRecipePrep {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/*
  * Underline-only input — Figma nodes 22:767 (name), 92:1890 (quantity)
  * No pill border, no border-radius — only bottom underline.
  */
@@ -112,6 +121,13 @@
 }
 
 /*
+ * Override TextArea min-height to single line in empty state per Figma node 44:1562
+ */
+.instructionsTextarea {
+  min-height: var(--fd-line-height-24, 24px) !important;
+}
+
+/*
  * "Add ingredient +" button — Figma nodes 22:794 (desktop/tablet), 114:5163 (mobile)
  * No fixed width — padding drives the size, button stays flexible.
  * Mobile: height 48px, padding 14px 20px
@@ -135,6 +151,39 @@
   display: inline-flex !important;
   align-items: center !important;
   gap: 8px !important;
+}
+
+/*
+ * Name input + counter — Figma node 22:766:
+ * flex row: placeholder text (left) + "0/200" counter (right), underline below both
+ */
+.inputWithCounter {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Input wrapper grows to fill available space */
+.inputCounterField {
+  flex: 1;
+  min-width: 0;
+}
+
+/*
+ * Counter "0/200" — Figma node 22:741
+ * Mulish Medium 16px, #bfbebe, aligned to baseline of the input
+ */
+.counter {
+  flex-shrink: 0;
+  font-family: "Mulish", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.32px;
+  color: #bfbebe;
+  white-space: nowrap;
 }
 
 /* Trash + Publish buttons */
