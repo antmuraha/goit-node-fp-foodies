@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { type ReactElement, useEffect } from "react";
 import { Button, FormErrorMessage, ImageInput, Input, Select, TextArea } from "../../../shared/ui";
-import { NumericStepper } from "../../../shared/ui/numeric-stepper/NumericStepper";
+import { NumericStepper } from "../../../shared/ui/numeric-stepper";
 import { Icon } from "../../../shared/components/Icon";
 import RecipeIngredientsPanel from "../../recipe/ui/RecipeIngredientsPanel";
 import { DEFAULT_RECIPE_FORM_VALUES, recipeEditorSchema, type RecipeEditorFormValues } from "../validation";
@@ -130,7 +130,7 @@ export const RecipeEditorForm = ({
     ];
 
     void formik.setFieldValue("ingredients", nextIngredients, false);
-    // Don't touch ingredients on successful add — errors show on submit attempt
+    // Don't touch ingredients on successful adding — errors show on a submitted attempt
 
     formik.setFieldValue("pendingIngredient", EMPTY_PENDING_INGREDIENT, false);
     void formik.setFieldTouched("pendingIngredient.ingredientId", false, false);
@@ -142,7 +142,7 @@ export const RecipeEditorForm = ({
   const handleRemoveIngredient = (indexToRemove: number) => {
     const nextIngredients = formik.values.ingredients.filter((_, index) => index !== indexToRemove);
     void formik.setFieldValue("ingredients", nextIngredients, false);
-    // Don't touch on remove either — error shows only on submit if array is empty
+    // Don't touch on remove either — the error shows only on submitting if an array is empty
   };
 
   const ingredientOptionMap = ingredientsOptions.reduce<Record<string, string>>((accumulator, optionItem) => {
@@ -399,7 +399,7 @@ export const RecipeEditorForm = ({
             hasError={Boolean(formik.touched.instructions && formik.errors.instructions)}
             disabled={isSubmitting}
             rows={6}
-            maxLength={1000}
+            maxLength={3000}
           />
           {formik.touched.instructions && formik.errors.instructions && (
             <FormErrorMessage>{formik.errors.instructions}</FormErrorMessage>

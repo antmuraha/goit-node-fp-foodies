@@ -12,11 +12,11 @@
   width: 100%;
 }
 
-/* All form fields stacked */
+/* All form fields stacked — mobile gap 32px per Figma node 114:5132 */
 .fieldsCol {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 32px;
 }
 
 .group {
@@ -84,6 +84,11 @@
   .imageCol {
     position: sticky;
     top: 32px;
+  }
+
+  /* Desktop gap: 60px between form groups per Figma node 44:1561 */
+  .fieldsCol {
+    gap: 60px;
   }
 }
 
