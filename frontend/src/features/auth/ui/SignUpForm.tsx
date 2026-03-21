@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useFormik } from "formik";
 import type { ReactElement } from "react";
 import { Button, FormErrorMessage, Input } from "../../../shared/ui";
 import { useAuth } from "../../../shared/hooks";
 import { Icon } from "../../../shared/components/Icon";
 import { signUpSchema, type SignUpFormValues } from "../validation";
+import { notificationService } from "../../../shared/services/notifications";
 import styles from "./SignUpForm.module.css";
 
 type SignUpFormProps = {
@@ -14,6 +15,7 @@ type SignUpFormProps = {
 
 export const SignUpForm = ({ onSuccess, onSignIn }: SignUpFormProps): ReactElement => {
   const { signUp, isRegistering, registerError } = useAuth();
+  const initialRegisterError = useRef(registerError);
   const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik<SignUpFormValues>({
@@ -35,6 +37,12 @@ export const SignUpForm = ({ onSuccess, onSignIn }: SignUpFormProps): ReactEleme
   const passwordError = hasSubmitted ? formik.errors.password : undefined;
 
   const isSubmitDisabled = isRegistering || !formik.values.name || !formik.values.email || !formik.values.password;
+
+  useEffect(() => {
+    if (registerError && registerError !== initialRegisterError.current) {
+      notificationService.error(registerError);
+    }
+  }, [registerError]);
 
   return (
     <form className={styles.form} onSubmit={formik.handleSubmit} noValidate>
@@ -93,8 +101,6 @@ export const SignUpForm = ({ onSuccess, onSignIn }: SignUpFormProps): ReactEleme
           {passwordError && <FormErrorMessage id="signup-password-error">{passwordError}</FormErrorMessage>}
         </div>
       </div>
-
-      {registerError && <FormErrorMessage variant="form">{registerError}</FormErrorMessage>}
 
       <div className={styles.btns}>
         <Button type="submit" fullWidth disabled={isSubmitDisabled} isLoading={isRegistering}>
