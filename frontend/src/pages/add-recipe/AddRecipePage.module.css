@@ -1,14 +1,19 @@
 /* Figma: desktop 14:613 / tablet 108:4206 / mobile 114:4798 */
 
+/*
+ * Mobile: header ends at y=62, section starts y=126 → top padding = 64px
+ * Left/right: content x=16 on 375px frame → padding 16px
+ */
 .page {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 32px 16px;
+  padding: 64px 16px 32px;
   box-sizing: border-box;
 }
 
 /* Page header: title + subtitle */
 .header {
+  /* Mobile: header section ends y=264, photo at y=296 → gap=32px */
   margin-bottom: 32px;
 }
 
@@ -16,8 +21,9 @@
   margin: 0 0 8px;
   font-family: "Mulish", sans-serif;
   font-weight: 800;
-  font-size: 28px;
-  line-height: 32px;
+  /* Mobile: 32px per Figma node 114:5120 */
+  font-size: 32px;
+  line-height: 38px;
   letter-spacing: -0.48px;
   text-transform: uppercase;
   color: #050505;
@@ -34,22 +40,29 @@
 }
 
 /* ── Tablet (768px) ── */
+/* header ends y=86, section y=150 → gap=64px */
 @media (min-width: 768px) {
   .page {
-    padding: 40px 32px;
+    padding: 64px 32px 40px;
   }
 
   .title {
-    font-size: 32px;
-    line-height: 38px;
+    font-size: 36px;
+    line-height: 40px;
     margin-bottom: 12px;
   }
 }
 
 /* ── Desktop (1280px) ── */
+/* header ends y=90, content y=170 → gap=80px; left padding = 80px */
 @media (min-width: 1280px) {
   .page {
-    padding: 40px 80px;
+    padding: 80px 80px 40px;
+  }
+
+  .header {
+    /* Desktop: header section 170px, two-column at y=210 → gap=40px */
+    margin-bottom: 40px;
   }
 
   .title {

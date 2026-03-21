@@ -1,3 +1,5 @@
+/* Figma: desktop 22:728 (551×400) / tablet 108:4607 (704×400) / mobile 114:5122 (343×318) */
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -20,23 +22,25 @@
   border: none;
   background: none;
   cursor: pointer;
-  border-radius: var(--fd-radius-lg);
+  border-radius: 20px;
   overflow: hidden;
 }
 
+/* Mobile: 343×318 per Figma node 114:5122 */
 .preview {
   width: 100%;
-  aspect-ratio: 551 / 400;
-  border-radius: var(--fd-radius-lg);
+  height: 318px;
+  border-radius: 20px;
   object-fit: cover;
   display: block;
 }
 
 /* Empty placeholder — Figma: dashed border, centered camera + text */
+/* Mobile: 343×318 */
 .placeholder {
   width: 100%;
-  aspect-ratio: 551 / 400;
-  border-radius: var(--fd-radius-lg);
+  height: 318px;
+  border-radius: 20px;
   border: 1.5px dashed #bfbebe;
   background: transparent;
   display: flex;
@@ -47,6 +51,7 @@
   cursor: pointer;
   transition: border-color 0.2s ease;
   padding: 0;
+  box-sizing: border-box;
 }
 
 .placeholder:hover:not(:disabled) {
@@ -86,4 +91,34 @@
   padding: 0;
   clip: rect(0 0 0 0);
   overflow: hidden;
+}
+
+/* ── Tablet (768px): full width × 400px per Figma node 108:4607 ── */
+@media (min-width: 768px) {
+  .preview {
+    height: 400px;
+    border-radius: 30px;
+  }
+
+  .previewBtn {
+    border-radius: 30px;
+  }
+
+  .placeholder {
+    height: 400px;
+    border-radius: 30px;
+  }
+}
+
+/* ── Desktop (1280px): 551×400px — width constrained by grid column ── */
+@media (min-width: 1280px) {
+  .preview {
+    width: 551px;
+    height: 400px;
+  }
+
+  .placeholder {
+    width: 551px;
+    height: 400px;
+  }
 }

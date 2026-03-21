@@ -41,7 +41,8 @@ export const recipeEditorSchema: Yup.ObjectSchema<RecipeEditorFormValues> = Yup.
     .max(200, "Name is too long")
     .required("Name is required"),
   description: Yup.string()
-    .max(500, "Description must be less than 500 characters")
+    // Figma shows 0/200 counter on description field
+    .max(200, "Description must be less than 200 characters")
     .required("Description is required"),
   instructions: Yup.string()
     .min(10, "Instructions must be at least 10 characters")
