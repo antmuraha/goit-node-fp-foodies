@@ -1,9 +1,5 @@
 /* Figma: desktop 14:613 / tablet 108:4206 / mobile 114:4798 */
 
-/*
- * Mobile: header ends at y=62, section starts y=126 → top padding = 64px
- * Left/right: content x=16 on 375px frame → padding 16px
- */
 .page {
   max-width: 1440px;
   margin: 0 auto;
@@ -11,62 +7,118 @@
   box-sizing: border-box;
 }
 
-/* Page header: title + subtitle */
+/*
+ * Page header: breadcrumbs + title group
+ * Mobile gap-[32px] (node 114:5114), tablet/desktop gap-[40px] (node 44:1555)
+ */
 .header {
-  /* Mobile: header section ends y=264, photo at y=296 → gap=32px */
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
   margin-bottom: 32px;
 }
 
+/*
+ * Breadcrumbs — Figma nodes 114:5115 / 108:4599 / 22:475
+ * Mulish Bold, 12px, line-height 18px, letter-spacing -0.24px, uppercase
+ */
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: "Mulish", sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: -0.24px;
+  text-transform: uppercase;
+}
+
+.breadcrumbMuted {
+  color: #bfbebe;
+}
+
+.breadcrumbActive {
+  color: #050505;
+}
+
+/*
+ * Title + subtitle group
+ * Mobile gap-[16px] (node 114:5119), tablet/desktop gap-[20px] (node 22:479)
+ */
+.titleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/*
+ * Page title
+ * Mobile: Mulish ExtraBold 28px / line-height 32px / letter-spacing -0.56px (node 114:5120)
+ */
 .title {
-  margin: 0 0 8px;
+  margin: 0;
   font-family: "Mulish", sans-serif;
   font-weight: 800;
-  /* Mobile: 32px per Figma node 114:5120 */
-  font-size: 32px;
-  line-height: 38px;
-  letter-spacing: -0.48px;
+  font-size: 28px;
+  line-height: 32px;
+  letter-spacing: -0.56px;
   text-transform: uppercase;
   color: #050505;
 }
 
+/*
+ * Page subtitle
+ * Mobile: Mulish Medium 14px / line-height 20px / letter-spacing -0.28px (node 114:5121)
+ */
 .subtitle {
   margin: 0;
   font-family: "Mulish", sans-serif;
   font-weight: 500;
   font-size: 14px;
   line-height: 20px;
+  letter-spacing: -0.28px;
   color: #1a1a1a;
-  max-width: 443px;
 }
 
 /* ── Tablet (768px) ── */
-/* header ends y=86, section y=150 → gap=64px */
 @media (min-width: 768px) {
   .page {
     padding: 64px 32px 40px;
   }
 
+  .header {
+    gap: 40px;
+    margin-bottom: 40px;
+  }
+
+  .titleGroup {
+    gap: 20px;
+  }
+
+  /*
+   * Tablet title: same as desktop — Mulish ExtraBold 40px (node 108:4604)
+   */
   .title {
-    font-size: 36px;
-    line-height: 40px;
-    margin-bottom: 12px;
+    font-size: 40px;
+    line-height: 44px;
+    letter-spacing: -0.8px;
+  }
+
+  /*
+   * Tablet/desktop subtitle: 16px (node 108:4605 / 22:481)
+   */
+  .subtitle {
+    font-size: 16px;
+    line-height: 24px;
+    letter-spacing: -0.32px;
+    max-width: 443px;
   }
 }
 
 /* ── Desktop (1280px) ── */
-/* header ends y=90, content y=170 → gap=80px; left padding = 80px */
 @media (min-width: 1280px) {
   .page {
     padding: 80px 80px 40px;
-  }
-
-  .header {
-    /* Desktop: header section 170px, two-column at y=210 → gap=40px */
-    margin-bottom: 40px;
-  }
-
-  .title {
-    font-size: 40px;
-    line-height: 44px;
   }
 }

@@ -1,5 +1,6 @@
 import { cloneElement, useEffect, useRef, useState, type MouseEvent, type ReactElement } from "react";
 import { FileInput } from "../file-input";
+import { Icon } from "../../components/Icon";
 import { validateFileSize } from "../../utils/fileValidation";
 import { canvasCoverResize } from "../../utils/canvasUtils";
 import styles from "./ImageInput.module.css";
@@ -103,7 +104,7 @@ export const ImageInput = ({
       {label && <label className={styles.label}>{label}</label>}
 
       {imageSrc ? (
-        /* Uploaded image — click to replace */
+        /* Uploaded state — click anywhere on image to replace */
         <button
           type="button"
           className={styles.previewBtn}
@@ -114,7 +115,7 @@ export const ImageInput = ({
           <img src={imageSrc} alt="Preview" className={styles.preview} />
         </button>
       ) : (
-        /* Empty state — Figma: camera icon + "Upload a photo" */
+        /* Empty state — Figma node 22:736: camera icon 64px + "Upload a photo" underlined */
         <button
           type="button"
           className={[styles.placeholder, hasError && styles.placeholderError].filter(Boolean).join(" ")}
@@ -122,28 +123,8 @@ export const ImageInput = ({
           disabled={disabled}
           aria-label="Upload a photo"
         >
-          {/* Camera icon from Figma node 22:730 */}
-          <svg
-            className={styles.cameraIcon}
-            width="64"
-            height="64"
-            viewBox="0 0 64 64"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <rect x="8" y="18" width="48" height="36" rx="6" stroke="#bfbebe" strokeWidth="2.5" fill="none" />
-            <path
-              d="M22 18l4-8h12l4 8"
-              stroke="#bfbebe"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-            />
-            <circle cx="32" cy="36" r="8" stroke="#bfbebe" strokeWidth="2.5" fill="none" />
-            <circle cx="50" cy="26" r="2" fill="#bfbebe" />
-          </svg>
+          {/* Figma: camera icon 64×64, color #bfbebe — token input-placeholder */}
+          <Icon name="camera" color="input-placeholder" size={64} />
           <span className={styles.placeholderText}>Upload a photo</span>
         </button>
       )}
@@ -158,12 +139,15 @@ export const ImageInput = ({
           hint={showFileName ? selectedImageName || "Selected image is used for local preview only" : undefined}
           hasError={hasError}
           error={error}
-          /* Hide native input when a custom trigger is provided — original logic preserved */
           className={elementTrigger ? styles.hiddenInput : undefined}
         />
       )}
 
-      {renderedTrigger}
+      {/*
+        Figma filled state (node 44:1570): "Upload another photo" shown ONLY when image is present.
+        Empty state has no trigger link below the placeholder.
+      */}
+      {imageSrc && renderedTrigger}
     </div>
   );
 };
