@@ -121,10 +121,7 @@ const RecipeCard = ({
         {variant === "grid" && (
           <div className={styles.footer}>
             <div className={styles.authorBtn} onClick={handleAuthorClick} role="button" tabIndex={0}>
-              <div 
-                className={styles.avatar} 
-                style={{ backgroundImage: `url(${author?.avatar || defaultAvatar})` }} 
-              />
+              <div className={styles.avatar} style={{ backgroundImage: `url(${author?.avatar || defaultAvatar})` }} />
               <span className={styles.authorName}>{author?.name || "Anonymous"}</span>
             </div>
 
@@ -138,17 +135,17 @@ const RecipeCard = ({
               >
                 <Icon name="heart" color={isFavorite(id) ? "color-danger" : "text-primary"} size={18} />
               </Button>
-              
+
               <NavLink to={`/recipe/${id}`} className={styles.titleLink}>
-              <Button
-                variant="secondary"
-                isIconOnly
-                className={styles.iconBtn}
-                onClick={handleDetailsClick}
-                aria-label="View details"
-              >
-                <Icon name="arrow-up-right" color="text-primary" size={18} />
-              </Button>
+                <Button
+                  variant="secondary"
+                  isIconOnly
+                  className={styles.iconBtn}
+                  onClick={handleDetailsClick}
+                  aria-label="View details"
+                >
+                  <Icon name="arrow-up-right" color="text-primary" size={18} />
+                </Button>
               </NavLink>
             </div>
           </div>
