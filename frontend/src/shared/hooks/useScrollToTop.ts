@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 export const useScrollToTop = (selector?: string): void => {
-  const { pathname } = useLocation();
+  const { pathname, search } = useLocation();
 
   useEffect(() => {
     if (selector) {
@@ -13,5 +13,5 @@ export const useScrollToTop = (selector?: string): void => {
       }
     }
     document.body.scrollIntoView({ behavior: "smooth" });
-  }, [pathname]);
+  }, [pathname, search, selector]);
 };

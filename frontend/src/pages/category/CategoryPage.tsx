@@ -39,7 +39,7 @@ export const CategoryPage = (): ReactElement => {
         prev.set("page", String(newPage));
         return prev;
       });
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      useScrollToTop(`.${SCROLL_TO_CLASS}`);
     },
     [setSearchParams],
   );
