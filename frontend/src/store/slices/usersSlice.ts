@@ -89,6 +89,18 @@ const usersSlice = createSlice({
       const nextCount = state.selectedUser.followersCount + action.payload.delta;
       state.selectedUser.followersCount = Math.max(0, nextCount);
     },
+    adjustSelectedUserRecipesCreatedCount: (state, action: { payload: { userId: number | string; delta: number } }) => {
+      if (!state.selectedUser) {
+        return;
+      }
+
+      if (String(state.selectedUser.id) !== String(action.payload.userId)) {
+        return;
+      }
+
+      const nextCount = state.selectedUser.recipesCreated + action.payload.delta;
+      state.selectedUser.recipesCreated = Math.max(0, nextCount);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -127,5 +139,6 @@ const usersSlice = createSlice({
   },
 });
 
-export const { clearSelectedUser, adjustSelectedUserFollowersCount } = usersSlice.actions;
+export const { clearSelectedUser, adjustSelectedUserFollowersCount, adjustSelectedUserRecipesCreatedCount } =
+  usersSlice.actions;
 export const usersReducer = usersSlice.reducer;

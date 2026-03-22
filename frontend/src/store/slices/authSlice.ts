@@ -182,6 +182,14 @@ const authSlice = createSlice({
       const nextCount = state.currentUser.favoritesCount + action.payload;
       state.currentUser.favoritesCount = Math.max(0, nextCount);
     },
+    adjustRecipesCreatedCount: (state, action: PayloadAction<number>) => {
+      if (!state.currentUser) {
+        return;
+      }
+
+      const nextCount = state.currentUser.recipesCreated + action.payload;
+      state.currentUser.recipesCreated = Math.max(0, nextCount);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -247,6 +255,12 @@ const authSlice = createSlice({
   },
 });
 
-export const { setAuthSession, rehydrateSession, clearAuthSession, adjustFollowingCount, adjustFavoritesCount } =
-  authSlice.actions;
+export const {
+  setAuthSession,
+  rehydrateSession,
+  clearAuthSession,
+  adjustFollowingCount,
+  adjustFavoritesCount,
+  adjustRecipesCreatedCount,
+} = authSlice.actions;
 export const authReducer = authSlice.reducer;
