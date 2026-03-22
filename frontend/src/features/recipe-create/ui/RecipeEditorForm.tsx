@@ -8,6 +8,12 @@ import { DEFAULT_RECIPE_FORM_VALUES, recipeEditorSchema, type RecipeEditorFormVa
 import { notificationService } from "../../../shared/services/notifications";
 import styles from "./RecipeEditorForm.module.css";
 
+type IngredientOption = {
+  id: number;
+  name: string;
+  image: string;
+};
+
 type ReferenceOption = {
   id: number;
   name: string;
@@ -16,7 +22,7 @@ type ReferenceOption = {
 type RecipeEditorFormProps = {
   isEdit: boolean;
   categories: ReferenceOption[];
-  ingredientsOptions: ReferenceOption[];
+  ingredientsOptions: IngredientOption[];
   areas: ReferenceOption[];
   initialValues?: RecipeEditorFormValues;
   isCatalogLoading: boolean;
@@ -173,7 +179,6 @@ export const RecipeEditorForm = ({
 
   return (
     <form className={styles.form} onSubmit={formik.handleSubmit} noValidate>
-      {/* Left column on desktop: image upload — no label per Figma */}
       <div className={styles.imageCol}>
         <ImageInput
           id="recipe-image"
@@ -186,12 +191,8 @@ export const RecipeEditorForm = ({
             if (file) void formik.setFieldValue("image", file, false);
           }}
           disabled={isSubmitting || isImageUploading}
-          hasError={Boolean(formik.touched.image && formik.errors.image) || Boolean(imageUploadError)}
-          error={
-            (formik.touched.image && formik.errors.image) || imageUploadError
-              ? (imageUploadError ?? (formik.touched.image ? formik.errors.image : undefined))
-              : undefined
-          }
+          hasError={Boolean(formik.errors.image) || Boolean(imageUploadError)}
+          error={formik.errors.image || imageUploadError ? imageUploadError || formik.errors.image : undefined}
         />
       </div>
 
@@ -204,9 +205,6 @@ export const RecipeEditorForm = ({
           Counter: 0/200 inline right — Figma node 22:741
         */}
         <div className={styles.groupName}>
-          <label className={styles.labelName} htmlFor="recipe-name">
-            The name of the recipe
-          </label>
           <div className={styles.inputWithCounter}>
             <div className={styles.inputCounterField}>
               <Input
@@ -215,7 +213,7 @@ export const RecipeEditorForm = ({
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                placeholder="Enter a description of the dish"
+                placeholder="The name of the recipe"
                 hasError={Boolean(formik.touched.name && formik.errors.name)}
                 disabled={isSubmitting}
                 maxLength={200}
@@ -225,6 +223,28 @@ export const RecipeEditorForm = ({
             <span className={styles.counter}>{formik.values.name.length}/200</span>
           </div>
           {formik.touched.name && formik.errors.name && <FormErrorMessage>{formik.errors.name}</FormErrorMessage>}
+        </div>
+
+        {/* Description */}
+        <div className={styles.group}>
+          <label className={styles.label} htmlFor="recipe-description">
+            Description
+          </label>
+          <TextArea
+            id="recipe-description"
+            name="description"
+            value={formik.values.description}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+            placeholder="Enter a description of the dish"
+            hasError={Boolean(formik.touched.description && formik.errors.description)}
+            disabled={isSubmitting}
+            rows={4}
+            maxLength={3000}
+          />
+          {formik.touched.description && formik.errors.description && (
+            <FormErrorMessage>{formik.errors.description}</FormErrorMessage>
+          )}
         </div>
 
         {/* Category + Cooking time — side by side per Figma */}
@@ -366,7 +386,7 @@ export const RecipeEditorForm = ({
                 id: ing.ingredientId,
                 name: ingredientOptionMap[String(ing.ingredientId)] ?? "Unknown",
                 measure: ing.measure,
-                image: null,
+                image: ingredientsOptions.find((option) => option.id === ing.ingredientId)?.image ?? "",
               }))}
               onRemove={handleRemoveIngredient}
             />

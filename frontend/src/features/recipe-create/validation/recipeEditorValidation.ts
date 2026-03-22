@@ -42,10 +42,11 @@ export const recipeEditorSchema: Yup.ObjectSchema<RecipeEditorFormValues> = Yup.
     .required("Name is required"),
   description: Yup.string()
     // Figma shows 0/200 counter on description field
-    .max(200, "Description must be less than 200 characters")
+    .min(100, "Description must be at least 100 characters")
+    .max(500, "Description must be less than 500 characters")
     .required("Description is required"),
   instructions: Yup.string()
-    .min(10, "Instructions must be at least 10 characters")
+    .min(200, "Instructions must be at least 200 characters")
     // Updated from 1000 to 3000 per task requirement
     .max(3000, "Instructions must be less than 3000 characters")
     .required("Instructions are required"),
@@ -56,7 +57,7 @@ export const recipeEditorSchema: Yup.ObjectSchema<RecipeEditorFormValues> = Yup.
       }
       return true;
     })
-    .default(""),
+    .required("Image is required"),
   cookingTime: Yup.number()
     .typeError("Cooking time must be a number")
     .integer("Cooking time must be a whole number")

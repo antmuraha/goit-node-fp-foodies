@@ -8,5 +8,5 @@ export type RecipeIngredientItem = {
   id: number;
   measure: string;
   name: string;
-  image: string | null;
+  image: string;
 };

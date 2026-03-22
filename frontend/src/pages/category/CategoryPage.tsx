@@ -1,12 +1,11 @@
 import { useCallback, useEffect, useMemo, useRef, type ReactElement } from "react";
-import { NavLink, useParams, useSearchParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { CategoryRecipesGrid } from "../../features/category-recipes-grid";
 import { CategoryFilterPanel } from "../../features/category-filters";
 import { HeroSection } from "../../shared/ui";
 import { useDataRecipes, useScrollToTop } from "../../shared/hooks";
 import { TestimonialsSection } from "../../shared/ui/testimonials-section";
 import styles from "./CategoryPage.module.css";
-import { APP_ROUTES } from "../../shared/constants/routes";
 import { Icon } from "../../shared/components/Icon";
 import { useDataCategory } from "../../shared/hooks/useDataCategories";
 
@@ -17,6 +16,7 @@ export const CategoryPage = (): ReactElement => {
   const { id: categoryId } = useParams();
   const [searchParams, setSearchParams] = useSearchParams();
   const isFirstRender = useRef(true);
+  const navigate = useNavigate();
   useScrollToTop(`.${SCROLL_TO_CLASS}`);
 
   const page = Math.max(1, Number(searchParams.get("page") ?? 1));
@@ -68,7 +68,14 @@ export const CategoryPage = (): ReactElement => {
     <>
       <HeroSection />
       <header className={styles.header + " " + SCROLL_TO_CLASS}>
-        <NavLink to={APP_ROUTES.HOME} className={styles.backLink}>
+        <NavLink
+          to="#"
+          className={styles.backLink}
+          onClick={(e) => {
+            e.preventDefault();
+            navigate(-1);
+          }}
+        >
           <Icon name="arrow-up-right" size={16} color="text-primary" />
           <span>Back</span>
         </NavLink>

@@ -8,6 +8,7 @@ import UserFollowersList from "../../../shared/components/UserFollowersList";
 import FollowingList from "../../../shared/components/FollowingList";
 import { Pagination } from "../../../shared/ui/pagination";
 import { useDataUserRecipes } from "../../../shared/hooks/useDataUsers";
+import { scrollTo } from "../../../shared/hooks/useScrollToTop";
 import {
   useDataProfileFavorites,
   useDataProfileFollowers,
@@ -72,6 +73,7 @@ export const ProfileContentList = ({ userId, isOwnProfile }: ProfileContentListP
       prev.set("page", String(newPage));
       return prev;
     });
+    scrollTo("#content-list", 200);
   };
 
   return (
