@@ -130,13 +130,6 @@ export const AddRecipePage = (): ReactElement => {
     <main className={styles.page}>
       {/* Page header — Figma nodes 44:1555 / 108:4598 / 114:5114 */}
       <div className={styles.header}>
-        {/* Breadcrumbs: Home / Add recipe — Figma nodes 22:475 / 108:4599 / 114:5115 */}
-        <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
-          <span className={styles.breadcrumbMuted}>Home</span>
-          <span className={styles.breadcrumbMuted}>/</span>
-          <span className={styles.breadcrumbActive}>{pageLabel}</span>
-        </nav>
-
         {/* Title + subtitle */}
         <div className={styles.titleGroup}>
           <h1 className={styles.title}>{pageLabel}</h1>
