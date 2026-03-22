@@ -1,5 +1,5 @@
 import type { ReactElement } from "react";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo } from "react";
 import { useSearchParams } from "react-router-dom";
 import { TabsListTab } from "../../../shared/components/TabsList/useTabsList";
 import UserRecipesList from "../../../shared/components/UserRecipesList";
