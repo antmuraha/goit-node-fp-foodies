@@ -29,6 +29,8 @@ export const UserPage = (): ReactNode => {
   }
 
   const isOwnProfile = user.id === currentUser.id;
+  const ownFavoritesCount = isOwnProfile ? currentUser.favoritesCount : 0;
+  const ownFollowingCount = isOwnProfile ? currentUser.followingCount : 0;
 
   return (
     <main>
@@ -44,8 +46,8 @@ export const UserPage = (): ReactNode => {
             key={id}
             isOwnProfile={isOwnProfile}
             user={user}
-            favoritesCount={currentUser.favoritesCount}
-            followingCount={currentUser.followingCount}
+            favoritesCount={ownFavoritesCount}
+            followingCount={ownFollowingCount}
           />
           <div id="content-list" className={styles.listInfo}>
             <ProfileTabsNavigation isOwnProfile={isOwnProfile} />

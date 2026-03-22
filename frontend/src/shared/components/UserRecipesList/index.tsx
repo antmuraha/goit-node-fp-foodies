@@ -3,6 +3,8 @@ import { ProfileRecipeCard } from "../../ui/profile-recipe-card";
 import { EmptyState } from "../../ui";
 import { useAppDispatch, useAppSelector } from "../../hooks/reduxHooks";
 import { deleteRecipe } from "../../../store/slices/recipesSlice";
+import { adjustRecipesCreatedCount } from "../../../store/slices/authSlice";
+import { adjustSelectedUserRecipesCreatedCount } from "../../../store/slices/usersSlice";
 import styles from "./UserRecipesList.module.css";
 
 type UserRecipesListProps = {
@@ -30,8 +32,15 @@ const UserRecipesList = ({ user }: UserRecipesListProps) => {
               image={recipe.image}
               onDelete={
                 isOwner
-                  ? () => {
-                      void dispatch(deleteRecipe(recipe.id));
+                  ? async () => {
+                      const result = await dispatch(deleteRecipe(recipe.id));
+
+                      if (!deleteRecipe.fulfilled.match(result) || !currentUser) {
+                        return;
+                      }
+
+                      dispatch(adjustRecipesCreatedCount(-1));
+                      dispatch(adjustSelectedUserRecipesCreatedCount({ userId: currentUser.id, delta: -1 }));
                     }
                   : undefined
               }

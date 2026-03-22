@@ -15,9 +15,18 @@ import {
 } from "../../shared/hooks";
 import { APP_ROUTES } from "../../shared/constants/routes";
 import { createRecipe, resetEditorSubmitState, updateRecipe } from "../../store/slices/recipesSlice";
+import { adjustRecipesCreatedCount } from "../../store/slices/authSlice";
+import { adjustSelectedUserRecipesCreatedCount } from "../../store/slices/usersSlice";
 import styles from "./AddRecipePage.module.css";
 
 export const AddRecipePage = (): ReactElement => {
+  /*
+  TODO: Refactor project-wide
+  1. Do NOT use `const dispatch = useAppDispatch();` in any Component.
+  2. Replace all component-level dispatch calls with entity-level hooks like `useDataSomeEntity`.
+  3. Audit all files to ensure no direct use of `useAppDispatch` remains.
+  4. Ensure async/data operations are handled through the entity hooks only.
+  */
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isEdit = useMatch(APP_ROUTES.RECIPE_EDIT);
@@ -100,6 +109,11 @@ export const AddRecipePage = (): ReactElement => {
       isEdit && recipeId
         ? await dispatch(updateRecipe({ id: recipeId, payload }))
         : await dispatch(createRecipe(payload));
+
+    if (createRecipe.fulfilled.match(result)) {
+      dispatch(adjustRecipesCreatedCount(1));
+      dispatch(adjustSelectedUserRecipesCreatedCount({ userId: result.payload.userId, delta: 1 }));
+    }
 
     if (createRecipe.fulfilled.match(result) || updateRecipe.fulfilled.match(result)) {
       navigate(APP_ROUTES.RECIPE_DETAILS.replace(":id", String(result.payload.id)));

@@ -3,6 +3,7 @@ import type { UserSummary } from "../../entities/user";
 import { usersApi } from "../../api/endpoints/usersApi";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
 import type { RootState } from "../store";
+import { clearAuthSession } from "./authSlice";
 import { AUTH_REQUIRED_USER_REQUEST_ERROR } from "./constants";
 import { UserDetailsResponse } from "../../entities/user/model/types";
 
@@ -88,6 +89,18 @@ const usersSlice = createSlice({
       const nextCount = state.selectedUser.followersCount + action.payload.delta;
       state.selectedUser.followersCount = Math.max(0, nextCount);
     },
+    adjustSelectedUserRecipesCreatedCount: (state, action: { payload: { userId: number | string; delta: number } }) => {
+      if (!state.selectedUser) {
+        return;
+      }
+
+      if (String(state.selectedUser.id) !== String(action.payload.userId)) {
+        return;
+      }
+
+      const nextCount = state.selectedUser.recipesCreated + action.payload.delta;
+      state.selectedUser.recipesCreated = Math.max(0, nextCount);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -114,9 +127,18 @@ const usersSlice = createSlice({
       .addCase(fetchUserById.rejected, (state, action) => {
         state.selectedUserStatus = "failed";
         state.selectedUserError = action.payload ?? "Unable to load user";
+      })
+      .addCase(clearAuthSession, (state) => {
+        state.list = [];
+        state.selectedUser = null;
+        state.listStatus = "idle";
+        state.selectedUserStatus = "idle";
+        state.listError = null;
+        state.selectedUserError = null;
       });
   },
 });
 
-export const { clearSelectedUser, adjustSelectedUserFollowersCount } = usersSlice.actions;
+export const { clearSelectedUser, adjustSelectedUserFollowersCount, adjustSelectedUserRecipesCreatedCount } =
+  usersSlice.actions;
 export const usersReducer = usersSlice.reducer;
