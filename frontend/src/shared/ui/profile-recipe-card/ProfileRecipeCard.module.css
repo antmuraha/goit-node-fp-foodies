@@ -60,11 +60,11 @@
 
 @media (max-width: 1440px) {
   .content {
-      max-width: 846px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
+    max-width: 846px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
 }
 
 .title {
