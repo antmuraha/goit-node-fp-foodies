@@ -3,6 +3,7 @@ import type { UserSummary } from "../../entities/user";
 import { usersApi } from "../../api/endpoints/usersApi";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
 import type { RootState } from "../store";
+import { clearAuthSession } from "./authSlice";
 import { AUTH_REQUIRED_USER_REQUEST_ERROR } from "./constants";
 import { UserDetailsResponse } from "../../entities/user/model/types";
 
@@ -114,6 +115,14 @@ const usersSlice = createSlice({
       .addCase(fetchUserById.rejected, (state, action) => {
         state.selectedUserStatus = "failed";
         state.selectedUserError = action.payload ?? "Unable to load user";
+      })
+      .addCase(clearAuthSession, (state) => {
+        state.list = [];
+        state.selectedUser = null;
+        state.listStatus = "idle";
+        state.selectedUserStatus = "idle";
+        state.listError = null;
+        state.selectedUserError = null;
       });
   },
 });
