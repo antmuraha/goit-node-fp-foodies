@@ -8,6 +8,7 @@ import type {
   UpdateRecipePayload,
 } from "../../entities/recipe/types";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
+import { clearAuthSession } from "./authSlice";
 
 type RecipeListState = {
   data: RecipeSummary[];
@@ -410,6 +411,14 @@ const recipesSlice = createSlice({
       .addCase(uploadRecipeImage.rejected, (state, action) => {
         state.imageUploadStatus = "failed";
         state.imageUploadError = action.payload ?? "Unable to upload recipe image";
+      })
+      .addCase(clearAuthSession, (state) => {
+        state.ownRecipes = { ...initialRecipeListState };
+        state.favoriteRecipes = { ...initialRecipeListState };
+        state.editorSubmitStatus = "idle";
+        state.editorSubmitError = null;
+        state.imageUploadStatus = "idle";
+        state.imageUploadError = null;
       });
   },
 });

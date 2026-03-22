@@ -3,6 +3,7 @@ import type { PaginatedUserListResponse, UserListQuery, UserSummary } from "../.
 import { usersApi } from "../../api/endpoints/usersApi";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
 import type { RootState } from "../store";
+import { clearAuthSession } from "./authSlice";
 import { AUTH_REQUIRED_FOLLOW_REQUEST_ERROR, AUTH_REQUIRED_USER_REQUEST_ERROR } from "./constants";
 
 type ProfileUsersState = {
@@ -286,6 +287,12 @@ const followersSlice = createSlice({
       .addCase(fetchFollowStatusByUserId.rejected, (state, action) => {
         state.followStatusRequestByUserId[toUserKey(action.meta.arg.userId)] = "failed";
         state.following.error = action.payload ?? "Unable to resolve follow status";
+      })
+      .addCase(clearAuthSession, (state) => {
+        state.followers = { ...initialProfileUsersState };
+        state.following = { ...initialProfileUsersState };
+        state.followStatusByUserId = {};
+        state.followStatusRequestByUserId = {};
       });
   },
 });
