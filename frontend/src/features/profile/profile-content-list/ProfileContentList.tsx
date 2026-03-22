@@ -66,7 +66,7 @@ export const ProfileContentList = ({ userId, isOwnProfile }: ProfileContentListP
         if (isOwnProfile) following.loadFollowing();
         break;
     }
-  }, [tab, page]);
+  }, [userId, tab, page]);
 
   const handlePageChange = (newPage: number): void => {
     setSearchParams((prev) => {
