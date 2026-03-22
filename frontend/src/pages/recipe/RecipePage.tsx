@@ -5,6 +5,7 @@ import { useDataRecipe, useScrollToTop } from "../../shared/hooks";
 import PopularRecipesList from "../../shared/ui/popular-recipes-list";
 import RecipeIngredientsPanel from "../../features/recipe/ui/RecipeIngredientsPanel";
 import RecipeInstructionsPanel from "../../features/recipe/ui/RecipeInstructionsPanel";
+import RecipeImage from "../../features/recipe/ui/RecipeImage";
 import { useUserFavorites } from "../../shared/helpers/useUserFavorites";
 import { Button } from "../../shared/ui";
 import { useAuth } from "../../shared/hooks";
@@ -54,7 +55,7 @@ export const RecipePage = (): ReactElement => {
           <section className={styles.content}>
             {/* Left column: recipe image */}
             <div className={styles.imageWrapper}>
-              <img className={styles.image} src={recipe.image ?? recipe.thumbnail ?? undefined} alt={recipe.title} />
+              <RecipeImage className={styles.image} src={recipe.image ?? recipe.thumbnail} alt={recipe.title} />
             </div>
 
             {/* Right column: all recipe details */}
