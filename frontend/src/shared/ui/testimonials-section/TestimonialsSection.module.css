@@ -70,6 +70,7 @@
   flex-direction: column;
   align-items: center;
   gap: 64px;
+  animation: quote-enter 0.35s ease;
 }
 
 .quoteText {
@@ -112,10 +113,12 @@
 .dot {
   width: 8px;
   height: 8px;
+  min-height: 0;
   border-radius: var(--fd-radius-full);
   background-color: var(--fd-color-muted);
   border: none;
   padding: 0;
+  text-transform: none;
   cursor: pointer;
   transition:
     background-color 0.2s ease,
@@ -126,6 +129,28 @@
   width: 18px;
   background-color: var(--fd-color-main);
   border-radius: var(--fd-radius-pill);
+}
+
+@keyframes quote-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .quote {
+    animation: none;
+  }
+
+  .dot {
+    transition: none;
+  }
 }
 
 /* ── Empty / loading ── */

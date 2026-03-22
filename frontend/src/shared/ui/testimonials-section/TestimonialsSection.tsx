@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { ReactElement } from "react";
 import { Icon } from "../../components/Icon";
 import { useDataTestimonials } from "../../hooks/useDataTestimonials";
@@ -6,10 +6,29 @@ import styles from "./TestimonialsSection.module.css";
 
 const SECTION_SUBTITLE = "What our customer say";
 const SECTION_TITLE = "Testimonials";
+const AUTO_ROTATE_INTERVAL_MS = 5000;
 
 const TestimonialsSection = (): ReactElement => {
   const { testimonials, isLoading } = useDataTestimonials();
   const [activeIndex, setActiveIndex] = useState(0);
+
+  useEffect(() => {
+    if (testimonials.length <= 1) {
+      return;
+    }
+
+    const intervalId = setInterval(() => {
+      setActiveIndex((currentIndex) => (currentIndex + 1) % testimonials.length);
+    }, AUTO_ROTATE_INTERVAL_MS);
+
+    return () => {
+      clearInterval(intervalId);
+    };
+  }, [testimonials.length]);
+
+  const handleDotClick = (index: number): void => {
+    setActiveIndex(index);
+  };
 
   if (isLoading) {
     return (
@@ -45,7 +64,7 @@ const TestimonialsSection = (): ReactElement => {
           <Icon name="quote" width={40} height={32} color="color-muted" />
         </div>
 
-        <blockquote className={styles.quote}>
+        <blockquote className={styles.quote} key={activeIndex}>
           <p className={styles.quoteText}>{current.content}</p>
           <footer className={styles.author}>
             <cite className={styles.authorName}>{current.owner.name}</cite>
@@ -59,7 +78,7 @@ const TestimonialsSection = (): ReactElement => {
             <button
               key={index}
               className={`${styles.dot} ${index === activeIndex ? styles.dotActive : ""}`}
-              onClick={() => setActiveIndex(index)}
+              onClick={() => handleDotClick(index)}
               role="tab"
               aria-selected={index === activeIndex}
               aria-label={`Testimonial ${index + 1}`}
