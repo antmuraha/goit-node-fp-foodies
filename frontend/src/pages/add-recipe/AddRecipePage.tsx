@@ -110,14 +110,26 @@ export const AddRecipePage = (): ReactElement => {
     navigate(-1);
   };
 
+  const pageLabel = isEdit ? "Edit recipe" : "Add recipe";
+
   return (
     <main className={styles.page}>
-      {/* Page header — matches Figma title + subtitle block */}
+      {/* Page header — Figma nodes 44:1555 / 108:4598 / 114:5114 */}
       <div className={styles.header}>
-        <h1 className={styles.title}>{isEdit ? "Edit recipe" : "Add recipe"}</h1>
-        <p className={styles.subtitle}>
-          Reveal your culinary art, share your favorite recipe and create gastronomic masterpieces with us.
-        </p>
+        {/* Breadcrumbs: Home / Add recipe — Figma nodes 22:475 / 108:4599 / 114:5115 */}
+        <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
+          <span className={styles.breadcrumbMuted}>Home</span>
+          <span className={styles.breadcrumbMuted}>/</span>
+          <span className={styles.breadcrumbActive}>{pageLabel}</span>
+        </nav>
+
+        {/* Title + subtitle */}
+        <div className={styles.titleGroup}>
+          <h1 className={styles.title}>{pageLabel}</h1>
+          <p className={styles.subtitle}>
+            Reveal your culinary art, share your favorite recipe and create gastronomic masterpieces with us.
+          </p>
+        </div>
       </div>
 
       {isEdit && isRecipeLoading && <p>Loading recipe data...</p>}

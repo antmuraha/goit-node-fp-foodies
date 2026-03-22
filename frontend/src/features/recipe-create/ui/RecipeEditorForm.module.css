@@ -12,11 +12,11 @@
   width: 100%;
 }
 
-/* All form fields stacked */
+/* All form fields stacked — mobile gap 32px per Figma node 114:5132 */
 .fieldsCol {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 32px;
 }
 
 .group {
@@ -50,23 +50,188 @@
   gap: 12px;
 }
 
-/* Added ingredient tiles rendered via RecipeIngredientsPanel — no custom styles needed */
+/*
+ * Name field — different label style per Figma node 44:1557 / 114:5133:
+ * color: #bfbebe (gray), ExtraBold, 16px mobile / 24px desktop, uppercase
+ * gap label→input: 32px mobile / 40px desktop
+ */
+.groupName {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
 
-/* Trash icon + Publish */
+/* Mobile: ExtraBold 16px #bfbebe */
+.labelName {
+  font-family: "Mulish", sans-serif;
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.32px;
+  text-transform: uppercase;
+  color: #bfbebe;
+}
+
+/*
+ * Area field — Figma node 12385:2704 shows width=330px on desktop.
+ * Full width on mobile/tablet, capped on desktop.
+ */
+.groupArea {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/*
+ * Recipe Preparation outer group — Figma node 44:1562: gap 40px label→input
+ */
+.groupRecipePrep {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+/*
+ * Underline-only input — Figma nodes 22:767 (name), 92:1890 (quantity)
+ * No pill border, no border-radius — only bottom underline.
+ */
+.underlineInput {
+  border: none !important;
+  border-radius: 0 !important;
+  border-bottom: 1px solid #bfbebe !important;
+  background: transparent !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  font-family: "Mulish", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.32px;
+  color: #050505;
+}
+
+.underlineInput::placeholder {
+  color: #bfbebe;
+}
+
+.underlineInput:focus {
+  outline: none;
+  border-bottom-color: #050505 !important;
+  box-shadow: none !important;
+}
+
+/*
+ * Override TextArea min-height to single line in empty state per Figma node 44:1562
+ */
+.instructionsTextarea {
+  min-height: var(--fd-line-height-24, 24px) !important;
+}
+
+/*
+ * "Add ingredient +" button — Figma nodes 22:794 (desktop/tablet), 114:5163 (mobile)
+ * No fixed width — padding drives the size, button stays flexible.
+ * Mobile: height 48px, padding 14px 20px
+ */
+.addIngredientBtn {
+  /* Mobile: Figma node 114:5163 */
+  height: 48px !important;
+  padding: 14px 20px !important;
+  width: fit-content !important;
+  /* Figma: gap from ingredient row to btn = 40px. group has gap:16px → extra 24px */
+  margin-top: 24px !important;
+
+  font-family: "Mulish", sans-serif !important;
+  font-weight: 700 !important;
+  font-size: 16px !important;
+  line-height: 20px !important;
+  letter-spacing: -0.32px !important;
+  text-transform: uppercase !important;
+
+  border-radius: 30px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+/*
+ * Name input + counter — Figma node 22:766:
+ * flex row: placeholder text (left) + "0/200" counter (right), underline below both
+ */
+.inputWithCounter {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Input wrapper grows to fill available space */
+.inputCounterField {
+  flex: 1;
+  min-width: 0;
+}
+
+/*
+ * Counter "0/200" — Figma node 22:741
+ * Mulish Medium 16px, #bfbebe, aligned to baseline of the input
+ */
+.counter {
+  flex-shrink: 0;
+  font-family: "Mulish", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.32px;
+  color: #bfbebe;
+  white-space: nowrap;
+}
+
+/* Trash + Publish buttons */
 .actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 8px;
   padding-top: 8px;
+}
+
+/*
+ * Trash delete button — override isIconOnly default sizing.
+ * Figma: 56×56px, padding 18px, border-radius 30px
+ */
+.deleteBtn {
+  width: 56px !important;
+  height: 56px !important;
+  padding: 18px !important;
+  border-radius: 30px !important;
+  aspect-ratio: unset !important;
 }
 
 /* ── Tablet (768px) ── */
 @media (min-width: 768px) {
   /* Category + time side by side */
+  /* Figma: Category = 315px fixed, Cooking time = auto, gap = 20px — node 22:770 */
   .categoryTimeRow {
-    grid-template-columns: 1fr auto;
+    grid-template-columns: 315px auto;
     align-items: end;
     gap: 20px;
+  }
+
+  /* Name label: 24px ExtraBold (H3) per Figma node 44:1557 */
+  .groupName {
+    gap: 40px;
+  }
+
+  .labelName {
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: -0.48px;
+  }
+
+  /* Desktop + tablet: button height 56px, wider padding per Figma node 22:794 */
+  .addIngredientBtn {
+    height: 56px !important;
+    padding: 16px 32px !important;
+    line-height: 24px !important;
   }
 }
 
@@ -84,6 +249,16 @@
   .imageCol {
     position: sticky;
     top: 32px;
+  }
+
+  /* Desktop gap: 60px between form groups per Figma node 44:1561 */
+  .fieldsCol {
+    gap: 60px;
+  }
+
+  /* Figma node 12385:2704: Area width=330px on desktop */
+  .groupArea {
+    max-width: 330px;
   }
 }
 

@@ -41,17 +41,19 @@ export const recipeEditorSchema: Yup.ObjectSchema<RecipeEditorFormValues> = Yup.
     .max(200, "Name is too long")
     .required("Name is required"),
   description: Yup.string()
-    .max(500, "Description must be less than 500 characters")
+    // Figma shows 0/200 counter on description field
+    .max(200, "Description must be less than 200 characters")
     .required("Description is required"),
   instructions: Yup.string()
     .min(10, "Instructions must be at least 10 characters")
+    // Updated from 1000 to 3000 per task requirement
+    .max(3000, "Instructions must be less than 3000 characters")
     .required("Instructions are required"),
   image: Yup.mixed<string | File>()
     .test("fileSize", "File size must be less than 5 MB", (value) => {
       if (value instanceof File) {
-        return value.size <= 5 * 1024 * 1024; // 5 MB
+        return value.size <= 5 * 1024 * 1024;
       }
-      // If it's not a file, skip validation (e.g., when it's a URL string)
       return true;
     })
     .default(""),

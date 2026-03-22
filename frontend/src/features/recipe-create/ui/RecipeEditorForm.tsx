@@ -1,7 +1,7 @@
 import { useFormik } from "formik";
 import { type ReactElement, useEffect } from "react";
 import { Button, FormErrorMessage, ImageInput, Input, Select, TextArea } from "../../../shared/ui";
-import { NumericStepper } from "../../../shared/ui/numeric-stepper/NumericStepper";
+import { NumericStepper } from "../../../shared/ui/numeric-stepper";
 import { Icon } from "../../../shared/components/Icon";
 import RecipeIngredientsPanel from "../../recipe/ui/RecipeIngredientsPanel";
 import { DEFAULT_RECIPE_FORM_VALUES, recipeEditorSchema, type RecipeEditorFormValues } from "../validation";
@@ -54,7 +54,6 @@ export const RecipeEditorForm = ({
   onSubmit,
   onCancel,
 }: RecipeEditorFormProps): ReactElement => {
-  // Show submit errors as toast notification (right-bottom corner)
   useEffect(() => {
     if (submitError) notificationService.error(submitError);
   }, [submitError]);
@@ -123,14 +122,12 @@ export const RecipeEditorForm = ({
     const nextIngredients = [
       ...formik.values.ingredients,
       {
-        // Parse to Number — Select returns string, Yup schema expects number
         ingredientId: Number(formik.values.pendingIngredient.ingredientId),
         measure: formik.values.pendingIngredient.measure.trim(),
       },
     ];
 
     void formik.setFieldValue("ingredients", nextIngredients, false);
-    // Don't touch ingredients on successful add — errors show on submit attempt
 
     formik.setFieldValue("pendingIngredient", EMPTY_PENDING_INGREDIENT, false);
     void formik.setFieldTouched("pendingIngredient.ingredientId", false, false);
@@ -142,7 +139,6 @@ export const RecipeEditorForm = ({
   const handleRemoveIngredient = (indexToRemove: number) => {
     const nextIngredients = formik.values.ingredients.filter((_, index) => index !== indexToRemove);
     void formik.setFieldValue("ingredients", nextIngredients, false);
-    // Don't touch on remove either — error shows only on submit if array is empty
   };
 
   const ingredientOptionMap = ingredientsOptions.reduce<Record<string, string>>((accumulator, optionItem) => {
@@ -201,44 +197,34 @@ export const RecipeEditorForm = ({
 
       {/* Right column on desktop: all form fields */}
       <div className={styles.fieldsCol}>
-        {/* Recipe name */}
-        <div className={styles.group}>
-          <label className={styles.label} htmlFor="recipe-name">
+        {/*
+          Recipe name — Figma node 44:1557 / 108:4618 / 114:5133
+          Label: #bfbebe, ExtraBold, 24px desktop / 16px mobile, uppercase
+          Input: underline only, placeholder "Enter a description of the dish"
+          Counter: 0/200 inline right — Figma node 22:741
+        */}
+        <div className={styles.groupName}>
+          <label className={styles.labelName} htmlFor="recipe-name">
             The name of the recipe
           </label>
-          <Input
-            id="recipe-name"
-            name="name"
-            value={formik.values.name}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            placeholder="Enter a description of the dish"
-            hasError={Boolean(formik.touched.name && formik.errors.name)}
-            disabled={isSubmitting}
-          />
+          <div className={styles.inputWithCounter}>
+            <div className={styles.inputCounterField}>
+              <Input
+                id="recipe-name"
+                name="name"
+                value={formik.values.name}
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                placeholder="Enter a description of the dish"
+                hasError={Boolean(formik.touched.name && formik.errors.name)}
+                disabled={isSubmitting}
+                maxLength={200}
+                className={styles.underlineInput}
+              />
+            </div>
+            <span className={styles.counter}>{formik.values.name.length}/200</span>
+          </div>
           {formik.touched.name && formik.errors.name && <FormErrorMessage>{formik.errors.name}</FormErrorMessage>}
-        </div>
-
-        {/* Description */}
-        <div className={styles.group}>
-          <label className={styles.label} htmlFor="recipe-description">
-            Description
-          </label>
-          <TextArea
-            id="recipe-description"
-            name="description"
-            value={formik.values.description}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            placeholder="Enter a description of the dish"
-            hasError={Boolean(formik.touched.description && formik.errors.description)}
-            disabled={isSubmitting}
-            rows={4}
-            maxLength={200}
-          />
-          {formik.touched.description && formik.errors.description && (
-            <FormErrorMessage>{formik.errors.description}</FormErrorMessage>
-          )}
         </div>
 
         {/* Category + Cooking time — side by side per Figma */}
@@ -253,7 +239,6 @@ export const RecipeEditorForm = ({
               value={formik.values.categoryId}
               hasError={Boolean(formik.touched.categoryId && formik.errors.categoryId)}
               onChange={(event) => {
-                // Only set value — touched is set on blur or submit, not on change
                 void formik.setFieldValue("categoryId", event.target.value);
               }}
               onBlur={() => void formik.setFieldTouched("categoryId", true)}
@@ -290,8 +275,11 @@ export const RecipeEditorForm = ({
           </div>
         </div>
 
-        {/* Area */}
-        <div className={styles.group}>
+        {/*
+          Area — Figma node 12385:2704 width=330px on desktop.
+          groupArea constrains max-width so it doesn't stretch the full column.
+        */}
+        <div className={styles.groupArea}>
           <span className={styles.label}>Area</span>
           <Select
             id="area-pending"
@@ -301,7 +289,6 @@ export const RecipeEditorForm = ({
             onChange={(event) => {
               const nextAreaId = Number(event.target.value);
               const nextAreas = Number.isFinite(nextAreaId) && nextAreaId > 0 ? [nextAreaId] : [];
-              // No shouldValidate + no setFieldTouched — errors only on blur or submit
               void formik.setFieldValue("areas", nextAreas);
             }}
             onBlur={() => void formik.setFieldTouched("areas", true)}
@@ -345,6 +332,7 @@ export const RecipeEditorForm = ({
             </div>
 
             <div>
+              {/* Figma: underline only, not bordered pill — node 92:1890 */}
               <Input
                 id="ingredient-pending-measure"
                 value={formik.values.pendingIngredient.measure}
@@ -353,6 +341,7 @@ export const RecipeEditorForm = ({
                 placeholder="Enter quantity"
                 hasError={Boolean(getPendingIngredientTouched("measure") && getPendingIngredientError("measure"))}
                 disabled={isSubmitting}
+                className={styles.underlineInput}
               />
               {getPendingIngredientTouched("measure") && getPendingIngredientError("measure") && (
                 <FormErrorMessage>{getPendingIngredientError("measure")}</FormErrorMessage>
@@ -360,11 +349,16 @@ export const RecipeEditorForm = ({
             </div>
           </div>
 
-          <Button variant="secondary" onClick={handleAddIngredient} disabled={isSubmitting || isCatalogLoading}>
+          {/* Figma node 22:794 / 108:4648 / 114:5163 */}
+          <Button
+            variant="secondary"
+            className={styles.addIngredientBtn}
+            onClick={handleAddIngredient}
+            disabled={isSubmitting || isCatalogLoading}
+          >
             Add ingredient +
           </Button>
 
-          {/* Added ingredient tiles — reuse RecipeIngredientsPanel with onRemove */}
           {formik.values.ingredients.length > 0 && (
             <RecipeIngredientsPanel
               showHeading={false}
@@ -372,7 +366,6 @@ export const RecipeEditorForm = ({
                 id: ing.ingredientId,
                 name: ingredientOptionMap[String(ing.ingredientId)] ?? "Unknown",
                 measure: ing.measure,
-                // Image not available in reference data — placeholder shown
                 image: null,
               }))}
               onRemove={handleRemoveIngredient}
@@ -384,8 +377,13 @@ export const RecipeEditorForm = ({
           )}
         </div>
 
-        {/* Recipe Preparation */}
-        <div className={styles.group}>
+        {/*
+          Recipe Preparation — Figma node 44:1562
+          gap label→input: 40px (groupRecipePrep)
+          Empty state: 1 line only (rows=1, min-height override via instructionsTextarea)
+          maxLength: 3000 per task requirement
+        */}
+        <div className={styles.groupRecipePrep}>
           <label className={styles.label} htmlFor="recipe-instructions">
             Recipe Preparation
           </label>
@@ -398,20 +396,26 @@ export const RecipeEditorForm = ({
             placeholder="Enter recipe"
             hasError={Boolean(formik.touched.instructions && formik.errors.instructions)}
             disabled={isSubmitting}
-            rows={6}
-            maxLength={1000}
+            rows={1}
+            maxLength={3000}
+            className={styles.instructionsTextarea}
           />
           {formik.touched.instructions && formik.errors.instructions && (
             <FormErrorMessage>{formik.errors.instructions}</FormErrorMessage>
           )}
         </div>
 
-        {/* Submit error shown as toast — no inline block needed */}
-
         {/* Actions */}
         <div className={styles.actions}>
-          <Button variant="secondary" isIconOnly onClick={onCancel} disabled={isSubmitting} aria-label="Delete draft">
-            <Icon name="trash" color="text-primary" size={18} />
+          <Button
+            variant="secondary"
+            isIconOnly
+            className={styles.deleteBtn}
+            onClick={onCancel}
+            disabled={isSubmitting}
+            aria-label="Delete draft"
+          >
+            <Icon name="trash" color="text-primary" size={20} />
           </Button>
           <Button type="submit" isLoading={isSubmitting}>
             {isEdit ? "Update recipe" : "Publish"}
