@@ -79,10 +79,7 @@ const TestimonialsSection = (): ReactElement => {
       return;
     }
 
-    const nextIndex = clampIndex(
-      Math.round(trackElement.scrollLeft / trackElement.clientWidth),
-      testimonials.length,
-    );
+    const nextIndex = clampIndex(Math.round(trackElement.scrollLeft / trackElement.clientWidth), testimonials.length);
 
     setActiveIndex((currentIndex) => (currentIndex === nextIndex ? currentIndex : nextIndex));
   }, [testimonials.length]);
