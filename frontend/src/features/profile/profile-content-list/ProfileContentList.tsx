@@ -46,12 +46,7 @@ export const ProfileContentList = ({ userId, isOwnProfile }: ProfileContentListP
 
   const totalPages = Math.ceil((activeData.total ?? 0) / PAGE_SIZE);
 
-  const isFirstRender = useRef(true);
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
     switch (tab) {
       case TabsListTab.RECIPES:
         recipes.loadOwnRecipes();
