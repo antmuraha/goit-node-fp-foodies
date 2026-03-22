@@ -121,10 +121,13 @@
 }
 
 /*
- * Override TextArea min-height to single line in empty state per Figma node 44:1562
+ * Instructions textarea — Figma node 44:1544.
+ * Figma shows 1 row in empty state; intentional UX deviation: rows=3 so the
+ * user can see what they are typing. No min-height override needed — the
+ * browser derives height from the rows attribute naturally.
  */
 .instructionsTextarea {
-  min-height: var(--fd-line-height-24, 24px) !important;
+  resize: vertical;
 }
 
 /*

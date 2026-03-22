@@ -397,12 +397,7 @@ export const RecipeEditorForm = ({
           )}
         </div>
 
-        {/*
-          Recipe Preparation — Figma node 44:1562
-          gap label→input: 40px (groupRecipePrep)
-          Empty state: 1 line only (rows=1, min-height override via instructionsTextarea)
-          maxLength: 3000 per task requirement
-        */}
+        {/* Recipe Preparation */}
         <div className={styles.groupRecipePrep}>
           <label className={styles.label} htmlFor="recipe-instructions">
             Recipe Preparation
@@ -416,7 +411,7 @@ export const RecipeEditorForm = ({
             placeholder="Enter recipe"
             hasError={Boolean(formik.touched.instructions && formik.errors.instructions)}
             disabled={isSubmitting}
-            rows={1}
+            rows={3}
             maxLength={3000}
             className={styles.instructionsTextarea}
           />
