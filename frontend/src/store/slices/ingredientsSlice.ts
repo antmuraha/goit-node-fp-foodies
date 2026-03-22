@@ -5,6 +5,7 @@ import type { ApiError } from "../../shared/types/api";
 type IngredientItem = {
   id: number;
   name: string;
+  image: string;
 };
 
 type IngredientsState = {

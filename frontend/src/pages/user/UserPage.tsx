@@ -47,7 +47,7 @@ export const UserPage = (): ReactNode => {
             favoritesCount={currentUser.favoritesCount}
             followingCount={currentUser.followingCount}
           />
-          <div className={styles.listInfo}>
+          <div id="content-list" className={styles.listInfo}>
             <ProfileTabsNavigation isOwnProfile={isOwnProfile} />
             <ProfileContentList userId={userId} isOwnProfile={isOwnProfile} />
           </div>

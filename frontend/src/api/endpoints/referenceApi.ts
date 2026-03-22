@@ -4,6 +4,7 @@ import { API_ROUTES } from "../../shared/constants/apiRoutes";
 type ReferenceItem = {
   id: number;
   name: string;
+  image: string;
 };
 
 type TestimonialsResponse = {

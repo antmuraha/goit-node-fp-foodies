@@ -15,3 +15,12 @@ export const useScrollToTop = (selector?: string): void => {
     document.body.scrollIntoView({ behavior: "smooth" });
   }, [pathname, search, selector]);
 };
+
+export const scrollTo = (selector: string, delay = 0) => {
+  setTimeout(() => {
+    const element = document.querySelector(selector);
+    if (element) {
+      element.scrollIntoView({ behavior: "smooth" });
+    }
+  }, delay);
+};
