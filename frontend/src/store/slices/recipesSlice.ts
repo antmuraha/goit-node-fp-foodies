@@ -366,6 +366,22 @@ const recipesSlice = createSlice({
       .addCase(createRecipe.fulfilled, (state, action) => {
         state.editorSubmitStatus = "succeeded";
         state.selectedRecipe = action.payload;
+
+        const alreadyPresent = state.ownRecipes.data.some((recipeItem) => recipeItem.id === action.payload.id);
+
+        if (alreadyPresent) {
+          return;
+        }
+
+        if (state.ownRecipes.offset === 0) {
+          state.ownRecipes.data.unshift(action.payload);
+
+          if (state.ownRecipes.limit > 0 && state.ownRecipes.data.length > state.ownRecipes.limit) {
+            state.ownRecipes.data.pop();
+          }
+        }
+
+        state.ownRecipes.total += 1;
       })
       .addCase(createRecipe.rejected, (state, action) => {
         state.editorSubmitStatus = "failed";
