@@ -16,6 +16,15 @@
   width: 75px;
   height: 75px;
   border-radius: 15px;
+
+  display: block;
+  overflow: hidden;
+  font-size: var(--fd-font-size-12);
+  line-height: var(--fd-line-height-18);
+  text-align: center;
+  align-content: center;
+
+  background-color: var(--fd-bg-muted);
 }
 
 @media (min-width: 768px) {
@@ -68,6 +77,7 @@
 
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-decoration: none;
