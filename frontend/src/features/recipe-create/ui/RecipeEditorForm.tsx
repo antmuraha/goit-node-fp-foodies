@@ -203,8 +203,12 @@ export const RecipeEditorForm = ({
           Label: #bfbebe, ExtraBold, 24px desktop / 16px mobile, uppercase
           Input: underline only, placeholder "Enter a description of the dish"
           Counter: 0/200 inline right — Figma node 22:741
+          Note: no separate Description field — not present in Figma design
         */}
         <div className={styles.groupName}>
+          <label className={styles.labelName} htmlFor="recipe-name">
+            The name of the recipe
+          </label>
           <div className={styles.inputWithCounter}>
             <div className={styles.inputCounterField}>
               <Input
@@ -213,7 +217,7 @@ export const RecipeEditorForm = ({
                 value={formik.values.name}
                 onChange={formik.handleChange}
                 onBlur={formik.handleBlur}
-                placeholder="The name of the recipe"
+                placeholder="Enter a description of the dish"
                 hasError={Boolean(formik.touched.name && formik.errors.name)}
                 disabled={isSubmitting}
                 maxLength={200}
@@ -223,28 +227,6 @@ export const RecipeEditorForm = ({
             <span className={styles.counter}>{formik.values.name.length}/200</span>
           </div>
           {formik.touched.name && formik.errors.name && <FormErrorMessage>{formik.errors.name}</FormErrorMessage>}
-        </div>
-
-        {/* Description */}
-        <div className={styles.group}>
-          <label className={styles.label} htmlFor="recipe-description">
-            Description
-          </label>
-          <TextArea
-            id="recipe-description"
-            name="description"
-            value={formik.values.description}
-            onChange={formik.handleChange}
-            onBlur={formik.handleBlur}
-            placeholder="Enter a description of the dish"
-            hasError={Boolean(formik.touched.description && formik.errors.description)}
-            disabled={isSubmitting}
-            rows={4}
-            maxLength={3000}
-          />
-          {formik.touched.description && formik.errors.description && (
-            <FormErrorMessage>{formik.errors.description}</FormErrorMessage>
-          )}
         </div>
 
         {/* Category + Cooking time — side by side per Figma */}
