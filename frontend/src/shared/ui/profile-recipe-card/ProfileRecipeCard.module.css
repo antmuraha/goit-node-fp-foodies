@@ -55,11 +55,10 @@
   font-weight: var(--fd-font-weight-extrabold);
   text-transform: uppercase;
   text-decoration: none;
-}
-
-@media (min-width: 768px) {
-  .title {
-  }
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .instructions {
