@@ -1,7 +1,19 @@
 .section {
+  position: relative;
   width: 100%;
   padding: 0;
   margin: 0;
+}
+
+.underline {
+  position: absolute;
+  bottom: 0.75px;
+  left: 0;
+  right: 0;
+  z-index: -1;
+  height: 1.5px;
+  background-color: var(--fd-border-default);
+  pointer-events: none;
 }
 
 .tabsList {
@@ -37,8 +49,18 @@
   opacity: 1;
 }
 
-.active {
-  color: var(--fd-text-primary) !important;
+li.active {
+  a {
+    color: var(--fd-text-primary) !important;
+  }
+
+  &::after {
+    content: "";
+    display: block;
+    height: 3px;
+    width: 100%;
+    background-color: var(--fd-text-primary);
+  }
 }
 
 .labelText {
@@ -53,19 +75,6 @@
   text-transform: uppercase;
 }
 
-.labelText::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -14px;
-  width: 100%;
-  height: 2px;
-  background-color: var(--fd-text-primary);
-  z-index: 5;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
 .active .labelText::after {
   opacity: 1;
 }
@@ -76,7 +85,6 @@
   left: 0;
   right: 0;
   height: var(--fd-border-width-hairline);
-  background-color: var(--fd-border-default);
   pointer-events: none;
 }
 

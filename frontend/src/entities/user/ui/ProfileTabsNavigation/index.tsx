@@ -28,17 +28,15 @@ export const ProfileTabsNavigation = ({ isOwnProfile }: Props) => {
     <nav className={styles.section} aria-label="Profile tabs">
       <ul className={styles.tabsList}>
         {tabs.map((tabItem) => (
-          <li key={tabItem.id} className={styles.tabItem}>
-            <NavLink
-              to={`?tab=${tabItem.id}`}
-              className={tab === tabItem.id ? `${styles.link} ${styles.active}` : styles.link}
-            >
+          <li key={tabItem.id} className={`${styles.tabItem} ${tab === tabItem.id ? styles.active : ""}`}>
+            <NavLink to={`?tab=${tabItem.id}`} className={styles.link}>
               <span className={styles.labelText}>{tabItem.label}</span>
             </NavLink>
           </li>
         ))}
         <div className={styles.bottomLine} />
       </ul>
+      <div className={styles.underline} />
     </nav>
   );
 };
