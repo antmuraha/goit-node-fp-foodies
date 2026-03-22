@@ -4,6 +4,7 @@ import { usersApi } from "../../api/endpoints/usersApi";
 import type { ApiError, AsyncStatus } from "../../shared/types/api";
 import { sessionStorageAdapter } from "../../shared/services/sessionStorage";
 import { MeProfile } from "../../entities/user/model/types";
+import { fetchProfileFollowing } from "./followersSlice";
 
 export type LoginCredentials = {
   email: string;
@@ -182,6 +183,14 @@ const authSlice = createSlice({
       const nextCount = state.currentUser.favoritesCount + action.payload;
       state.currentUser.favoritesCount = Math.max(0, nextCount);
     },
+    adjustRecipesCreatedCount: (state, action: PayloadAction<number>) => {
+      if (!state.currentUser) {
+        return;
+      }
+
+      const nextCount = state.currentUser.recipesCreated + action.payload;
+      state.currentUser.recipesCreated = Math.max(0, nextCount);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -243,10 +252,23 @@ const authSlice = createSlice({
       .addCase(updateAvatar.rejected, (state, action) => {
         state.avatarUpdateStatus = "failed";
         state.avatarUpdateError = action.payload ?? "Unable to update avatar";
+      })
+      .addCase(fetchProfileFollowing.fulfilled, (state, action) => {
+        if (!state.currentUser) {
+          return;
+        }
+
+        state.currentUser.followingCount = action.payload.total;
       });
   },
 });
 
-export const { setAuthSession, rehydrateSession, clearAuthSession, adjustFollowingCount, adjustFavoritesCount } =
-  authSlice.actions;
+export const {
+  setAuthSession,
+  rehydrateSession,
+  clearAuthSession,
+  adjustFollowingCount,
+  adjustFavoritesCount,
+  adjustRecipesCreatedCount,
+} = authSlice.actions;
 export const authReducer = authSlice.reducer;
