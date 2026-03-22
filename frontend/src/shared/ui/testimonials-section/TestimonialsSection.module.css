@@ -48,6 +48,27 @@
   width: 100%;
 }
 
+.track {
+  width: 100%;
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+
+.track::-webkit-scrollbar {
+  display: none;
+}
+
+.slide {
+  flex: 0 0 100%;
+  width: 100%;
+  scroll-snap-align: center;
+  scroll-snap-stop: always;
+}
+
 .quoteIcon {
   position: absolute;
   left: 8px;
@@ -71,6 +92,7 @@
   align-items: center;
   gap: 64px;
   animation: quote-enter 0.35s ease;
+  width: 100%;
 }
 
 .quoteText {
@@ -114,12 +136,14 @@
   width: 8px;
   height: 8px;
   min-height: 0;
+  min-width: 0;
   border-radius: var(--fd-radius-full);
   background-color: var(--fd-color-muted);
   border: none;
   padding: 0;
   text-transform: none;
   cursor: pointer;
+  display: inline-flex;
   transition:
     background-color 0.2s ease,
     width 0.2s ease;
@@ -148,6 +172,10 @@
     animation: none;
   }
 
+  .track {
+    scroll-behavior: auto;
+  }
+
   .dot {
     transition: none;
   }
@@ -169,6 +197,10 @@
   .reviews {
     gap: 80px;
     max-width: 704px;
+  }
+
+  .track {
+    overflow-x: hidden;
   }
 
   .subtitle {

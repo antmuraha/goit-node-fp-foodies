@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { ReactElement } from "react";
 import { Icon } from "../../components/Icon";
 import { useDataTestimonials } from "../../hooks/useDataTestimonials";
@@ -7,10 +7,51 @@ import styles from "./TestimonialsSection.module.css";
 const SECTION_SUBTITLE = "What our customer say";
 const SECTION_TITLE = "Testimonials";
 const AUTO_ROTATE_INTERVAL_MS = 5000;
+const TESTIMONIAL_LABEL_PREFIX = "Testimonial";
+
+const clampIndex = (index: number, maxLength: number): number => {
+  if (maxLength === 0) {
+    return 0;
+  }
+
+  return Math.max(0, Math.min(index, maxLength - 1));
+};
 
 const TestimonialsSection = (): ReactElement => {
   const { testimonials, isLoading } = useDataTestimonials();
   const [activeIndex, setActiveIndex] = useState(0);
+  const trackRef = useRef<HTMLDivElement | null>(null);
+
+  const scrollToIndex = useCallback(
+    (index: number, behavior: ScrollBehavior = "smooth"): void => {
+      const trackElement = trackRef.current;
+
+      if (!trackElement) {
+        return;
+      }
+
+      const nextIndex = clampIndex(index, testimonials.length);
+
+      trackElement.scrollTo({
+        left: trackElement.clientWidth * nextIndex,
+        behavior,
+      });
+    },
+    [testimonials.length],
+  );
+
+  useEffect(() => {
+    if (testimonials.length === 0) {
+      return;
+    }
+
+    const normalizedIndex = clampIndex(activeIndex, testimonials.length);
+
+    if (normalizedIndex !== activeIndex) {
+      setActiveIndex(normalizedIndex);
+      scrollToIndex(normalizedIndex, "auto");
+    }
+  }, [activeIndex, scrollToIndex, testimonials.length]);
 
   useEffect(() => {
     if (testimonials.length <= 1) {
@@ -18,16 +59,39 @@ const TestimonialsSection = (): ReactElement => {
     }
 
     const intervalId = setInterval(() => {
-      setActiveIndex((currentIndex) => (currentIndex + 1) % testimonials.length);
+      setActiveIndex((currentIndex) => {
+        const nextIndex = (currentIndex + 1) % testimonials.length;
+        scrollToIndex(nextIndex);
+
+        return nextIndex;
+      });
     }, AUTO_ROTATE_INTERVAL_MS);
 
     return () => {
       clearInterval(intervalId);
     };
+  }, [scrollToIndex, testimonials.length]);
+
+  const handleTrackScroll = useCallback((): void => {
+    const trackElement = trackRef.current;
+
+    if (!trackElement || testimonials.length <= 1) {
+      return;
+    }
+
+    const nextIndex = clampIndex(
+      Math.round(trackElement.scrollLeft / trackElement.clientWidth),
+      testimonials.length,
+    );
+
+    setActiveIndex((currentIndex) => (currentIndex === nextIndex ? currentIndex : nextIndex));
   }, [testimonials.length]);
 
   const handleDotClick = (index: number): void => {
-    setActiveIndex(index);
+    const nextIndex = clampIndex(index, testimonials.length);
+
+    setActiveIndex(nextIndex);
+    scrollToIndex(nextIndex);
   };
 
   if (isLoading) {
@@ -50,8 +114,6 @@ const TestimonialsSection = (): ReactElement => {
     );
   }
 
-  const current = testimonials[activeIndex];
-
   return (
     <section className={styles.section} aria-label={SECTION_TITLE}>
       <div className={styles.reviews}>
@@ -64,12 +126,29 @@ const TestimonialsSection = (): ReactElement => {
           <Icon name="quote" width={40} height={32} color="color-muted" />
         </div>
 
-        <blockquote className={styles.quote} key={activeIndex}>
-          <p className={styles.quoteText}>{current.content}</p>
-          <footer className={styles.author}>
-            <cite className={styles.authorName}>{current.owner.name}</cite>
-          </footer>
-        </blockquote>
+        <div
+          ref={trackRef}
+          className={styles.track}
+          onScroll={handleTrackScroll}
+          role="region"
+          aria-label="Testimonials carousel"
+        >
+          {testimonials.map((testimonial, index) => (
+            <article
+              key={testimonial.id}
+              className={styles.slide}
+              aria-roledescription="slide"
+              aria-label={`${TESTIMONIAL_LABEL_PREFIX} ${index + 1} of ${testimonials.length}`}
+            >
+              <blockquote className={styles.quote}>
+                <p className={styles.quoteText}>{testimonial.content}</p>
+                <footer className={styles.author}>
+                  <cite className={styles.authorName}>{testimonial.owner.name}</cite>
+                </footer>
+              </blockquote>
+            </article>
+          ))}
+        </div>
       </div>
 
       {testimonials.length > 1 && (
@@ -77,11 +156,12 @@ const TestimonialsSection = (): ReactElement => {
           {testimonials.map((_, index) => (
             <button
               key={index}
+              type="button"
               className={`${styles.dot} ${index === activeIndex ? styles.dotActive : ""}`}
               onClick={() => handleDotClick(index)}
               role="tab"
               aria-selected={index === activeIndex}
-              aria-label={`Testimonial ${index + 1}`}
+              aria-label={`${TESTIMONIAL_LABEL_PREFIX} ${index + 1}`}
             />
           ))}
         </div>
