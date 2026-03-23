@@ -2,7 +2,8 @@ import { useCallback, useEffect, useMemo, useRef, type ReactElement } from "reac
 import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { CategoryRecipesGrid } from "../../features/category-recipes-grid";
 import { CategoryFilterPanel } from "../../features/category-filters";
-import { HeroSection, EmptyState } from "../../shared/ui";
+import { HeroSection } from "../../shared/ui";
+import { CategoryEmptyState } from "./CategoryEmptyState";
 import { useDataRecipes, useScrollToTop } from "../../shared/hooks";
 import { TestimonialsSection } from "../../shared/ui/testimonials-section";
 import styles from "./CategoryPage.module.css";
@@ -116,7 +117,7 @@ export const CategoryPage = (): ReactElement => {
                   />
                 </>
               ) : (
-                <EmptyState message="No recipes found for the selected filters." />
+                <CategoryEmptyState />
               )}
             </>
           )}
