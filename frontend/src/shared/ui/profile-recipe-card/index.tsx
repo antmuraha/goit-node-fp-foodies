@@ -23,7 +23,7 @@ export const ProfileRecipeCard = ({
   isDeleting,
 }: ProfileRecipeCardProps): ReactElement => {
   return (
-    <div className={styles.card}>
+    <li className={styles.card}>
       <NavLink to={`/recipe/${id}`}>
         {image ? (
           <img src={image} alt={title} className={styles.image} />
@@ -56,6 +56,6 @@ export const ProfileRecipeCard = ({
           )}
         </div>
       </div>
-    </div>
+    </li>
   );
 };
