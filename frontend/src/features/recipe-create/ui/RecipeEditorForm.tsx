@@ -240,7 +240,7 @@ export const RecipeEditorForm = ({
             hasError={Boolean(formik.touched.description && formik.errors.description)}
             disabled={isSubmitting}
             rows={4}
-            maxLength={3000}
+            maxLength={500}
           />
           {formik.touched.description && formik.errors.description && (
             <FormErrorMessage>{formik.errors.description}</FormErrorMessage>
