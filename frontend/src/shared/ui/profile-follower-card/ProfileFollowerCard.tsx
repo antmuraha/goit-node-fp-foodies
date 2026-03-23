@@ -35,7 +35,7 @@ export const ProfileFollowerCard = ({ id, name, avatar }: ProfileFollowerCardPro
   }, [id, token]);
 
   return (
-    <div className={styles.profileCard}>
+    <li className={styles.profileCard}>
       {/* User Info block */}
       <div className={styles.userInfo}>
         <div className={styles.avatarWrapper}>
@@ -76,6 +76,6 @@ export const ProfileFollowerCard = ({ id, name, avatar }: ProfileFollowerCardPro
           <Icon name="arrow-up-right" color="text-primary" size={18} />
         </div>
       </NavLink>
-    </div>
+    </li>
   );
 };
