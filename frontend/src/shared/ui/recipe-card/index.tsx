@@ -133,7 +133,7 @@ const RecipeCard = ({
                 onClick={handleActionClick}
                 aria-label="Favorite"
               >
-                <Icon name="heart" color={isFavorite(id) ? "color-white" : ""} size={18} />
+                <Icon name="heart" color={isFavorite(id) ? "color-white" : "text-primary"} size={18} />
               </Button>
 
               <NavLink to={`/recipe/${id}`} className={styles.titleLink}>
