@@ -3,6 +3,7 @@ import { NavLink, useNavigate, useParams, useSearchParams } from "react-router-d
 import { CategoryRecipesGrid } from "../../features/category-recipes-grid";
 import { CategoryFilterPanel } from "../../features/category-filters";
 import { HeroSection } from "../../shared/ui";
+import { CategoryEmptyState } from "./CategoryEmptyState";
 import { useDataRecipes, useScrollToTop } from "../../shared/hooks";
 import { TestimonialsSection } from "../../shared/ui/testimonials-section";
 import styles from "./CategoryPage.module.css";
@@ -116,9 +117,7 @@ export const CategoryPage = (): ReactElement => {
                   />
                 </>
               ) : (
-                <>
-                  <div className={styles.state}>No recipes found for the selected filters.</div>
-                </>
+                <CategoryEmptyState />
               )}
             </>
           )}
