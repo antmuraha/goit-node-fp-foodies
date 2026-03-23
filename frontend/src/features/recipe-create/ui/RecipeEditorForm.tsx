@@ -240,7 +240,7 @@ export const RecipeEditorForm = ({
             hasError={Boolean(formik.touched.description && formik.errors.description)}
             disabled={isSubmitting}
             rows={4}
-            maxLength={3000}
+            maxLength={500}
           />
           {formik.touched.description && formik.errors.description && (
             <FormErrorMessage>{formik.errors.description}</FormErrorMessage>
@@ -397,7 +397,12 @@ export const RecipeEditorForm = ({
           )}
         </div>
 
-        {/* Recipe Preparation */}
+        {/*
+          Recipe Preparation — Figma node 44:1562.
+          Figma shows 1 row in empty state, but that is impractical for UX — intentional
+          deviation: rows=3 so the user can see what they are typing.
+          maxLength: 3000 per task requirement.
+        */}
         <div className={styles.groupRecipePrep}>
           <label className={styles.label} htmlFor="recipe-instructions">
             Recipe Preparation
