@@ -267,3 +267,8 @@
     border: 1.5px solid var(--fd-color-muted) !important;
   }
 }
+
+.iconBtnActive {
+  background-color: var(--fd-color-main) !important;
+  border-color: var(--fd-color-main) !important;
+}

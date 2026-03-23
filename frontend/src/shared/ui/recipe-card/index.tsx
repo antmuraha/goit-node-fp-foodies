@@ -102,13 +102,13 @@ const RecipeCard = ({
               <Button
                 variant="secondary"
                 isIconOnly
-                className={styles.iconBtn}
+                className={`${styles.iconBtn} ${actionIcon === "heart" && isFavorite(id) ? styles.iconBtnActive : ""}`}
                 onClick={handleActionClick}
                 aria-label={actionIcon === "trash" ? "Delete" : "Favorite"}
               >
                 <Icon
                   name={actionIcon}
-                  color={actionIcon === "heart" && isFavorite(id) ? "color-danger" : "text-primary"}
+                  color={actionIcon === "heart" && isFavorite(id) ? "color-white" : "text-primary"}
                   size={18}
                 />
               </Button>
@@ -129,11 +129,11 @@ const RecipeCard = ({
               <Button
                 variant="secondary"
                 isIconOnly
-                className={styles.iconBtn}
+                className={`${styles.iconBtn} ${isFavorite(id) ? styles.iconBtnActive : ""}`}
                 onClick={handleActionClick}
                 aria-label="Favorite"
               >
-                <Icon name="heart" color={isFavorite(id) ? "color-danger" : "text-primary"} size={18} />
+                <Icon name="heart" color={isFavorite(id) ? "color-white" : ""} size={18} />
               </Button>
 
               <NavLink to={`/recipe/${id}`} className={styles.titleLink}>

@@ -27,7 +27,7 @@
   background-color: var(--fd-bg-muted);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 1440px) {
   .image {
     width: 100px;
     height: 100px;
