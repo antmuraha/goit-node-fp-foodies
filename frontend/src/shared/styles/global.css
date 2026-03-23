@@ -31,6 +31,12 @@ a {
   color: inherit;
 }
 
+ul {
+  list-style: "none";
+  margin: 0;
+  padding: 0;
+}
+
 .page-shell {
   max-width: 100%;
   padding: var(--fd-space-24) var(--fd-space-16) var(--fd-space-40);
