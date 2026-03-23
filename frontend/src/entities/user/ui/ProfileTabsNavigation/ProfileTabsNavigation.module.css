@@ -31,6 +31,11 @@
   display: none;
 }
 
+.tabItem {
+  position: relative;
+  padding-bottom: 14px;
+}
+
 .link {
   position: relative;
   text-decoration: none !important;
@@ -45,10 +50,6 @@
   color: var(--fd-text-primary);
 }
 
-.link:hover .labelText::after {
-  opacity: 1;
-}
-
 li.active {
   a {
     color: var(--fd-text-primary) !important;
@@ -56,9 +57,11 @@ li.active {
 
   &::after {
     content: "";
-    display: block;
-    height: 3px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
     width: 100%;
+    height: 3px;
     background-color: var(--fd-text-primary);
   }
 }
@@ -73,10 +76,6 @@ li.active {
   line-height: 24px;
   letter-spacing: var(--fd-letter-spacing-tight);
   text-transform: uppercase;
-}
-
-.active .labelText::after {
-  opacity: 1;
 }
 
 .bottomLine {
