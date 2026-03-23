@@ -3,14 +3,7 @@ import styles from "./CategoryEmptyState.module.css";
 export const CategoryEmptyState = () => (
   <div className={styles.container}>
     <div className={styles.illustration}>
-      <svg
-        width="96"
-        height="96"
-        viewBox="0 0 96 96"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-        aria-hidden="true"
-      >
+      <svg width="96" height="96" viewBox="0 0 96 96" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
         {/* Fork */}
         <line x1="26" y1="12" x2="26" y2="84" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
         <path
@@ -37,8 +30,6 @@ export const CategoryEmptyState = () => (
     </div>
 
     <h2 className={styles.title}>No recipes found</h2>
-    <p className={styles.subtitle}>
-      Try adjusting or clearing your filters to discover more delicious recipes.
-    </p>
+    <p className={styles.subtitle}>Try adjusting or clearing your filters to discover more delicious recipes.</p>
   </div>
 );
